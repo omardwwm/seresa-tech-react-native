@@ -18,10 +18,10 @@ import {
   FisioStackScreen, PresentationStackScreen, PasswordRecuperationStackScreen
 } from "./src/screen/MainTabScreen";
 import { DrawerContent } from "./src/components/DrawerContent";
-import PresentationScreen from "./src/screen/PresentationScreen";
+// import PresentationScreen from "./src/screen/PresentationScreen";
 
 const Drawer = createDrawerNavigator();
-const Stack = createStackNavigator();
+// const Stack = createStackNavigator();
 
 export default function App() {
   return (

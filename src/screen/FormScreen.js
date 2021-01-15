@@ -6,7 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Modal,
-  Button,
+  Button, Image
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { ActivityIndicator, RadioButton } from "react-native-paper";
@@ -119,7 +119,7 @@ const _FormScreen = (props) => {
           showsHorizontalScrollIndicator={false}
         >
           {form.pages[0].elements.map((current, index) => {
-            if (current.type == "rating") {
+            if (current.type === "rating") {
               const rating = [];
               for (
                 let index = current.rateMin;
@@ -149,7 +149,7 @@ const _FormScreen = (props) => {
                 );
               }
               return (
-                <View>
+                <View key={index}>
                   <Text style={{ ...styles.title, marginTop: 50 }}>
                     {current.title}
                   </Text>
@@ -207,6 +207,9 @@ const _FormScreen = (props) => {
                         <Text style={styles.textStyle}>&gt;</Text>
                       </TouchableOpacity>
                     )}
+                  </View>
+                  <View style={{marginTop:60}}>
+                    <Image source={{uri:'http://seresa-tech.net/wp-content/uploads/2020/10/escala_dolor.png'}} style={{width:"100%", height:150}}/>
                   </View>
                 </View>
               );

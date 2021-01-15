@@ -194,7 +194,7 @@ export const getForm = (user) => {
       const response = await Axios.get(
         `http://seresa-tech.net/index.php/wp-json/wcra/v1/get_formulaire/?param1=${user.juiz_secret_token_autolog[0]}`
       );
-      console.log("response getForm", response.data);
+      console.log("response getForm", response);
       dispatch({ type: "GET_FORM", form: response.data.json_survey });
     } catch (error) {
       console.log("error form", error.response);
@@ -228,9 +228,12 @@ export const getExercice = (user) => {
   return async (dispatch) => {
     try {
       const response = await Axios.get(
-        `http://seresa-tech.net/index.php/wp-json/wcra/v1/get_media/?param1=${user.level_phase}`
+        // `http://seresa-tech.net/index.php/wp-json/wcra/v1/get_media/?param1=${user && user.role[0].slice(18)}`
+            // `http://seresa-tech.net/index.php/wp-json/wcra/v1/get_media/?param1=${user.level_phase}`
+            `http://seresa-tech.net/index.php/wp-json/wcra/v1/get_media/?param1=${user && user.mod6_capabilities[0].slice(29, 30)}`
       );
       console.log("getExercice", response);
+      console.log(user.mod6_capabilities[0].slice(29, 30));
       dispatch({ type: "GET_EXERCICE", payload: response.data });
     } catch (error) {
       console.log("getExercice", error.response);
