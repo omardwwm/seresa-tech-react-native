@@ -119,7 +119,6 @@ const mapStateToProps = (state) => ({
 
 const PasswordRecuperationScreen = connect(mapStateToProps, {
     checkEmail,
-    // checkUsername,
 })(_PasswordRecuperationScreen);
 
 export default PasswordRecuperationScreen;

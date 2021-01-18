@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   ActivityIndicator, CheckBox, TouchableHighlight
 } from "react-native";
-import { TextInput } from "react-native-paper";
+import {RadioButton, TextInput} from "react-native-paper";
 import { ScrollView } from "react-native-gesture-handler";
 import * as Animatable from "react-native-animatable";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -75,6 +75,8 @@ const _RegisterScreen = (props) => {
     showDateForm: false,
     showAlertModal: false,
     alertModalMessage: "",
+    gender:"",
+    isValidGender: true,
   });
 
   const handleChange = (value, stateName) => {
@@ -104,13 +106,14 @@ const _RegisterScreen = (props) => {
     }
     console.log(form);
     if (
-      form.email.length === 0 ||
-      form.lastname.length === 0 ||
-      form.name.length === 0 ||
-      form.password.length === 0 ||
-      form.passwordConfirm.length === 0 ||
-      form.phoneNumber.length === 0 ||
-      form.username.length === 0
+        form.email.length === 0 ||
+        form.lastname.length === 0 ||
+        form.name.length === 0 ||
+        form.password.length === 0 ||
+        form.passwordConfirm.length === 0 ||
+        form.phoneNumber.length === 0 ||
+        form.username.length === 0 ||
+        form.gender.length === 0
     ) {
       setForm({
         ...form,
@@ -120,13 +123,14 @@ const _RegisterScreen = (props) => {
       return;
     }
     if (
-      form.isValidEmail &&
-      form.isValidLastname &&
-      form.isValidName &&
-      form.isValidPassword &&
-      form.isValidPasswordConfirm &&
-      form.isValidPhoneNumber &&
-      form.isValidUsername
+        form.isValidEmail &&
+        form.isValidLastname &&
+        form.isValidName &&
+        form.isValidPassword &&
+        form.isValidPasswordConfirm &&
+        form.isValidPhoneNumber &&
+        form.isValidUsername &&
+        form.isValidGender
     ) {
       setIsLoading();
       userRegister(form);
@@ -192,6 +196,20 @@ const _RegisterScreen = (props) => {
         setForm({
           ...form,
           isValidLastname: true,
+        });
+      }
+    }
+
+    if (field === "gender") {
+      if (value.length === 5){
+        setForm({
+          ...form,
+          isValidGender: false
+        });
+      }else {
+        setForm({
+          ...form,
+          isValidGender: true
         });
       }
     }
@@ -265,7 +283,10 @@ const _RegisterScreen = (props) => {
     });
   };
 
-  const [isChecked, setChecked] = useState(false);
+
+  const [checked, setChecked] = useState('');
+
+  const [isCheckedConditions, setCheckedConditions] = useState(false);
 
   return (
     <ScrollView style={styles.scrollContainer}>
@@ -446,6 +467,41 @@ const _RegisterScreen = (props) => {
             </Animatable.View>
           )}
         </View>
+        <View style={{flexDirection:"row"}}>
+          <RadioButton
+            value={form.gender}
+            status={checked === 'Femme' ? 'checked' : 'unChecked'}
+            onPress={()=>setChecked('Femme',
+                setForm({
+                  ...form,
+                  gender: "Femme"
+                }))}
+            error={!form.isValidGender}
+           />
+           <Text>Femme</Text>
+          <RadioButton
+              value={form.gender}
+              status={checked === 'Homme' ? 'checked' : 'unChecked'}
+              onPress={()=>setChecked('Homme',
+                  setForm({
+                    ...form,
+                    gender: "Homme"
+                  })
+                  )}
+              error={!form.isValidGender}
+          />
+          <Text>Homme</Text>
+
+          {form.isValidGender ? null : (
+              <Animatable.View animation="fadeInLeft" duration={500}>
+                <Text style={styles.errorMessage}>
+                  Vous devez cocher votre sexe !
+                </Text>
+              </Animatable.View>
+          )}
+
+        </View>
+
         <View
           style={[
             styles.inputBox,
@@ -475,13 +531,13 @@ const _RegisterScreen = (props) => {
 
         <View style={{ flexDirection: 'row' }}>
           <CheckBox
-              value={isChecked}
-              onValueChange={setChecked}
+              value={isCheckedConditions}
+              onValueChange={setCheckedConditions}
           />
           <Text style={{marginTop: 5, textAlign:"center"}}>Veuillez confirmer que vous acceptez notre politique{"\n"}de confidentialité</Text>
         </View>
-        <TouchableOpacity disabled={!isChecked}
-          style={isChecked? styles.submitButton : {...styles.submitButton, backgroundColor: '#d7b1a4'}}
+        <TouchableOpacity disabled={!isCheckedConditions}
+          style={isCheckedConditions? styles.submitButton : {...styles.submitButton, backgroundColor: '#d7b1a4'}}
           onPress={() => handleSubmit()}
           activeOpacity={0.8}
         >

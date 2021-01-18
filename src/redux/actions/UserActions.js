@@ -103,7 +103,7 @@ export const userRegister = (formData) => {
   return async (dispatch) => {
     try {
       const response = await Axios.get(
-        `http://seresa-tech.net/index.php/wp-json/wcra/v1/create_user/?param1=${formData.email}&param2=${formData.password}&param3=${formData.username}&param4=${formData.name}&param5=${formData.lastname}&param6=${formData.phoneNumber}&param7=${formData.dateOfBirthToSend}`
+        `http://seresa-tech.net/index.php/wp-json/wcra/v1/create_user/?param1=${formData.email}&param2=${formData.password}&param3=${formData.username}&param4=${formData.name}&param5=${formData.lastname}&param6=${formData.phoneNumber}&param7=${formData.dateOfBirthToSend}&param8=${formData.gender}`
       );
       console.log("response", response);
       dispatch({ type: "REGISTER", isUserCreated: true, showModal: true });
@@ -217,7 +217,8 @@ export const sendFormData = (user, data) => {
       );
       console.log("sendFormData Response", response);
       dispatch({ type: "SEND_FORM_DATA", formError: false });
-    } catch (error) {
+    }
+    catch (error) {
       console.log("sendFormData Error", error.response);
       dispatch({ type: "SEND_FORM_DATA", formError: true });
     }

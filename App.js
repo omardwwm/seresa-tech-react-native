@@ -2,10 +2,12 @@ import "react-native-gesture-handler";
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import {createStackNavigator} from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import { Provider as PaperProvider } from "react-native-paper";
 import { store } from "./src/redux";
+import { connect } from "react-redux";
 
 import {
   HomeStackScreen,
@@ -18,10 +20,14 @@ import {
   FisioStackScreen, PresentationStackScreen, PasswordRecuperationStackScreen
 } from "./src/screen/MainTabScreen";
 import { DrawerContent } from "./src/components/DrawerContent";
+import {userReducer} from "./src/redux/reducers/UserReducer";
+import {Text, TouchableOpacity} from "react-native";
 // import PresentationScreen from "./src/screen/PresentationScreen";
 
 const Drawer = createDrawerNavigator();
 // const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+const { user, isUserLogged } = userReducer;
 
 export default function App() {
   return (
@@ -47,9 +53,6 @@ export default function App() {
             />
             <Drawer.Screen name="Fisio" component={FisioStackScreen} />
           </Drawer.Navigator>
-          {/*<Stack.Navigator>*/}
-          {/*  <Stack.Screen name="Presentation" component={PresentationScreen}/>*/}
-          {/*</Stack.Navigator>*/}
         </NavigationContainer>
       </PaperProvider>
     </Provider>

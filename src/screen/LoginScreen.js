@@ -90,6 +90,13 @@ const _LoginScreen = (props) => {
         <Text style={styles.submitText}>Mot de passe oublie ?!</Text>
       </TouchableOpacity>
 
+      <TouchableOpacity
+          style={styles.buttonReset}
+          onPress={()=>props.navigation.navigate("Inscription")}
+      >
+        <Text style={styles.submitText}>Vous n'avez pas de compte ?!</Text>
+      </TouchableOpacity>
+
 
       <Modal animationType="slide" transparent={true} visible={showModal}>
         <View style={styles.centeredModal}>

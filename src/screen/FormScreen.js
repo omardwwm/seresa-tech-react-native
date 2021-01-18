@@ -91,6 +91,8 @@ const _FormScreen = (props) => {
 
   if (form != null) {
     if (form.date !== undefined) {
+    // if (1>0){
+      console.log(user && user.timestamp[0]);
       return (
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
@@ -100,7 +102,7 @@ const _FormScreen = (props) => {
           </Text>
           <CountDown
             until={parseInt(
-              (Date.parse(form.date.replace(/\s/g, "T")) - new Date()) / 1000
+              (user && user.timestamp) / 1000
             )}
             size={30}
           />

@@ -18,7 +18,7 @@ const _ProfileScreen = (props) => {
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
         <View style={styles.profileBox}>
-          {user && user.gender[0].slice(14, -3) === "Femme" ? (<Avatar.Image
+          {user.gender[0].slice(14, -3) === "Femme" ? (<Avatar.Image
               source={require("../assets/image/woman-avatar.png")}
               size={150}
               style={{
@@ -35,7 +35,7 @@ const _ProfileScreen = (props) => {
           />}
 
           {/*<Avatar.Image*/}
-          {/*  source={require("../assets/image/woman-avatar.png")}*/}
+          {/*  source={require("../assets/image/massage.jpg")}*/}
           {/*  size={150}*/}
           {/*  style={{*/}
           {/*    marginRight: 10,*/}
