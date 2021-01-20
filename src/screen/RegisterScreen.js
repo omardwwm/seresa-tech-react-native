@@ -75,8 +75,8 @@ const _RegisterScreen = (props) => {
     showDateForm: false,
     showAlertModal: false,
     alertModalMessage: "",
-    gender:"",
-    isValidGender: true,
+    gender: "",
+    isValidGender: false,
   });
 
   const handleChange = (value, stateName) => {
@@ -201,7 +201,7 @@ const _RegisterScreen = (props) => {
     }
 
     if (field === "gender") {
-      if (value.length === 5){
+      if (value.length === 0){
         setForm({
           ...form,
           isValidGender: false
@@ -474,9 +474,10 @@ const _RegisterScreen = (props) => {
             onPress={()=>setChecked('Femme',
                 setForm({
                   ...form,
-                  gender: "Femme"
+                  gender: "Femme",
+                  isValidGender: true
                 }))}
-            error={!form.isValidGender}
+            // error={!form.isValidGender}
            />
            <Text>Femme</Text>
           <RadioButton
@@ -485,13 +486,15 @@ const _RegisterScreen = (props) => {
               onPress={()=>setChecked('Homme',
                   setForm({
                     ...form,
-                    gender: "Homme"
+                    gender: "Homme",
+                    isValidGender: true
                   })
                   )}
-              error={!form.isValidGender}
+              // error={!form.isValidGender}
           />
           <Text>Homme</Text>
-
+        </View>
+        <View>
           {form.isValidGender ? null : (
               <Animatable.View animation="fadeInLeft" duration={500}>
                 <Text style={styles.errorMessage}>
@@ -499,7 +502,6 @@ const _RegisterScreen = (props) => {
                 </Text>
               </Animatable.View>
           )}
-
         </View>
 
         <View

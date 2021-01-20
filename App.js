@@ -7,7 +7,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import { Provider as PaperProvider } from "react-native-paper";
 import { store } from "./src/redux";
-import { connect } from "react-redux";
+// import { connect } from "react-redux";
+// import TabScreen from "./src/screen/MainTabScreen";
 
 import {
   HomeStackScreen,
@@ -17,17 +18,18 @@ import {
   FormStackScreen,
   PhasesStackScreen,
   PasswordChangeStackScreen,
-  FisioStackScreen, PresentationStackScreen, PasswordRecuperationStackScreen
+  FisioStackScreen, PresentationStackScreen, PasswordRecuperationStackScreen, TabStackScreen,
 } from "./src/screen/MainTabScreen";
 import { DrawerContent } from "./src/components/DrawerContent";
 import {userReducer} from "./src/redux/reducers/UserReducer";
 import {Text, TouchableOpacity} from "react-native";
+import RegisterScreen from "./src/screen/RegisterScreen";
 // import PresentationScreen from "./src/screen/PresentationScreen";
 
 const Drawer = createDrawerNavigator();
-// const Stack = createStackNavigator();
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-const { user, isUserLogged } = userReducer;
+
 
 export default function App() {
   return (
@@ -35,18 +37,19 @@ export default function App() {
       <PaperProvider>
         <NavigationContainer>
           <Drawer.Navigator
-            initialRouteName="Home"
+            // initialRouteName="Seresa"
             drawerPosition="right"
             drawerContent={(props) => <DrawerContent {...props} />}
           >
-            <Drawer.Screen name="Home" component={HomeStackScreen} />
-            <Drawer.Screen name="Inscription" component={RegisterStackScreen} />
+            <Drawer.Screen name="Tab" component={TabStackScreen} />
+            {/*<Drawer.Screen name="Home" component={HomeStackScreen} />*/}
+            {/*<Drawer.Screen name="Inscription" component={RegisterStackScreen} />*/}
             <Drawer.Screen name="Login" component={LoginStackScreen} />
-            <Drawer.Screen name="Profile" component={ProfileStackScreen} />
+            {/*<Drawer.Screen name="Profile" component={ProfileStackScreen} />*/}
             <Drawer.Screen name="Presentation" component={PresentationStackScreen}/>
             <Drawer.Screen name="PasswordRecuperation" component={PasswordRecuperationStackScreen } />
-            <Drawer.Screen name="Form" component={FormStackScreen} />
-            <Drawer.Screen name="Phases" component={PhasesStackScreen} />
+            {/*<Drawer.Screen name="Form" component={FormStackScreen} />*/}
+            {/*<Drawer.Screen name="Phases" component={PhasesStackScreen} />*/}
             <Drawer.Screen
               name="PasswordChange"
               component={PasswordChangeStackScreen}

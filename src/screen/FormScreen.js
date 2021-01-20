@@ -62,8 +62,8 @@ const _FormScreen = (props) => {
   const handleSubmit = () => {
     console.log(checked.form);
     if (
-      Object.keys(checked.form).length !==
-      Object.keys(form.pages[0].elements).length
+        Object.keys(checked.form).length !==
+        Object.keys(form.pages[0].elements).length
     ) {
       setChecked({
         ...checked,
@@ -91,287 +91,292 @@ const _FormScreen = (props) => {
 
   if (form != null) {
     if (form.date !== undefined) {
-    // if (1>0){
-      console.log(user && user.timestamp[0]);
       return (
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          <Text style={styles.title}>
-            Temps restant avant la prochaine phase :
-          </Text>
-          <CountDown
-            until={parseInt(
-              (user && user.timestamp) / 1000
-            )}
-            size={30}
-          />
-        </View>
+          <View
+              style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <Text style={styles.title}>
+              Temps restant avant la prochaine phase :
+            </Text>
+            <CountDown
+                until={parseInt(
+                    (Date.parse(form.date.replace(/\s/g, "T")) - new Date()) / 1000
+                )}
+                size={30}
+            />
+          </View>
       );
     }
     return (
-      <View style={{ flex: 1 }}>
-        <ScrollView
-          horizontal
-          decelerationRate={0}
-          snapToInterval={width}
-          snapToAlignment={"center"}
-          ref={scrollRef}
-          contentContainerStyle={{ marginBottom: 10 }}
-          showsHorizontalScrollIndicator={false}
-        >
-          {form.pages[0].elements.map((current, index) => {
-            if (current.type === "rating") {
-              const rating = [];
-              for (
-                let index = current.rateMin;
-                index <= current.rateMax;
-                index++
-              ) {
-                rating.push(
-                  <View
-                    key={index}
-                    style={{
-                      flexDirection: "row",
-                      width: "25%",
-                      alignItems: "center",
-                      marginBottom: 15,
-                    }}
-                  >
-                    <RadioButton
-                      value={parseInt(index)}
-                      status={
-                        checked.form[current.name] === parseInt(index)
-                          ? "checked"
-                          : "unchecked"
-                      }
-                    />
-                    <Text>{index} </Text>
-                  </View>
+        <View style={{ flex: 1 }}>
+          <ScrollView
+              horizontal
+              decelerationRate={0}
+              snapToInterval={width}
+              snapToAlignment={"center"}
+              ref={scrollRef}
+              contentContainerStyle={{ marginBottom: 10 }}
+              showsHorizontalScrollIndicator={false}
+          >
+            {form.pages[0].elements.map((current, index) => {
+              if (current.type === "rating") {
+                const rating = [];
+                for (
+                    let index = current.rateMin;
+                    index <= current.rateMax;
+                    index++
+                ) {
+                  rating.push(
+                      <View
+                          key={index}
+                          style={{
+                            flexDirection: "row",
+                            // flex: 1,
+                            width: "25%",
+                            alignItems: "center",
+                            marginBottom: 15,
+                          }}
+                      >
+                        <RadioButton
+                            value={parseInt(index)}
+                            status={
+                              checked.form[current.name] === parseInt(index)
+                                  ? "checked"
+                                  : "unchecked"
+                            }
+                        />
+                        <Text>{index} </Text>
+                      </View>
+                  );
+                }
+                return (
+                    <View key={index}>
+                      <Text style={{ ...styles.title, marginTop: 40 }}>
+                        {current.title}
+                      </Text>
+                      <View
+                          key={current.name}
+                          style={{
+                            ...styles.view,
+                            flexWrap: "wrap",
+                            marginTop: 0,
+                            flexDirection: "row",
+                            flex: 1,
+                            alignItems: "center",
+                            // marginTop: 50,
+                            width: width - 20,
+                            // margin: 10,
+                            borderRadius: 10,
+                          }}
+                          onLayout={(event) => {
+                            const layout = event.nativeEvent.layout;
+                            setViewLayout([...viewLayout, layout.x]);
+                          }}
+                      >
+                        <RadioButton.Group
+                            onValueChange={(value) => {
+                              setChecked({
+                                ...checked,
+                                form: {
+                                  ...checked.form,
+                                  [current.name]: value,
+                                },
+                              });
+                            }}
+                        >
+                          {rating}
+                        </RadioButton.Group>
+                      </View>
+                      <View>
+                        {index == 0 ? null : (
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                onPress={() => handleNav(index, "last")}
+                                style={{
+                                  ...styles.stepButton,
+                                  position: "absolute",
+                                  left: 0,
+                                }}
+                            >
+                              <Text style={styles.textStyle}>&#x3C;</Text>
+                            </TouchableOpacity>
+                        )}
+                        {index == form.pages[0].elements.length - 1 ? null : (
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                onPress={() => handleNav(index + 1)}
+                                style={{
+                                  ...styles.stepButton,
+                                  position: "absolute",
+                                  right: 0,
+                                }}
+                            >
+                              <Text style={styles.textStyle}>&gt;</Text>
+                            </TouchableOpacity>
+                        )}
+                      </View>
+                      <View style={{marginTop:50}}>
+                        <Image source={{uri:'http://seresa-tech.net/wp-content/uploads/2020/10/escala_dolor.png'}} style={{width:"100%", height:150}}/>
+                      </View>
+                    </View>
                 );
               }
-              return (
-                <View key={index}>
-                  <Text style={{ ...styles.title, marginTop: 50 }}>
-                    {current.title}
-                  </Text>
-                  <View
-                    key={current.name}
-                    style={{
-                      ...styles.view,
-                      flexWrap: "wrap",
-                      marginTop: 0,
-                      flexDirection: "row",
-                    }}
-                    onLayout={(event) => {
-                      const layout = event.nativeEvent.layout;
-                      setViewLayout([...viewLayout, layout.x]);
-                    }}
-                  >
-                    <RadioButton.Group
-                      onValueChange={(value) => {
-                        setChecked({
-                          ...checked,
-                          form: {
-                            ...checked.form,
-                            [current.name]: value,
-                          },
-                        });
-                      }}
+              if (current.type == "radiogroup") {
+                return (
+                    <View
+                        key={current.name}
+                        style={styles.view}
+                        onLayout={(event) => {
+                          const layout = event.nativeEvent.layout;
+                          setViewLayout([...viewLayout, layout.x]);
+                        }}
                     >
-                      {rating}
-                    </RadioButton.Group>
-                  </View>
-                  <View>
-                    {index == 0 ? null : (
-                      <TouchableOpacity
-                        activeOpacity={0.8}
-                        onPress={() => handleNav(index, "last")}
-                        style={{
-                          ...styles.stepButton,
-                          position: "absolute",
-                          left: 0,
-                        }}
+                      <Text style={styles.title}>{current.title}</Text>
+                      <RadioButton.Group
+                          onValueChange={(value) => {
+                            setChecked({
+                              ...checked,
+                              form: {
+                                ...checked.form,
+                                [current.name]: value,
+                              },
+                            });
+                          }}
                       >
-                        <Text style={styles.textStyle}>&#x3C;</Text>
-                      </TouchableOpacity>
-                    )}
-                    {index == form.pages[0].elements.length - 1 ? null : (
-                      <TouchableOpacity
-                        activeOpacity={0.8}
-                        onPress={() => handleNav(index + 1)}
-                        style={{
-                          ...styles.stepButton,
-                          position: "absolute",
-                          right: 0,
-                        }}
+                        {current.choices.map((currentChoice) => {
+                          return (
+                              <View key={currentChoice.text} style={styles.radioBox}>
+                                <RadioButton
+                                    value={parseInt(currentChoice.value)}
+                                    status={
+                                      checked.form[current.name] ===
+                                      parseInt(currentChoice.value)
+                                          ? "checked"
+                                          : "unchecked"
+                                    }
+                                />
+                                <Text>{currentChoice.text} </Text>
+                              </View>
+                          );
+                        })}
+                      </RadioButton.Group>
+                      <View
+                          style={{
+                            flexDirection: "row",
+                          }}
                       >
-                        <Text style={styles.textStyle}>&gt;</Text>
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                  <View style={{marginTop:60}}>
-                    <Image source={{uri:'http://seresa-tech.net/wp-content/uploads/2020/10/escala_dolor.png'}} style={{width:"100%", height:150}}/>
-                  </View>
-                </View>
-              );
-            }
-            if (current.type == "radiogroup") {
-              return (
-                <View
-                  key={current.name}
-                  style={styles.view}
-                  onLayout={(event) => {
-                    const layout = event.nativeEvent.layout;
-                    setViewLayout([...viewLayout, layout.x]);
-                  }}
+                        {index == 0 ? null : (
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                onPress={() => handleNav(index, "last")}
+                                style={{
+                                  ...styles.stepButton,
+                                  position: "absolute",
+                                  left: 0,
+                                }}
+                            >
+                              <Text style={styles.textStyle}>&#x3C;</Text>
+                            </TouchableOpacity>
+                        )}
+                        {index == form.pages[0].elements.length - 1 ? null : (
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                onPress={() => handleNav(index + 1)}
+                                style={{
+                                  ...styles.stepButton,
+                                  position: "absolute",
+                                  right: 0,
+                                }}
+                            >
+                              <Text style={styles.textStyle}>&gt;</Text>
+                            </TouchableOpacity>
+                        )}
+                      </View>
+                    </View>
+                );
+              }
+            })}
+          </ScrollView>
+          <View>
+            <TouchableOpacity
+                style={{
+                  ...styles.submitButton,
+                }}
+                onPress={() => {
+                  handleSubmit();
+                }}
+            >
+              {isLoading ? (
+                  <ActivityIndicator size="large" color="white" />
+              ) : (
+                  <Text style={styles.textStyle}>Ok</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+          <Modal animationType="slide" transparent={true} visible={showFormModal}>
+            <View style={styles.centeredModal}>
+              <View style={styles.modal}>
+                <Text>
+                  {formError
+                      ? "Un problème à été rencontré"
+                      : "Formulaire envoyé avec succès"}
+                </Text>
+                <Ionicons
+                    name={formError ? "md-warning" : "md-checkmark-circle"}
+                    color={formError ? "#ED4337" : "#59ed9c"}
+                    size={60}
+                    style={{ alignSelf: "center" }}
+                />
+                <TouchableOpacity
+                    style={{
+                      ...styles.openButton,
+                    }}
+                    onPress={() => {
+                      toggleModal();
+                    }}
                 >
-                  <Text style={styles.title}>{current.title}</Text>
-                  <RadioButton.Group
-                    onValueChange={(value) => {
+                  <Text style={styles.textStyle}>Ok</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+          <Modal
+              animationType="slide"
+              transparent={true}
+              visible={checked.showModal}
+          >
+            <View style={styles.centeredModal}>
+              <View style={styles.modal}>
+                <Text>Vous devez remplir tous les champs</Text>
+                <Ionicons
+                    name="md-warning"
+                    color="#ED4337"
+                    size={60}
+                    style={{ alignSelf: "center" }}
+                />
+                <TouchableOpacity
+                    style={{
+                      ...styles.openButton,
+                    }}
+                    onPress={() => {
                       setChecked({
                         ...checked,
-                        form: {
-                          ...checked.form,
-                          [current.name]: value,
-                        },
+                        showModal: !checked.showModal,
                       });
                     }}
-                  >
-                    {current.choices.map((currentChoice) => {
-                      return (
-                        <View key={currentChoice.text} style={styles.radioBox}>
-                          <RadioButton
-                            value={parseInt(currentChoice.value)}
-                            status={
-                              checked.form[current.name] ===
-                              parseInt(currentChoice.value)
-                                ? "checked"
-                                : "unchecked"
-                            }
-                          />
-                          <Text>{currentChoice.text} </Text>
-                        </View>
-                      );
-                    })}
-                  </RadioButton.Group>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                    }}
-                  >
-                    {index == 0 ? null : (
-                      <TouchableOpacity
-                        activeOpacity={0.8}
-                        onPress={() => handleNav(index, "last")}
-                        style={{
-                          ...styles.stepButton,
-                          position: "absolute",
-                          left: 0,
-                        }}
-                      >
-                        <Text style={styles.textStyle}>&#x3C;</Text>
-                      </TouchableOpacity>
-                    )}
-                    {index == form.pages[0].elements.length - 1 ? null : (
-                      <TouchableOpacity
-                        activeOpacity={0.8}
-                        onPress={() => handleNav(index + 1)}
-                        style={{
-                          ...styles.stepButton,
-                          position: "absolute",
-                          right: 0,
-                        }}
-                      >
-                        <Text style={styles.textStyle}>&gt;</Text>
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                </View>
-              );
-            }
-          })}
-        </ScrollView>
-        <View>
-          <TouchableOpacity
-            style={{
-              ...styles.submitButton,
-            }}
-            onPress={() => {
-              handleSubmit();
-            }}
-          >
-            {isLoading ? (
-              <ActivityIndicator size="large" color="white" />
-            ) : (
-              <Text style={styles.textStyle}>Ok</Text>
-            )}
-          </TouchableOpacity>
+                >
+                  <Text style={styles.textStyle}>Ok</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
         </View>
-        <Modal animationType="slide" transparent={true} visible={showFormModal}>
-          <View style={styles.centeredModal}>
-            <View style={styles.modal}>
-              <Text>
-                {formError
-                  ? "Un problème à été rencontré"
-                  : "Formulaire envoyé avec succès"}
-              </Text>
-              <Ionicons
-                name={formError ? "md-warning" : "md-checkmark-circle"}
-                color={formError ? "#ED4337" : "#59ed9c"}
-                size={60}
-                style={{ alignSelf: "center" }}
-              />
-              <TouchableOpacity
-                style={{
-                  ...styles.openButton,
-                }}
-                onPress={() => {
-                  toggleModal();
-                }}
-              >
-                <Text style={styles.textStyle}>Ok</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={checked.showModal}
-        >
-          <View style={styles.centeredModal}>
-            <View style={styles.modal}>
-              <Text>Vous devez remplir tous les champs</Text>
-              <Ionicons
-                name="md-warning"
-                color="#ED4337"
-                size={60}
-                style={{ alignSelf: "center" }}
-              />
-              <TouchableOpacity
-                style={{
-                  ...styles.openButton,
-                }}
-                onPress={() => {
-                  setChecked({
-                    ...checked,
-                    showModal: !checked.showModal,
-                  });
-                }}
-              >
-                <Text style={styles.textStyle}>Ok</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-      </View>
     );
   } else {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="#FD9854" />
-      </View>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <ActivityIndicator size="large" color="#FD9854" />
+        </View>
     );
   }
 };

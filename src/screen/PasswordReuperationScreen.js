@@ -27,7 +27,10 @@ const _PasswordRecuperationScreen = (props) => {
     }
 
     const [form, setForm] = useState({
-        email: ""});
+        email: "",
+        isValidEmail:true,
+    });
+
 
     const handleChange = (value, stateName) => {
         setForm({

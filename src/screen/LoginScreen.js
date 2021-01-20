@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Modal,
   TouchableOpacity,
-  ActivityIndicator,
+  ActivityIndicator, Button
 } from "react-native";
 import { TextInput } from "react-native-paper";
 import { connect } from "react-redux";
@@ -147,6 +147,9 @@ const _LoginScreen = (props) => {
           </View>
         </View>
       </Modal>
+      <View style={{marginTop:30}}>
+        <Button title="Retour accueil" color="#FD9854" onPress={() => props.navigation.navigate("Home")}  />
+      </View>
     </View>
   );
 };
@@ -155,12 +158,12 @@ const styles = StyleSheet.create({
   buttonBox: {
     marginTop: 20,
     backgroundColor: "#FD9854",
-    padding: 10,
+    padding: 5,
     borderRadius: 20,
   },
   buttonReset:{
     marginTop: 20,
-    backgroundColor: "#6035cc",
+    backgroundColor: "#67b4aa",
     padding: 6,
     borderRadius: 20,
   },
