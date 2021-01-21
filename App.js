@@ -1,8 +1,6 @@
 import "react-native-gesture-handler";
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import {createStackNavigator} from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import { Provider as PaperProvider } from "react-native-paper";
@@ -21,14 +19,11 @@ import {
   FisioStackScreen, PresentationStackScreen, PasswordRecuperationStackScreen, TabStackScreen,
 } from "./src/screen/MainTabScreen";
 import { DrawerContent } from "./src/components/DrawerContent";
-import {userReducer} from "./src/redux/reducers/UserReducer";
 import {Text, TouchableOpacity} from "react-native";
-import RegisterScreen from "./src/screen/RegisterScreen";
 // import PresentationScreen from "./src/screen/PresentationScreen";
 
 const Drawer = createDrawerNavigator();
-const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
+
 
 
 export default function App() {
@@ -37,7 +32,7 @@ export default function App() {
       <PaperProvider>
         <NavigationContainer>
           <Drawer.Navigator
-            // initialRouteName="Seresa"
+            initialRouteName="Seresa"
             drawerPosition="right"
             drawerContent={(props) => <DrawerContent {...props} />}
           >

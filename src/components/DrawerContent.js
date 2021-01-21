@@ -126,7 +126,6 @@ const _DrawerContent = (props) => {
                   )}
                   onPress={() => {
                     props.navigation.navigate("Presentation");
-                    // getForm(user);
                   }}
                   style={[styles.drawerItem]}
                 />

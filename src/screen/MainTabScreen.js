@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
-import { Pressable, Image, View, Text } from "react-native";
+import { Pressable, Image } from "react-native";
 
 import HomeScreen from "./HomeScreen";
 import RegisterScreen from "./RegisterScreen";
@@ -34,7 +34,7 @@ const PasswordRecuperationStack = createStackNavigator();
 const TabStack = createStackNavigator();
 
 const Tab = createMaterialBottomTabNavigator();
-// function to get the name of route and show it in the headet title with navigation with tabButtonNavigation (https://reactnavigation.org/)
+// function to get the name of route and show it in the header title with navigation with tabButtonNavigation (https://reactnavigation.org/)
 function getHeaderTitle(route) {
     // If the focused route is not found, we need to assume it's the initial screen
     // This can happen during if there hasn't been any navigation inside the screen
@@ -62,8 +62,8 @@ const _TabScreen = (props) => {
     if (isUserLogged){
         return (
             <Tab.Navigator
-                // initialRouteName="Seresa"
-                // activeColor="#fff"
+                initialRouteName="Seresa"
+                activeColor="#fff"
             >
                 <Tab.Screen
                     name="Home"
@@ -90,17 +90,6 @@ const _TabScreen = (props) => {
                 />
 
                 <Tab.Screen
-                    name="Phases"
-                    component={PhasesStackScreen}
-                    options={{
-                        tabBarLabel: 'Phases',
-                        tabBarColor: '#009387',
-                        tabBarIcon: ({color}) => (
-                            <MaterialCommunityIcons name="walk" color={color} size={26}/>
-                        ),
-                    }}
-                />
-                <Tab.Screen
                     name="Form"
                     component={FormStackScreen}
                     options={{
@@ -111,8 +100,21 @@ const _TabScreen = (props) => {
                         ),
                     }}
                 />
+
+                <Tab.Screen
+                    name="Phases"
+                    component={PhasesStackScreen}
+                    options={{
+                        tabBarLabel: 'Phases',
+                        tabBarColor: '#009387',
+                        tabBarIcon: ({color}) => (
+                            <MaterialCommunityIcons name="walk" color={color} size={26}/>
+                        ),
+                    }}
+                />
+
             </Tab.Navigator>
-        );
+        )
     } else {
         return (
             <Tab.Navigator

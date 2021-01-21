@@ -119,7 +119,7 @@ const _FormScreen = (props) => {
               showsHorizontalScrollIndicator={false}
           >
             {form.pages[0].elements.map((current, index) => {
-              if (current.type === "rating") {
+              if (current.type == "rating") {
                 const rating = [];
                 for (
                     let index = current.rateMin;
@@ -131,10 +131,11 @@ const _FormScreen = (props) => {
                           key={index}
                           style={{
                             flexDirection: "row",
-                            // flex: 1,
-                            width: "25%",
+                            flexWrap: 'wrap',
+                            // width: "30%",
+                            height: "5%",
                             alignItems: "center",
-                            marginBottom: 15,
+                            marginBottom: 18,
                           }}
                       >
                         <RadioButton
@@ -145,13 +146,13 @@ const _FormScreen = (props) => {
                                   : "unchecked"
                             }
                         />
-                        <Text>{index} </Text>
+                        <Text style={{marginRight:50}}>{index}</Text>
                       </View>
                   );
                 }
                 return (
                     <View key={index}>
-                      <Text style={{ ...styles.title, marginTop: 40 }}>
+                      <Text style={{ ...styles.title, marginTop: 20 }}>
                         {current.title}
                       </Text>
                       <View
@@ -161,12 +162,8 @@ const _FormScreen = (props) => {
                             flexWrap: "wrap",
                             marginTop: 0,
                             flexDirection: "row",
-                            flex: 1,
-                            alignItems: "center",
-                            // marginTop: 50,
-                            width: width - 20,
-                            // margin: 10,
-                            borderRadius: 10,
+                            marginLeft:20,
+                            width:width-35
                           }}
                           onLayout={(event) => {
                             const layout = event.nativeEvent.layout;
@@ -186,6 +183,9 @@ const _FormScreen = (props) => {
                         >
                           {rating}
                         </RadioButton.Group>
+                        <View style={{flexDirection: "row"}}>
+                          <Image source={require('../assets/image/escala_dolor.png')} style={{width:150, height: "100%"}}/>
+                        </View>
                       </View>
                       <View>
                         {index == 0 ? null : (
@@ -214,9 +214,6 @@ const _FormScreen = (props) => {
                               <Text style={styles.textStyle}>&gt;</Text>
                             </TouchableOpacity>
                         )}
-                      </View>
-                      <View style={{marginTop:50}}>
-                        <Image source={{uri:'http://seresa-tech.net/wp-content/uploads/2020/10/escala_dolor.png'}} style={{width:"100%", height:150}}/>
                       </View>
                     </View>
                 );
@@ -292,27 +289,46 @@ const _FormScreen = (props) => {
                             </TouchableOpacity>
                         )}
                       </View>
+                      <View>
+                        {index=== form.pages[0].elements.length -1  ?
+                        <TouchableOpacity
+                            style={{
+                              ...styles.submitButton
+                            }}
+                            onPress={() => {
+                              handleSubmit();
+                            }}
+                        >
+                          {isLoading ? (
+                              <ActivityIndicator size="large" color="white" />
+                          ) : (
+                              <Text style={styles.textStyle}>Valider mon formulaire</Text>
+                          )
+                          }
+                        </TouchableOpacity>: null}
+                      </View>
                     </View>
                 );
               }
             })}
           </ScrollView>
-          <View>
-            <TouchableOpacity
-                style={{
-                  ...styles.submitButton,
-                }}
-                onPress={() => {
-                  handleSubmit();
-                }}
-            >
-              {isLoading ? (
-                  <ActivityIndicator size="large" color="white" />
-              ) : (
-                  <Text style={styles.textStyle}>Ok</Text>
-              )}
-            </TouchableOpacity>
-          </View>
+          {/*<View>*/}
+          {/*  <TouchableOpacity*/}
+          {/*      style={{*/}
+          {/*        ...styles.submitButton,*/}
+          {/*      }}*/}
+          {/*      onPress={() => {*/}
+          {/*        handleSubmit();*/}
+          {/*      }}*/}
+          {/*  >*/}
+          {/*    {isLoading ? (*/}
+          {/*          <ActivityIndicator size="large" color="white" />*/}
+          {/*      ) : (*/}
+          {/*          <Text style={styles.textStyle}>Okk</Text>*/}
+          {/*      )*/}
+          {/*    }*/}
+          {/*  </TouchableOpacity>*/}
+          {/*</View>*/}
           <Modal animationType="slide" transparent={true} visible={showFormModal}>
             <View style={styles.centeredModal}>
               <View style={styles.modal}>
@@ -391,7 +407,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 22,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: 15,
   },
   textStyle: {
     color: "white",
@@ -437,11 +453,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: "80%",
     alignSelf: "center",
-    marginBottom: 100,
+    marginTop: 100,
   },
   stepButton: {
     backgroundColor: "#FD9854",
-    padding: 10,
+    padding: 12,
     borderRadius: 20,
   },
   view: {
@@ -449,6 +465,7 @@ const styles = StyleSheet.create({
     width: width - 20,
     margin: 10,
     borderRadius: 10,
+    height: "80%"
   },
 });
 
