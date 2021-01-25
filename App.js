@@ -8,7 +8,7 @@ import { store } from "./src/redux";
 // import { connect } from "react-redux";
 // import TabScreen from "./src/screen/MainTabScreen";
 
-import {
+import TabScreen, {
   HomeStackScreen,
   RegisterStackScreen,
   LoginStackScreen,
@@ -32,23 +32,23 @@ export default function App() {
       <PaperProvider>
         <NavigationContainer>
           <Drawer.Navigator
-            initialRouteName="Seresa"
+            initialRouteName="Home"
             drawerPosition="right"
             drawerContent={(props) => <DrawerContent {...props} />}
           >
-            <Drawer.Screen name="Tab" component={TabStackScreen} />
+            <Drawer.Screen name="HomeMainStack" component={TabScreen} />
             {/*<Drawer.Screen name="Home" component={HomeStackScreen} />*/}
             {/*<Drawer.Screen name="Inscription" component={RegisterStackScreen} />*/}
-            <Drawer.Screen name="Login" component={LoginStackScreen} />
+            {/*<Drawer.Screen name="Login" component={LoginStackScreen} />*/}
             {/*<Drawer.Screen name="Profile" component={ProfileStackScreen} />*/}
-            <Drawer.Screen name="Presentation" component={PresentationStackScreen}/>
-            <Drawer.Screen name="PasswordRecuperation" component={PasswordRecuperationStackScreen } />
-            {/*<Drawer.Screen name="Form" component={FormStackScreen} />*/}
+            {/*<Drawer.Screen name="Presentation" component={PresentationStackScreen}/>*/}
+            {/*<Drawer.Screen name="PasswordRecuperation" component={PasswordRecuperationStackScreen } />*/}
+            <Drawer.Screen name="Form" component={FormStackScreen} />
             {/*<Drawer.Screen name="Phases" component={PhasesStackScreen} />*/}
-            <Drawer.Screen
-              name="PasswordChange"
-              component={PasswordChangeStackScreen}
-            />
+            {/*<Drawer.Screen*/}
+            {/*  name="PasswordChange"*/}
+            {/*  component={PasswordChangeStackScreen}*/}
+            {/*/>*/}
             <Drawer.Screen name="Fisio" component={FisioStackScreen} />
           </Drawer.Navigator>
         </NavigationContainer>

@@ -159,13 +159,13 @@ const _PasswordChangeScreen = (props) => {
         >
           <Text style={styles.submitText}>Changer de mot de passe</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.buttonBox}
-          onPress={() => props.navigation.navigate("Profile")}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.submitText}>Retourner sur le profile</Text>
-        </TouchableOpacity>
+        {/*<TouchableOpacity*/}
+        {/*  style={styles.buttonBox}*/}
+        {/*  onPress={() => props.navigation.navigate("Profile")}*/}
+        {/*  activeOpacity={0.8}*/}
+        {/*>*/}
+        {/*  <Text style={styles.submitText}>Retourner sur le profile</Text>*/}
+        {/*</TouchableOpacity>*/}
       </View>
     </ScrollView>
   );

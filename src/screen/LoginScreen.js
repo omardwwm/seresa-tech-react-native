@@ -147,9 +147,9 @@ const _LoginScreen = (props) => {
           </View>
         </View>
       </Modal>
-      <View style={{marginTop:30}}>
-        <Button title="Retour accueil" color="#FD9854" onPress={() => props.navigation.navigate("Home")}  />
-      </View>
+      {/*<View style={{marginTop:30}}>*/}
+      {/*  <Button title="Retour accueil" color="#FD9854" onPress={() => props.navigation.navigate("Home")}  />*/}
+      {/*</View>*/}
     </View>
   );
 };
