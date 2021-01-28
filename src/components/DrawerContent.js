@@ -19,6 +19,7 @@ const _DrawerContent = (props) => {
   const { user, isUserLogged } = userReducer;
 
   const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const role = user && user.role;
 
   const toggleTheme = () => {
     setIsDarkTheme(!isDarkTheme);
@@ -55,7 +56,7 @@ const _DrawerContent = (props) => {
             <DrawerItem
               label="Bienvenida"
               icon={({ color, size }) => (
-                <Ionicons name="md-home" color={color} size={size} />
+                <Ionicons name="md-home" color="#fd9854" size={size} />
               )}
               onPress={() => {
                 props.navigation.navigate("Home");
@@ -84,17 +85,7 @@ const _DrawerContent = (props) => {
                   }}
                   style={[styles.drawerItem]}
                 />
-                <DrawerItem
-                  label="Fisio"
-                  icon={({ color, size }) => (
-                      <Fontisto name="doctor" size={26} color="#67b4aa" />
-                  )}
-                  onPress={() => {
-                    props.navigation.navigate("Fisio");
-                    getPatient();
-                  }}
-                  style={[styles.drawerItem]}
-                />
+
               </View>
             )}
             {isUserLogged && (
@@ -102,44 +93,75 @@ const _DrawerContent = (props) => {
                 <DrawerItem
                   label="Profile"
                   icon={({ color, size }) => (
-                      <FontAwesome name="user" size={24} color="black" />
+                      <FontAwesome name="user" size={24} color="#67b4aa" />
                   )}
                   onPress={() => {
                     props.navigation.navigate("Profile");
                   }}
                   style={[styles.drawerItem]}
                 />
-                <DrawerItem
-                  label="Formulaire"
-                  icon={({ color, size }) => (
-                    <Ionicons name="md-list" color={color} size={size} />
-                  )}
-                  onPress={() => {
-                    props.navigation.navigate("Form");
-                    getForm(user);
-                  }}
-                  style={[styles.drawerItem]}
-                /><DrawerItem
-                  label="Presentation"
-                  icon={({ color, size }) => (
-                      <MaterialCommunityIcons name="presentation-play" size={24} color="black" />
-                  )}
-                  onPress={() => {
-                    props.navigation.navigate("Presentation");
-                  }}
-                  style={[styles.drawerItem]}
-                />
-                <DrawerItem
-                  label="Phases"
-                  icon={({ color, size }) => (
-                      <FontAwesome5 name="layer-group" size={24} color="green" />
-                  )}
-                  onPress={() => {
-                    getExercice(user);
-                    props.navigation.navigate("Phases");
-                  }}
-                  style={[styles.drawerItem]}
-                />
+                {role === "um_fisioterapeuta"?
+                    [<DrawerItem
+                        label="AllPatients"
+                        icon={({ color, size }) => (
+                            <MaterialCommunityIcons name="clipboard-list" size={26} color="#67b4aa" />
+                        )}
+                        onPress={() => {
+                          props.navigation.navigate("AllPatients");
+                          getPatient();
+                        }}
+                        style={[styles.drawerItem]}
+                      />,
+                      <DrawerItem
+                          label="MyPatients"
+                          icon={({ color, size }) => (
+                              <Ionicons name="list-circle" size={26} color="#67b4aa" />
+                          )}
+                          onPress={() => {
+                            props.navigation.navigate("MyPatients");
+                            getPatient();
+                          }}
+                          style={[styles.drawerItem]}
+                      />
+
+                    ] :
+
+                    [
+                      <DrawerItem
+                          label="Formulaire"
+                          icon={({ color, size }) => (
+                              <Ionicons name="md-list" color={color} size={size} />
+                          )}
+                          onPress={() => {
+                            props.navigation.navigate("Form");
+                            getForm(user);
+                          }}
+                          style={[styles.drawerItem]}
+                      />,
+                      // <DrawerItem
+                      //   label="Presentation"
+                      //   icon={({ color, size }) => (
+                      //       <MaterialCommunityIcons name="presentation-play" size={24} color="black" />
+                      //   )}
+                      //   onPress={() => {
+                      //     props.navigation.navigate("Presentation");
+                      //   }}
+                      //   style={[styles.drawerItem]}
+                      // />,
+                      <DrawerItem
+                          label="Phases"
+                          icon={({ color, size }) => (
+                              <FontAwesome5 name="layer-group" size={24} color="green" />
+                          )}
+                          onPress={() => {
+                            getExercice(user);
+                            props.navigation.navigate("Phases");
+                          }}
+                          style={[styles.drawerItem]}
+                      />
+                    ]
+                }
+
               </View>
             )}
           </Drawer.Section>

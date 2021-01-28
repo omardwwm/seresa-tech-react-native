@@ -18,21 +18,21 @@ const _ProfileScreen = (props) => {
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
         <View style={styles.profileBox}>
-          {user.gender[0].slice(14, -3) === "Femme" ? (<Avatar.Image
-              source={require("../assets/image/woman-avatar.png")}
-              size={150}
-              style={{
-                marginRight: 10,
-                backgroundColor: "gold",
-              }}
-          />): <Avatar.Image
-              source={require("../assets/image/man-avatar.png")}
-              size={150}
-              style={{
-                marginRight: 10,
-                backgroundColor: "gold",
-              }}
-          />}
+          {/*{user.gender[0].slice(14, -3) === "Femme" ? (<Avatar.Image*/}
+          {/*    source={require("../assets/image/woman-avatar.png")}*/}
+          {/*    size={150}*/}
+          {/*    style={{*/}
+          {/*      marginRight: 10,*/}
+          {/*      backgroundColor: "gold",*/}
+          {/*    }}*/}
+          {/*/>): <Avatar.Image*/}
+          {/*    source={require("../assets/image/man-avatar.png")}*/}
+          {/*    size={150}*/}
+          {/*    style={{*/}
+          {/*      marginRight: 10,*/}
+          {/*      backgroundColor: "gold",*/}
+          {/*    }}*/}
+          {/*/>}*/}
 
           {/*<Avatar.Image*/}
           {/*  source={require("../assets/image/massage.jpg")}*/}
@@ -49,6 +49,7 @@ const _ProfileScreen = (props) => {
           <Text>Lastname : {user && user.last_name}</Text>
           <Text>Phone number : {user && user.phone_number}</Text>
           {/*<Text>Phase-Role : {user.mod6_capabilities[0].slice(29, 30)}</Text>*/}
+          <Text>Role : {user && user.role}</Text>
           <TouchableOpacity
             style={styles.buttonBox}
             onPress={() => props.navigation.navigate("PasswordChange")}

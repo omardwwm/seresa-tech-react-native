@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Image } from "react-native";
+import { FontAwesome, FontAwesome5, MaterialCommunityIcons, Fontisto, Ionicons } from '@expo/vector-icons';
 
 import HomeScreen from "./HomeScreen";
 import RegisterScreen from "./RegisterScreen";
@@ -11,15 +11,15 @@ import FormScreen from "./FormScreen";
 import PhasesScreen from "./PhasesScreen";
 import PasswordChangeScreen from "./PasswordChangeScreen";
 import logo from "../assets/image/Logo-Seresa-Tech.png";
-import FisioScreen from "./FisioScreen";
+import AllPatientsScreen from "./AllPatientsScreen";
+import MyPatientsScreen from "./MyPtientsScreen";
+import FichePatientScreen from "./FichePtientScreen";
 import PresentationScreen from "./PresentationScreen";
 import PasswordRecuperationScreen from "./PasswordReuperationScreen";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from "react-redux";
 import {getExercice, getForm, getPatient, getUser, onUserLogin, onUserLogout} from "../redux";
 // import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
-
 
 const HomeStack = createStackNavigator();
 const RegisterStack = createStackNavigator();
@@ -34,6 +34,8 @@ const PasswordRecuperationStack = createStackNavigator();
 const TabStack = createStackNavigator();
 // const Stack = createStackNavigator();
 const MainStack = createStackNavigator();
+const MyPatientsStack = createStackNavigator();
+const FichePatientStack = createStackNavigator();
 
 const Tab = createMaterialBottomTabNavigator();
 // function to get the name of route and show it in the header title with navigation with tabButtonNavigation (https://reactnavigation.org/)
@@ -61,6 +63,13 @@ const Tab = createMaterialBottomTabNavigator();
 const _TabScreen = (props) => {
     const { userReducer, getUser, onUserLogin } = props;
     const { user, isUserLogged } = userReducer;
+    // console.log(user && user.role);
+    const role = user && user.role;
+    // console.log(roleFisio);
+
+
+
+
 
     if (isUserLogged){
         return (
@@ -94,17 +103,43 @@ const _TabScreen = (props) => {
                     }}
                 />
 
-                <Tab.Screen
-                    name="Phases"
-                    component={PhasesStackScreen}
-                    options={{
-                        tabBarLabel: 'Phases',
-                        tabBarColor: '#009387',
-                        tabBarIcon: ({color}) => (
-                            <MaterialCommunityIcons name="run" color={color} size={26}/>
-                        ),
-                    }}
-                />
+                {role === "um_fisioterapeuta"?
+                    [<Tab.Screen key={user.id}
+                        name="AllPatients"
+                        component={AllPatientsStackScreen}
+                        options={{
+                            tabBarLabel: 'AllPatients',
+                            tabBarColor: '#009387',
+                            tabBarIcon: ({color}) => (
+                                <MaterialCommunityIcons name="clipboard-list" color={color} size={26}/>
+                            ),
+                        }}
+                    />,
+                        <Tab.Screen
+                            name="MyPatients"
+                            component={MyPatientsStackScreen}
+                            options={{
+                                tabBarLabel: 'MyPatients',
+                                tabBarColor: '#009387',
+                                tabBarIcon: ({color}) => (
+                                    <Ionicons name="list-circle" color={color} size={26}/>
+                                ),
+                            }}
+                        />
+                    ]
+                    :
+                    <Tab.Screen
+                        name="Phases"
+                        component={PhasesStackScreen}
+                        options={{
+                            tabBarLabel: 'Phases',
+                            tabBarColor: '#009387',
+                            tabBarIcon: ({color}) => (
+                                <MaterialCommunityIcons name="run" color={color} size={26}/>
+                            ),
+                        }}
+                    />
+                }
 
             </Tab.Navigator>
         )
@@ -321,12 +356,32 @@ export const PhasesStackScreen = ({ navigation }) => (
 //   </PasswordChangeStack.Navigator>
 // );
 
-export const FisioStackScreen = ({ navigation }) => (
+export const AllPatientsStackScreen = ({ navigation }) => (
   <FisioStack.Navigator screenOptions={ScreenOption({ navigation })}>
     <FisioStack.Screen
-      name="Fisio"
-      component={FisioScreen}
-      options={{ title: "Fisio" }}
+      name="AllPatients"
+      component={AllPatientsScreen}
+      options={{ title: "AllPatients" }}
     />
+      <FichePatientStack.Screen
+          name="FichePatient"
+          component={FichePatientScreen}
+          options={{title: "FichePatient"}}
+      />
   </FisioStack.Navigator>
 );
+
+export const MyPatientsStackScreen = ({navigation}) => (
+    <MyPatientsStack.Navigator screenOptions={ScreenOption({ navigation })}>
+        <MyPatientsStack.Screen
+            name="MyPatients"
+            component={MyPatientsScreen}
+            options={{title: "MyPatients"}}
+        />
+        <FichePatientStack.Screen
+            name="FichePatient"
+            component={FichePatientScreen}
+            options={{title: "FichePatient"}}
+        />
+    </MyPatientsStack.Navigator>
+)
