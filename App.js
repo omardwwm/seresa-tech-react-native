@@ -16,7 +16,12 @@ import TabScreen, {
   FormStackScreen,
   PhasesStackScreen,
   PasswordChangeStackScreen,
-  FisioStackScreen, PresentationStackScreen, PasswordRecuperationStackScreen, TabStackScreen, AllPatientsStackScreen,
+  FisioStackScreen,
+  PresentationStackScreen,
+  PasswordRecuperationStackScreen,
+  TabStackScreen,
+  AllPatientsStackScreen,
+  DatosStackScreen,
 } from "./src/screen/MainTabScreen";
 import { DrawerContent } from "./src/components/DrawerContent";
 import {Text, TouchableOpacity} from "react-native";
@@ -49,7 +54,8 @@ export default function App() {
             {/*  name="PasswordChange"*/}
             {/*  component={PasswordChangeStackScreen}*/}
             {/*/>*/}
-            <Drawer.Screen name="AllPatients" component={AllPatientsStackScreen} />
+            <Drawer.Screen name="Datos" component={DatosStackScreen} />
+            {/*<Drawer.Screen name="AllPatients" component={AllPatientsStackScreen} />*/}
           </Drawer.Navigator>
         </NavigationContainer>
       </PaperProvider>

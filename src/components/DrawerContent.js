@@ -85,6 +85,17 @@ const _DrawerContent = (props) => {
                   }}
                   style={[styles.drawerItem]}
                 />
+                {/*<DrawerItem*/}
+                {/*    label="AllPatients"*/}
+                {/*    icon={({ color, size }) => (*/}
+                {/*        <MaterialCommunityIcons name="clipboard-list" size={26} color="#67b4aa" />*/}
+                {/*    )}*/}
+                {/*    onPress={() => {*/}
+                {/*      props.navigation.navigate("AllPatients");*/}
+                {/*      getPatient();*/}
+                {/*    }}*/}
+                {/*    style={[styles.drawerItem]}*/}
+                {/*/>*/}
 
               </View>
             )}
@@ -102,12 +113,12 @@ const _DrawerContent = (props) => {
                 />
                 {role === "um_fisioterapeuta"?
                     [<DrawerItem
-                        label="AllPatients"
+                        label="Datos"
                         icon={({ color, size }) => (
                             <MaterialCommunityIcons name="clipboard-list" size={26} color="#67b4aa" />
                         )}
                         onPress={() => {
-                          props.navigation.navigate("AllPatients");
+                          props.navigation.navigate("Datos");
                           getPatient();
                         }}
                         style={[styles.drawerItem]}
@@ -127,7 +138,7 @@ const _DrawerContent = (props) => {
                     ] :
 
                     [
-                      <DrawerItem
+                      <DrawerItem key={user.id}
                           label="Formulaire"
                           icon={({ color, size }) => (
                               <Ionicons name="md-list" color={color} size={size} />

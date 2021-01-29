@@ -1,128 +1,85 @@
-import React, { useState } from "react";
-import { Button, ScrollView, Text, View, StyleSheet } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
-import {
-  Table,
-  TableWrapper,
-  Row,
-  Rows,
-  Col,
-  Cols,
-  Cell,
-} from "react-native-table-component";
+import React from "react";
+import {ScrollView, Text, View, SafeAreaView, StyleSheet, TouchableOpacity, FlatList, VirtualizedList, StatusBar} from "react-native";
+import { FontAwesome, FontAwesome5, MaterialCommunityIcons, Fontisto, Ionicons } from '@expo/vector-icons';
+
+
 import { connect } from "react-redux";
 import { getPatient } from "../redux";
+import {ActivityIndicator} from "react-native-paper";
+// tu update, change by getMyPatents function , to create!!
 
-const _AllPatientsScreen = (props) => {
-  const { userReducer, getPatient } = props;
-  const { patients } = userReducer;
-
-  let tableHeadArray = [];
-  let tableDataArray = [];
-  let widthArr = [
-    70,
-    140,
-    70,
-    50,
-    100,
-    140,
-    60,
-    120,
-    120,
-    120,
-    120,
-    120,
-    120,
-    120,
-    120,
-    120,
-    120,
-    120,
-  ];
-
-  if (patients !== null) {
-    Object.keys(patients[0]).forEach((element) => {
-      tableHeadArray.push(element);
-    });
-
-    Object.keys(patients).forEach((element) => {
-      let currentArray = [];
-      Object.values(patients[element]).forEach((element) => {
-        currentArray.push(element);
-      });
-      tableDataArray.push(currentArray);
-    });
-
-    return (
-      <ScrollView>
-        <ScrollView horizontal>
-          <View style={styles.container}>
-            <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
-              <Row
-                data={tableHeadArray}
-                style={styles.head}
-                textStyle={styles.text}
-                widthArr={widthArr}
-              />
-              <Rows
-                data={tableDataArray}
-                textStyle={styles.text}
-                widthArr={widthArr}
-              />
-            </Table>
-          </View>
-        </ScrollView>
-      </ScrollView>
-    );
-  } else {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="#FD9854" />
-      </View>
-    );
-  }
-
-  /*
-  return (
-    <ScrollView>
-      <ScrollView horizontal>
-        <DataTable>
-          <DataTable.Header
-            style={{ alignItems: "center", justifyContent: "center" }}
-          >
-            {Object.keys(patients[0]).map((element) => {
-              return (
-                <DataTable.Title key={element} style={{ margin: 10 }}>
-                  {element}
-                </DataTable.Title>
-              );
-            })}
-          </DataTable.Header>
-          {Object.keys(patients).map((element) => {
-            return (
-              <DataTable.Row>
-                {Object.values(patients[element]).map((current) => {
-                  console.log(current);
-                  return <DataTable.Cell>{current}</DataTable.Cell>;
-                })}
-              </DataTable.Row>
-            );
-          })}
-        </DataTable>
-      </ScrollView>
-    </ScrollView>
-  ); */
-};
+const Item = ({ name }) => (
+    <View >
+        <Text >{name}</Text>
+    </View>
+);
+const _AllPatientsScreen = (props)=> {
+    const {userReducer, getPatient} = props;
+    const {patients} = userReducer;
+    // console.log(patients);
+    if (patients !== null) {
+        let allPatientsArray = Object.keys(patients).map(function (i) {
+            return patients[i];
+        });
+        // console.log(allPatientsArray);
+        return (
+            <SafeAreaView style={styles.container}>
+                <FlatList
+                    data={allPatientsArray}
+                    renderItem={({ item }) => {
+                        return [
+                            <View style={styles.item}>
+                                <Text>
+                                    {item.date}  {item.name}
+                                </Text>
+                                <Text>Indice Oswestry: {item.indice}</Text>
+                                <Text>Patient suivie ou non A implementer!!</Text>
+                                <TouchableOpacity onPress={()=>props.navigation.navigate('FichePatient', {item})}>
+                                    <Text style={styles.btnDetails}>Lire la suite</Text>
+                                </TouchableOpacity>
+                            </View>
+                        ]
+                    }}
+                    keyExtractor={item => item.id}
+                />
+            </SafeAreaView>
+        )
+    } else {
+        return (
+            <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+                <ActivityIndicator size="large" color="#FD9854"/>
+            </View>
+        );
+    }
+}
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: "#fff" },
-  head: { height: 40, backgroundColor: "#f1f8ff" },
-  text: { margin: 6, textAlign: "center" },
+    container: {
+        flex: 1,
+        marginTop: StatusBar.currentHeight || 0,
+    },
+    item:{
+        padding: 10,
+        margin: 10,
+        fontSize: 18,
+        borderWidth: 1,
+        borderRadius:6,
+        backgroundColor:"#e3985a"
+    },
+    btnDetails:{
+        alignItems: "center",
+        textAlign:"center",
+        justifyContent:"center",
+        backgroundColor: "#8fe2b3",
+        borderRadius: 6,
+        width: 120
+    }
 });
 
 const mapStateToProps = (state) => ({
-  userReducer: state.userReducer,
+    userReducer: state.userReducer,
 });
+
 
 const AllPatientsScreen = connect(mapStateToProps, { getPatient })(_AllPatientsScreen);
 

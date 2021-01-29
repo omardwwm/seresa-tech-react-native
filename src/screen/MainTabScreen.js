@@ -11,7 +11,7 @@ import FormScreen from "./FormScreen";
 import PhasesScreen from "./PhasesScreen";
 import PasswordChangeScreen from "./PasswordChangeScreen";
 import logo from "../assets/image/Logo-Seresa-Tech.png";
-import AllPatientsScreen from "./AllPatientsScreen";
+import DatosScreen from "./DatosScreen";
 import MyPatientsScreen from "./MyPtientsScreen";
 import FichePatientScreen from "./FichePtientScreen";
 import PresentationScreen from "./PresentationScreen";
@@ -19,6 +19,7 @@ import PasswordRecuperationScreen from "./PasswordReuperationScreen";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { connect } from "react-redux";
 import {getExercice, getForm, getPatient, getUser, onUserLogin, onUserLogout} from "../redux";
+import AllPatientsScreen from "./AllPatientsScreen";
 // import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 const HomeStack = createStackNavigator();
@@ -28,7 +29,7 @@ const ProfileStack = createStackNavigator();
 const FormStack = createStackNavigator();
 const PhasesStack = createStackNavigator();
 const PasswordChangeStack = createStackNavigator();
-const FisioStack = createStackNavigator();
+const DatosStack = createStackNavigator();
 const PresentationStack = createStackNavigator();
 const PasswordRecuperationStack = createStackNavigator();
 const TabStack = createStackNavigator();
@@ -36,6 +37,7 @@ const TabStack = createStackNavigator();
 const MainStack = createStackNavigator();
 const MyPatientsStack = createStackNavigator();
 const FichePatientStack = createStackNavigator();
+const AllPatientsStack = createStackNavigator();
 
 const Tab = createMaterialBottomTabNavigator();
 // function to get the name of route and show it in the header title with navigation with tabButtonNavigation (https://reactnavigation.org/)
@@ -128,7 +130,7 @@ const _TabScreen = (props) => {
                         />
                     ]
                     :
-                    <Tab.Screen
+                    <Tab.Screen key={user.id}
                         name="Phases"
                         component={PhasesStackScreen}
                         options={{
@@ -356,9 +358,19 @@ export const PhasesStackScreen = ({ navigation }) => (
 //   </PasswordChangeStack.Navigator>
 // );
 
+export const DatosStackScreen = ({navigation}) => (
+    <DatosStack.Navigator screenOptions={ScreenOption({ navigation })}>
+        <DatosStack.Screen
+            name="DatosScreen"
+            component={DatosScreen}
+            options={{ title: "Datos" }}
+        />
+    </DatosStack.Navigator>
+)
+
 export const AllPatientsStackScreen = ({ navigation }) => (
-  <FisioStack.Navigator screenOptions={ScreenOption({ navigation })}>
-    <FisioStack.Screen
+  <AllPatientsStack.Navigator screenOptions={ScreenOption({ navigation })}>
+    <AllPatientsStack.Screen
       name="AllPatients"
       component={AllPatientsScreen}
       options={{ title: "AllPatients" }}
@@ -368,7 +380,7 @@ export const AllPatientsStackScreen = ({ navigation }) => (
           component={FichePatientScreen}
           options={{title: "FichePatient"}}
       />
-  </FisioStack.Navigator>
+  </AllPatientsStack.Navigator>
 );
 
 export const MyPatientsStackScreen = ({navigation}) => (
