@@ -13,7 +13,7 @@ import {
 import { connect } from "react-redux";
 import { getPatient } from "../redux";
 
-const _AllPatientsScreen = (props) => {
+const _DatosScreen = (props) => {
   const { userReducer, getPatient } = props;
   const { patients } = userReducer;
   console.log(patients);
@@ -152,6 +152,6 @@ const mapStateToProps = (state) => ({
   userReducer: state.userReducer,
 });
 
-const DatosScreen = connect(mapStateToProps, { getPatient })(_AllPatientsScreen);
+const DatosScreen = connect(mapStateToProps, { getPatient })(_DatosScreen);
 
 export default DatosScreen;

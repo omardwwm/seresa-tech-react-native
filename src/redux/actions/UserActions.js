@@ -197,7 +197,7 @@ export const getForm = (user) => {
       const response = await Axios.get(
         `http://seresa-tech.net/index.php/wp-json/wcra/v1/get_formulaire/?param1=${user.juiz_secret_token_autolog[0]}`
       );
-      console.log("response getForm", response);
+      // console.log("response getForm", response);
       dispatch({ type: "GET_FORM", form: response.data.json_survey });
     } catch (error) {
       console.log("error form", error.response);

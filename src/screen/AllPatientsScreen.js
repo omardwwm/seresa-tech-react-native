@@ -8,11 +8,7 @@ import { getPatient } from "../redux";
 import {ActivityIndicator} from "react-native-paper";
 // tu update, change by getMyPatents function , to create!!
 
-const Item = ({ name }) => (
-    <View >
-        <Text >{name}</Text>
-    </View>
-);
+
 const _AllPatientsScreen = (props)=> {
     const {userReducer, getPatient} = props;
     const {patients} = userReducer;
@@ -23,12 +19,12 @@ const _AllPatientsScreen = (props)=> {
         });
         // console.log(allPatientsArray);
         return (
-            <SafeAreaView style={styles.container}>
-                <FlatList
+            <SafeAreaView>
+                <FlatList key={allPatientsArray.index}
                     data={allPatientsArray}
                     renderItem={({ item }) => {
                         return [
-                            <View style={styles.item}>
+                            <View style={styles.item} >
                                 <Text>
                                     {item.date}  {item.name}
                                 </Text>

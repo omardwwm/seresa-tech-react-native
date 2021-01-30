@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { ActivityIndicator, RadioButton } from "react-native-paper";
-import { getForm, hideFormModal, sendFormData, setIsLoading, getExercice } from "../redux";
+import { getForm, hideFormModal, sendFormData, setIsLoading, getExercice, getPatient } from "../redux";
 import { connect } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import CountDown from "react-native-countdown-component";
@@ -24,16 +24,20 @@ const _FormScreen = (props) => {
     sendFormData,
     setIsLoading,
     hideFormModal,
-    getExercice
+    getExercice,
+      getPatient
   } = props;
   const {
     form,
     user,
+    patients,
     isFormLoading,
     showFormModal,
     isLoading,
     formError,
   } = userReducer;
+
+  console.log(patients);
 
   const [checked, setChecked] = useState({
     form: {},
@@ -89,6 +93,18 @@ const _FormScreen = (props) => {
     );
   }*/
 
+  // if (patients !== null){
+  //   let allPatientsArray = Object.keys(patients).map(function (i) {
+  //     return patients[i];
+  //   });
+  //   // let thisPatientFiche = _.filter(allPatientsArray, {paciente: user.id});
+  //   console.log(allPatientsArray.filter(function (item){
+  //     return item.paciente === 179;
+  //   }));
+  //   console.log(user.id);
+  //
+  // }
+
   if (form != null) {
     if (form.date !== undefined) {
       return (
@@ -107,6 +123,7 @@ const _FormScreen = (props) => {
           </View>
       );
     }
+
     return (
         <View style={{ flex: 1 }}>
           <ScrollView
@@ -474,11 +491,12 @@ const mapStateToProps = (state) => ({
 });
 
 const FormScreen = connect(mapStateToProps, {
+  getPatient,
   getForm,
   sendFormData,
   setIsLoading,
   hideFormModal,
-  getExercice
+  getExercice,
 })(_FormScreen);
 
 export default FormScreen;

@@ -31,28 +31,47 @@ const _DrawerContent = (props) => {
           {isUserLogged && (
             <View style={styles.userInfoSection}>
               <View style={{ flexDirection: "row-reverse" }}>
-                <Avatar.Image
-                  source={require("../assets/image/woman-avatar.png")}
-                  size={50}
-                  style={{
-                    marginRight: 10,
-                    backgroundColor: "gold",
-                  }}
-                />
+                {role !== "um_fisioterapeuta"?
+                    //{/* ajouter le role admin ds la condition */}
+                    user && user.gender[0].slice(14, -3) === "Femme" ? (<Avatar.Image
+                        source={require("../assets/image/woman-avatar.png")}
+                        size={50}
+                        style={{
+                          marginRight: 10,
+                          backgroundColor: "gold",
+                        }}
+                    />): <Avatar.Image
+                        source={require("../assets/image/man-avatar.png")}
+                        size={50}
+                        style={{
+                          marginRight: 10,
+                          backgroundColor: "gold",
+                        }}
+                    />
+
+                    : null}
+                {/*<Avatar.Image*/}
+                {/*  source={require("../assets/image/woman-avatar.png")}*/}
+                {/*  size={50}*/}
+                {/*  style={{*/}
+                {/*    marginRight: 10,*/}
+                {/*    backgroundColor: "gold",*/}
+                {/*  }}*/}
+                {/*/>*/}
                 <View
                   style={{
                     marginRight: 10,
                   }}
                 >
-                  <Title style={styles.title}>{/*user.nickname*/}</Title>
+                  <Title style={styles.title}>{user.first_name}</Title>
                   <Caption style={styles.caption}>
-                    {/*user.first_name + " " + user.last_name*/}
+                    <Text>{user.first_name + " " + user.last_name}</Text>
                   </Caption>
                 </View>
               </View>
             </View>
           )}
-          <Drawer.Section style={styles.drawerSection}>
+          <Drawer.Section style={styles.drawerSection} key={user && user.id}>
             <DrawerItem
               label="Bienvenida"
               icon={({ color, size }) => (
@@ -64,7 +83,7 @@ const _DrawerContent = (props) => {
               style={[styles.drawerItem]}
             />
             {!isUserLogged && (
-              <View>
+              <View key={user && user.id}>
                 <DrawerItem
                   label="Inscribirse"
                   icon={({ color, size }) => (
@@ -112,7 +131,7 @@ const _DrawerContent = (props) => {
                   style={[styles.drawerItem]}
                 />
                 {role === "um_fisioterapeuta"?
-                    [<DrawerItem
+                    [<DrawerItem key={user.id}
                         label="Datos"
                         icon={({ color, size }) => (
                             <MaterialCommunityIcons name="clipboard-list" size={26} color="#67b4aa" />
@@ -123,7 +142,7 @@ const _DrawerContent = (props) => {
                         }}
                         style={[styles.drawerItem]}
                       />,
-                      <DrawerItem
+                      <DrawerItem key={user.id+1}
                           label="MyPatients"
                           icon={({ color, size }) => (
                               <Ionicons name="list-circle" size={26} color="#67b4aa" />
@@ -159,7 +178,7 @@ const _DrawerContent = (props) => {
                       //   }}
                       //   style={[styles.drawerItem]}
                       // />,
-                      <DrawerItem
+                      <DrawerItem key={user.id+1}
                           label="Phases"
                           icon={({ color, size }) => (
                               <FontAwesome5 name="layer-group" size={24} color="green" />

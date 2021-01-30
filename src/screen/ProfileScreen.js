@@ -13,11 +13,31 @@ const _ProfileScreen = (props) => {
   if (user === null) {
     return null;
   }
+  const role = user && user.role;
+  console.log(role);
 
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
         <View style={styles.profileBox}>
+          {role !== "um_fisioterapeuta"?
+              user && user.gender[0].slice(14, -3) === "Femme" ? (<Avatar.Image
+                    source={require("../assets/image/woman-avatar.png")}
+                    size={150}
+                    style={{
+                      marginRight: 10,
+                      backgroundColor: "gold",
+                    }}
+                />): <Avatar.Image
+                    source={require("../assets/image/man-avatar.png")}
+                    size={150}
+                    style={{
+                      marginRight: 10,
+                      backgroundColor: "gold",
+                    }}
+                />
+
+              : null}
           {/*{user.gender[0].slice(14, -3) === "Femme" ? (<Avatar.Image*/}
           {/*    source={require("../assets/image/woman-avatar.png")}*/}
           {/*    size={150}*/}

@@ -117,7 +117,7 @@ const _TabScreen = (props) => {
                             ),
                         }}
                     />,
-                        <Tab.Screen
+                        <Tab.Screen key={user.id+1}
                             name="MyPatients"
                             component={MyPatientsStackScreen}
                             options={{
@@ -130,7 +130,7 @@ const _TabScreen = (props) => {
                         />
                     ]
                     :
-                    <Tab.Screen key={user.id}
+                    <Tab.Screen
                         name="Phases"
                         component={PhasesStackScreen}
                         options={{
