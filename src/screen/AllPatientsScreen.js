@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {ScrollView, Text, View, SafeAreaView, StyleSheet, TouchableOpacity, FlatList, VirtualizedList, StatusBar} from "react-native";
-import { FontAwesome, FontAwesome5, MaterialCommunityIcons, Fontisto, Ionicons } from '@expo/vector-icons';
+// import { FontAwesome, FontAwesome5, MaterialCommunityIcons, Fontisto, Ionicons } from '@expo/vector-icons';
 
 
 import { connect } from "react-redux";
@@ -12,19 +12,24 @@ import {ActivityIndicator} from "react-native-paper";
 const _AllPatientsScreen = (props)=> {
     const {userReducer, getPatient} = props;
     const {patients} = userReducer;
-    // console.log(patients);
+    useEffect(() => {
+        getPatient();
+    }, []);
+    console.log(patients);
     if (patients !== null) {
-        let allPatientsArray = Object.keys(patients).map(function (i) {
+        const allPatientsArray = Object.keys(patients).map(function (i) {
             return patients[i];
         });
+
         // console.log(allPatientsArray);
+
         return (
             <SafeAreaView>
-                <FlatList key={allPatientsArray.index}
+                <FlatList
                     data={allPatientsArray}
-                    renderItem={({ item }) => {
-                        return [
-                            <View style={styles.item} >
+                    renderItem={({ item }) => (
+
+                            <View style={styles.item} key={item.id}>
                                 <Text>
                                     {item.date}  {item.name}
                                 </Text>
@@ -34,9 +39,9 @@ const _AllPatientsScreen = (props)=> {
                                     <Text style={styles.btnDetails}>Lire la suite</Text>
                                 </TouchableOpacity>
                             </View>
-                        ]
-                    }}
-                    keyExtractor={item => item.id}
+                        )}
+                    // keyExtractor={item => item.id}
+                    keyExtractor = { (item, index) => index.toString() }
                 />
             </SafeAreaView>
         )

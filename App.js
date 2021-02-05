@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import { Provider as PaperProvider } from "react-native-paper";
 import { store } from "./src/redux";
+import {enableScreens} from 'react-native-screens';
 // import { connect } from "react-redux";
 // import TabScreen from "./src/screen/MainTabScreen";
 
@@ -21,11 +22,14 @@ import TabScreen, {
   PasswordRecuperationStackScreen,
   TabStackScreen,
   AllPatientsStackScreen,
-  DatosStackScreen,
+  DatosStackScreen, FichePatientStackScreen,
 } from "./src/screen/MainTabScreen";
 import { DrawerContent } from "./src/components/DrawerContent";
 import {Text, TouchableOpacity} from "react-native";
+import AllPatientsScreen from "./src/screen/AllPatientsScreen";
+import FichePatientScreen from "./src/screen/FichePtientScreen";
 // import PresentationScreen from "./src/screen/PresentationScreen";
+enableScreens();
 
 const Drawer = createDrawerNavigator();
 
@@ -41,7 +45,7 @@ export default function App() {
             drawerPosition="right"
             drawerContent={(props) => <DrawerContent {...props} />}
           >
-            <Drawer.Screen name="HomeMainStack" component={TabScreen} />
+            <Drawer.Screen name="Tab" component={TabScreen} />
             {/*<Drawer.Screen name="Home" component={HomeStackScreen} />*/}
             {/*<Drawer.Screen name="Inscription" component={RegisterStackScreen} />*/}
             {/*<Drawer.Screen name="Login" component={LoginStackScreen} />*/}
@@ -54,7 +58,8 @@ export default function App() {
             {/*  name="PasswordChange"*/}
             {/*  component={PasswordChangeStackScreen}*/}
             {/*/>*/}
-            <Drawer.Screen name="Datos" component={DatosStackScreen} />
+            {/*<Drawer.Screen name="FichePatient" component={FichePatientScreen}/>*/}
+            <Drawer.Screen name="DatosScreen" component={DatosStackScreen} />
             {/*<Drawer.Screen name="AllPatients" component={AllPatientsStackScreen} />*/}
           </Drawer.Navigator>
         </NavigationContainer>

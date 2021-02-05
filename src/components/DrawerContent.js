@@ -10,7 +10,7 @@ import {
   Title,
   TouchableRipple,
 } from "react-native-paper";
-import { FontAwesome, FontAwesome5, MaterialCommunityIcons, Fontisto, Ionicons } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome5, MaterialCommunityIcons, AntDesign, Ionicons } from '@expo/vector-icons';
 import { connect } from "react-redux";
 import { onUserLogout, getForm, getExercice, getPatient } from "../redux";
 
@@ -31,9 +31,9 @@ const _DrawerContent = (props) => {
           {isUserLogged && (
             <View style={styles.userInfoSection}>
               <View style={{ flexDirection: "row-reverse" }}>
-                {role !== "um_fisioterapeuta"?
+                {role && role !== "um_fisioterapeuta"?
                     //{/* ajouter le role admin ds la condition */}
-                    user && user.gender[0].slice(14, -3) === "Femme" ? (<Avatar.Image
+                    (user.gender && user.gender[0].slice(14, -3) === "Femme" || user.gender && user.gender[0] === "Femme")? (<Avatar.Image
                         source={require("../assets/image/woman-avatar.png")}
                         size={50}
                         style={{
@@ -131,43 +131,66 @@ const _DrawerContent = (props) => {
                   style={[styles.drawerItem]}
                 />
                 {role === "um_fisioterapeuta"?
-                    [<DrawerItem key={user.id}
+                    <>
+                      <DrawerItem
                         label="Datos"
                         icon={({ color, size }) => (
-                            <MaterialCommunityIcons name="clipboard-list" size={26} color="#67b4aa" />
+                            <AntDesign name="database" size={26} color="#67b4aa" />
                         )}
                         onPress={() => {
-                          props.navigation.navigate("Datos");
+                          props.navigation.navigate("DatosScreen");
                           getPatient();
                         }}
                         style={[styles.drawerItem]}
-                      />,
-                      <DrawerItem key={user.id+1}
-                          label="MyPatients"
+                      />
+                      <DrawerItem
+                          label="AllPatients"
                           icon={({ color, size }) => (
                               <Ionicons name="list-circle" size={26} color="#67b4aa" />
                           )}
                           onPress={() => {
-                            props.navigation.navigate("MyPatients");
+                            props.navigation.navigate("AllPatients");
                             getPatient();
                           }}
                           style={[styles.drawerItem]}
                       />
+                    </> :
+                    <>
+                      <DrawerItem
+                                   label="Formulaire"
+                                   icon={({ color, size }) => (
+                                       <Ionicons name="md-list" color={color} size={size} />
+                                   )}
+                                   onPress={() => {
+                                     props.navigation.navigate("Form");
+                                     getForm(user); getPatient();
+                                   }}
+                                   style={[styles.drawerItem]}
+                      />
+                      <DrawerItem
+                                   label="Phases"
+                                   icon={({ color, size }) => (
+                                       <FontAwesome5 name="layer-group" size={24} color="green" />
+                                   )}
+                                   onPress={() => {
+                                     getExercice(user);
+                                     props.navigation.navigate("Phases");
+                                   }}
+                                   style={[styles.drawerItem]}
+                      />
+                      {/*<DrawerItem*/}
+                      {/*  label="Datos"*/}
+                      {/*  icon={({ color, size }) => (*/}
+                      {/*      <MaterialCommunityIcons name="clipboard-list" size={26} color="#67b4aa" />*/}
+                      {/*  )}*/}
+                      {/*  onPress={() => {*/}
+                      {/*    props.navigation.navigate("Datos");*/}
+                      {/*    getPatient();*/}
+                      {/*  }}*/}
+                      {/*  style={[styles.drawerItem]}*/}
+                      {/*/>*/}
+                    </>
 
-                    ] :
-
-                    [
-                      <DrawerItem key={user.id}
-                          label="Formulaire"
-                          icon={({ color, size }) => (
-                              <Ionicons name="md-list" color={color} size={size} />
-                          )}
-                          onPress={() => {
-                            props.navigation.navigate("Form");
-                            getForm(user);
-                          }}
-                          style={[styles.drawerItem]}
-                      />,
                       // <DrawerItem
                       //   label="Presentation"
                       //   icon={({ color, size }) => (
@@ -178,18 +201,6 @@ const _DrawerContent = (props) => {
                       //   }}
                       //   style={[styles.drawerItem]}
                       // />,
-                      <DrawerItem key={user.id+1}
-                          label="Phases"
-                          icon={({ color, size }) => (
-                              <FontAwesome5 name="layer-group" size={24} color="green" />
-                          )}
-                          onPress={() => {
-                            getExercice(user);
-                            props.navigation.navigate("Phases");
-                          }}
-                          style={[styles.drawerItem]}
-                      />
-                    ]
                 }
 
               </View>

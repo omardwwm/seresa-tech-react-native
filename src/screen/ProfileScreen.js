@@ -14,14 +14,14 @@ const _ProfileScreen = (props) => {
     return null;
   }
   const role = user && user.role;
-  console.log(role);
+  console.log(user);
 
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
         <View style={styles.profileBox}>
-          {role !== "um_fisioterapeuta"?
-              user && user.gender[0].slice(14, -3) === "Femme" ? (<Avatar.Image
+          {role && role !== "um_fisioterapeuta"?
+              (user && user.gender[0].slice(14, -3) === "Femme" || user && user.gender[0] === "Femme")? (<Avatar.Image
                     source={require("../assets/image/woman-avatar.png")}
                     size={150}
                     style={{
@@ -70,6 +70,7 @@ const _ProfileScreen = (props) => {
           <Text>Phone number : {user && user.phone_number}</Text>
           {/*<Text>Phase-Role : {user.mod6_capabilities[0].slice(29, 30)}</Text>*/}
           <Text>Role : {user && user.role}</Text>
+          {/*<Text>genre : {user && user.gender[0].slice(14, -3)}</Text>*/}
           <TouchableOpacity
             style={styles.buttonBox}
             onPress={() => props.navigation.navigate("PasswordChange")}

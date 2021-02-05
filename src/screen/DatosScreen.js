@@ -13,12 +13,13 @@ import {
 import { connect } from "react-redux";
 import { getPatient } from "../redux";
 
+
 const _DatosScreen = (props) => {
   const { userReducer, getPatient } = props;
   const { patients } = userReducer;
   console.log(patients);
 
-  let tableHeadArray = [];
+    let tableHeadArray = [];
   let tableDataArray = [];
   let widthArr = [
       70,

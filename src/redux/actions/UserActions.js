@@ -184,7 +184,22 @@ export const changePassword = (value, user) => {
     }
   };
 };
+////////////////function to stop-patient
 
+export const stopPatient = (user) => {
+  return async (dispatch) => {
+    try {
+      const response = await Axios.get(
+          `http://seresa-tech.net/wp-json/wcra/v1/stop_paciente/?param1=${user.juiz_secret_token_autolog[0]}&param2=${user.juiz_list_paciente[0]}`
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+};
+
+///////////////////////
 export const setIsLoading = () => {
   return (dispatch) => {
     dispatch({ type: "SET_IS_LOADING" });

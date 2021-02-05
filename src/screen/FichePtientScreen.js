@@ -1,5 +1,6 @@
 import React from "react";
-import {ScrollView, Text, View, Button, StyleSheet, TouchableOpacity} from "react-native";
+import {ScrollView, Text, View, Button, StyleSheet, TouchableOpacity, Alert} from "react-native";
+import {stopPatient} from "../redux"
 
 
 
@@ -8,10 +9,21 @@ import { getPatient } from "../redux"; // tu update, change by getPatientFiche f
 
 
 const _FichePatientScreen = (props)=>{
+    const {userReducer} = props;
+    const {user} = userReducer;
     const {item} = props.route.params;
     // console.log(item);
+    const idFisio = item['id fisio'];
+    const addThisPatientToMyList = ()=>{
+        Alert.alert('adding patient function to implemente');
+    }
+    const removePatientFromMyList = (user)=>{
+        Alert.alert('remove patient function to implemente');
+       // stopPatient(user); // to implement!!!
+
+    }
     return (
-        <View>
+        <View style={{margin:10}}>
 
             <ScrollView>
                 <Text>Privé : Fiche {item['phase du relevé']} {item.name}</Text>
@@ -29,9 +41,22 @@ const _FichePatientScreen = (props)=>{
                 <Text>Estar sentado : {item['Estar sentado']}</Text>
                 <Text>Viajar : {item.Viajar}</Text>
                 <Text>Indice : {item.indice}</Text>
-                <Text></Text>
-                <TouchableOpacity  style={{color:"#f0f"}}>
-                    <Text >SUIVRE CE PATIENT/ARRETER DE SUIVE CE PATIENT</Text>
+
+                <TouchableOpacity  >
+                    {idFisio===0 ?
+                        (<Text onPress={addThisPatientToMyList} style={{backgroundColor:"#FD9854"}}>Suivre ce patient</Text>) :
+
+                    idFisio===user.id ?
+                        (
+                            <>
+                                <Text style={{backgroundColor:"#66983a", marginBottom:10}}>Vous suivez deja ce patient</Text>
+                                <Text onPress={removePatientFromMyList} style={{backgroundColor:"#FD9854"}}>Arreter de suivre ce patient</Text>
+                            </>
+
+                        ) :
+
+                        (<Text style={{backgroundColor:"#66983a", marginBottom:10}}>Ce patient est suivi par le DR dont l'id est: {item['id fisio']}</Text>)
+                    }
                 </TouchableOpacity>
                 <Text>Selon le cas, page accessible avec l'Id du patient en navigation </Text>
             </ScrollView>

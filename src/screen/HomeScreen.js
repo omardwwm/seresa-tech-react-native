@@ -3,15 +3,14 @@ import { Image, StyleSheet, Text, View, Button, ImageBackground, TouchableOpacit
 import InolamLogo from "../assets/image/logo-inolam-blanc.png";
 import UscLogo from "../assets/image/logo-usc.png";
 import bgImg from "../assets/image/massage.jpg";
-import { onAppLaunch, getUser, getPatient } from "../redux";
+import { onAppLaunch, getUser } from "../redux";
 import { connect } from "react-redux";
 import AsyncStorage from "@react-native-community/async-storage";
 
 const _HomeScreen = (props) => {
   const { onAppLaunch, getUser, userReducer } = props;
-  // const { user } = userReducer;
-  const { user, isUserLogged, patients } = userReducer;
-  console.log(patients);
+  const { user, isUserLogged } = userReducer;
+  // console.log(user);
 
   useEffect(() => {
     onAppLaunch();
@@ -116,7 +115,7 @@ const mapStateToProps = (state) => ({
   userReducer: state.userReducer,
 });
 
-const HomeScreen = connect(mapStateToProps, { onAppLaunch, getUser, getPatient })(
+const HomeScreen = connect(mapStateToProps, { onAppLaunch, getUser })(
   _HomeScreen
 );
 

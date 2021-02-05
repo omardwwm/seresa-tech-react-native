@@ -20,56 +20,54 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { connect } from "react-redux";
 import {getExercice, getForm, getPatient, getUser, onUserLogin, onUserLogout} from "../redux";
 import AllPatientsScreen from "./AllPatientsScreen";
-// import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
-const HomeStack = createStackNavigator();
-const RegisterStack = createStackNavigator();
-const LoginStack = createStackNavigator();
-const ProfileStack = createStackNavigator();
-const FormStack = createStackNavigator();
-const PhasesStack = createStackNavigator();
-const PasswordChangeStack = createStackNavigator();
-const DatosStack = createStackNavigator();
-const PresentationStack = createStackNavigator();
-const PasswordRecuperationStack = createStackNavigator();
-const TabStack = createStackNavigator();
-// const Stack = createStackNavigator();
-const MainStack = createStackNavigator();
-const MyPatientsStack = createStackNavigator();
-const FichePatientStack = createStackNavigator();
-const AllPatientsStack = createStackNavigator();
+
+// const HomeStack = createStackNavigator();
+// const RegisterStack = createStackNavigator();
+// const LoginStack = createStackNavigator();
+// const ProfileStack = createStackNavigator();
+// const FormStack = createStackNavigator();
+// const PhasesStack = createStackNavigator();
+// const PasswordChangeStack = createStackNavigator();
+// const DatosStack = createStackNavigator();
+// const PresentationStack = createStackNavigator();
+// const PasswordRecuperationStack = createStackNavigator();
+// const TabStack = createStackNavigator();
+// const MainStack = createStackNavigator();
+// const MyPatientsStack = createStackNavigator();
+// const FichePatientStack = createStackNavigator();
+// const AllPatientsStack = createStackNavigator();
+const Stack = createStackNavigator();
 
 const Tab = createMaterialBottomTabNavigator();
 // function to get the name of route and show it in the header title with navigation with tabButtonNavigation (https://reactnavigation.org/)
-// function getHeaderTitle(route) {
-//     // If the focused route is not found, we need to assume it's the initial screen
-//     // This can happen during if there hasn't been any navigation inside the screen
-//     // In our case, it's "Feed" as that's the first screen inside the navigator
-//     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
-//
-//     switch (routeName) {
-//         case 'Home':
-//             return 'Welcome';
-//         case 'Profile':
-//             return 'My profile';
-//         case 'Phases':
-//             return 'My Phases';
-//         case 'Form':
-//             return 'My Form';
-//         case 'Inscription':
-//             return 'Register-form';
-//
-//     }
-// }
+function getHeaderTitle(route) {
+    // If the focused route is not found, we need to assume it's the initial screen
+    // This can happen during if there hasn't been any navigation inside the screen
+    // In our case, it's "Feed" as that's the first screen inside the navigator
+    const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
+
+    switch (routeName) {
+        case 'Home':
+            return 'Welcome';
+        case 'Profile':
+            return 'My profile';
+        case 'Phases':
+            return 'My Phases';
+        case 'Form':
+            return 'My Form';
+        case 'Inscription':
+            return 'Register-form';
+
+    }
+}
 //the composantes of our TabButtonNavigation in function if user isLogged or not
 const _TabScreen = (props) => {
     const { userReducer, getUser, onUserLogin } = props;
     const { user, isUserLogged } = userReducer;
     // console.log(user && user.role);
     const role = user && user.role;
-    // console.log(roleFisio);
-
-
 
 
 
@@ -106,18 +104,19 @@ const _TabScreen = (props) => {
                 />
 
                 {role === "um_fisioterapeuta"?
-                    [<Tab.Screen key={user.id}
-                        name="AllPatients"
-                        component={AllPatientsStackScreen}
-                        options={{
-                            tabBarLabel: 'AllPatients',
-                            tabBarColor: '#009387',
-                            tabBarIcon: ({color}) => (
-                                <MaterialCommunityIcons name="clipboard-list" color={color} size={26}/>
-                            ),
-                        }}
-                    />,
-                        <Tab.Screen key={user.id+1}
+                    <>
+                        <Tab.Screen
+                            name="AllPatients"
+                            component={AllPatientsStackScreen}
+                            options={{
+                                tabBarLabel: 'AllPatients',
+                                tabBarColor: '#009387',
+                                tabBarIcon: ({color}) => (
+                                    <MaterialCommunityIcons name="clipboard-list" color={color} size={26}/>
+                                ),
+                            }}
+                        />
+                        <Tab.Screen
                             name="MyPatients"
                             component={MyPatientsStackScreen}
                             options={{
@@ -128,8 +127,9 @@ const _TabScreen = (props) => {
                                 ),
                             }}
                         />
-                    ]
+                    </>
                     :
+                    <>
                     <Tab.Screen
                         name="Phases"
                         component={PhasesStackScreen}
@@ -141,8 +141,19 @@ const _TabScreen = (props) => {
                             ),
                         }}
                     />
+                        {/*<Tab.Screen*/}
+                        {/*    name="Form"*/}
+                        {/*    component={FormStackScreen}*/}
+                        {/*    options={{*/}
+                        {/*        tabBarLabel: 'Formulaire',*/}
+                        {/*        tabBarColor: '#009387',*/}
+                        {/*        tabBarIcon: ({color}) => (*/}
+                        {/*            <MaterialCommunityIcons name="format-list-checkbox" color={color} size={26}/>*/}
+                        {/*        ),*/}
+                        {/*    }}*/}
+                        {/*/>*/}
+                    </>
                 }
-
             </Tab.Navigator>
         )
     } else {
@@ -184,7 +195,7 @@ const mapStateToProps = (state) => ({
 });
 const TabScreen = connect(mapStateToProps, {
     onUserLogin,
-    getUser
+    getUser, getPatient
 })(_TabScreen);
 export default TabScreen;
 
@@ -239,161 +250,169 @@ const ScreenOption = ({ navigation }) => {
   };
 };
 
-// export const TabStackScreen = ({navigation}) =>(
-//     <Stack.Navigator screenOptions={ScreenOption({ navigation })}>
-//         <Stack.Screen
-//             name="SERESA"
-//             component={TabScreen}
-//             options={({ route }) => ({
-//                 headerTitle: getHeaderTitle(route),
-//             })}
-//         />
-//     </Stack.Navigator>
-// );
+export const TabStackScreen = ({navigation}) =>(
+    <Stack.Navigator screenOptions={ScreenOption({ navigation })}>
+        <Stack.Screen
+            name="SERESA"
+            component={TabScreen}
+            options={({ route }) => ({
+                headerTitle: getHeaderTitle(route),
+            })}
+        />
+    </Stack.Navigator>
+);
 
 export const MainStackScreen = ({ navigation }) => (
-  <MainStack.Navigator screenOptions={ScreenOption({ navigation })}>
-    <HomeStack.Screen
+  <Stack.Navigator screenOptions={ScreenOption({ navigation })}>
+    <Stack.Screen
       name="Home"
       component={HomeScreen}
       options={{ title: "Bienvenida" }}
     />
-    <LoginStack.Screen
+    <Stack.Screen
           name="Login"
           component={LoginScreen}
           options={{ title: "Conexion" }}
     />
-      <PasswordRecuperationStack.Screen
+      <Stack.Screen
           name="PasswordRecuperation"
           component={PasswordRecuperationScreen}
           options={{title: "reset password"}}
       />
-      <PresentationStack.Screen name="Presentation"
+      <Stack.Screen name="Presentation"
                                 component={PresentationScreen}
                                 options={{title: "espalda baja"}}
       />
-  </MainStack.Navigator>
+  </Stack.Navigator>
 );
 
-// export const PresentationStackScreen = ({navigation})=>(
-//     <PresentationStack.Navigator screenOptions={ScreenOption({ navigation })}>
-//         <PresentationStack.Screen name="Presentation"
-//                                   component={PresentationScreen}
-//                                   options={{title: "espalda baja"}}
-//         />
-//     </PresentationStack.Navigator>
-// );
+export const PresentationStackScreen = ({navigation})=>(
+    <Stack.Navigator screenOptions={ScreenOption({ navigation })}>
+        <Stack.Screen name="Presentation"
+                                  component={PresentationScreen}
+                                  options={{title: "espalda baja"}}
+        />
+    </Stack.Navigator>
+);
 
-// export const PasswordRecuperationStackScreen = ({navigation})=>(
-//     <PasswordRecuperationStack.Navigator screenOptions={ScreenOption({ navigation })}>
-//         <PasswordRecuperationStack.Screen name="PasswordRecuperation"
-//                                   component={PasswordRecuperationScreen}
-//                                   options={{title: "reset password"}}
-//         />
-//     </PasswordRecuperationStack.Navigator>
-// );
+export const PasswordRecuperationStackScreen = ({navigation})=>(
+    <Stack.Navigator screenOptions={ScreenOption({ navigation })}>
+        <Stack.Screen name="PasswordRecuperation"
+                                  component={PasswordRecuperationScreen}
+                                  options={{title: "reset password"}}
+        />
+    </Stack.Navigator>
+);
 
 export const RegisterStackScreen = ({ navigation }) => (
-  <RegisterStack.Navigator screenOptions={ScreenOption({ navigation })}>
-    <RegisterStack.Screen
+  <Stack.Navigator screenOptions={ScreenOption({ navigation })}>
+    <Stack.Screen
       name="Inscription"
       component={RegisterScreen}
       options={{ title: "Inscribirse" }}
     />
-  </RegisterStack.Navigator>
+  </Stack.Navigator>
 );
 
-// export const LoginStackScreen = ({ navigation }) => (
-//   <LoginStack.Navigator screenOptions={ScreenOption({ navigation })}>
-//     <LoginStack.Screen
-//       name="Login"
-//       component={LoginScreen}
-//       options={{ title: "Conexion" }}
-//     />
-//   </LoginStack.Navigator>
-// );
+export const LoginStackScreen = ({ navigation }) => (
+  <Stack.Navigator screenOptions={ScreenOption({ navigation })}>
+    <Stack.Screen
+      name="Login"
+      component={LoginScreen}
+      options={{ title: "Conexion" }}
+    />
+  </Stack.Navigator>
+);
 
 export const ProfileStackScreen = ({ navigation }) => (
-  <ProfileStack.Navigator screenOptions={ScreenOption({ navigation })}>
-    <ProfileStack.Screen
+  <Stack.Navigator screenOptions={ScreenOption({ navigation })}>
+    <Stack.Screen
         name="Profile"
         component={ProfileScreen}
         options={{ title: "Perfil" }}
     />
-    <PasswordChangeStack.Screen
+    <Stack.Screen
         name="PasswordChange"
         component={PasswordChangeScreen}
         options={{ title: "PasswordChange" }}
     />
-  </ProfileStack.Navigator>
+  </Stack.Navigator>
 );
 
 export const FormStackScreen = ({ navigation }) => (
-  <FormStack.Navigator screenOptions={ScreenOption({ navigation })}>
-    <FormStack.Screen
+  <Stack.Navigator screenOptions={ScreenOption({ navigation })}>
+    <Stack.Screen
       name="Form"
       component={FormScreen}
       options={{ title: "Formulaire" }}
     />
-  </FormStack.Navigator>
+  </Stack.Navigator>
 );
 
 export const PhasesStackScreen = ({ navigation }) => (
-  <PhasesStack.Navigator screenOptions={ScreenOption({ navigation })}>
-    <PhasesStack.Screen
+  <Stack.Navigator screenOptions={ScreenOption({ navigation })}>
+    <Stack.Screen
       name="Phases"
       component={PhasesScreen}
       options={{ title: "Phases" }}
     />
-  </PhasesStack.Navigator>
+  </Stack.Navigator>
 );
 
-// export const PasswordChangeStackScreen = ({ navigation }) => (
-//   <PasswordChangeStack.Navigator screenOptions={ScreenOption({ navigation })}>
-//     <PasswordChangeStack.Screen
-//       name="PasswordChange"
-//       component={PasswordChangeScreen}
-//       options={{ title: "PasswordChange" }}
-//     />
-//   </PasswordChangeStack.Navigator>
-// );
+export const PasswordChangeStackScreen = ({ navigation }) => (
+  <Stack.Navigator screenOptions={ScreenOption({ navigation })}>
+    <Stack.Screen
+      name="PasswordChange"
+      component={PasswordChangeScreen}
+      options={{ title: "PasswordChange" }}
+    />
+  </Stack.Navigator>
+);
 
 export const DatosStackScreen = ({navigation}) => (
-    <DatosStack.Navigator screenOptions={ScreenOption({ navigation })}>
-        <DatosStack.Screen
+    <Stack.Navigator screenOptions={ScreenOption({ navigation })}>
+        <Stack.Screen
             name="DatosScreen"
             component={DatosScreen}
             options={{ title: "Datos" }}
         />
-    </DatosStack.Navigator>
+    </Stack.Navigator>
 )
 
 export const AllPatientsStackScreen = ({ navigation }) => (
-  <AllPatientsStack.Navigator screenOptions={ScreenOption({ navigation })}>
-    <AllPatientsStack.Screen
+  <Stack.Navigator screenOptions={ScreenOption({ navigation })}>
+    <Stack.Screen
       name="AllPatients"
       component={AllPatientsScreen}
       options={{ title: "AllPatients" }}
     />
-      <FichePatientStack.Screen
+      <Stack.Screen
           name="FichePatient"
           component={FichePatientScreen}
           options={{title: "FichePatient"}}
       />
-  </AllPatientsStack.Navigator>
+  </Stack.Navigator>
 );
-
+// export const FichePatientStackScreen = ({navigation}) =>(
+//     <FichePatientStack.Navigator screenOptions={ScreenOption({ navigation })}>
+//         <FichePatientStack.Screen
+//             name="FichePatient"
+//             component={FichePatientScreen}
+//             options={{title: "FichePatient"}}
+//         />
+//     </FichePatientStack.Navigator>
+// )
 export const MyPatientsStackScreen = ({navigation}) => (
-    <MyPatientsStack.Navigator screenOptions={ScreenOption({ navigation })}>
-        <MyPatientsStack.Screen
+    <Stack.Navigator screenOptions={ScreenOption({ navigation })}>
+        <Stack.Screen
             name="MyPatients"
             component={MyPatientsScreen}
             options={{title: "MyPatients"}}
         />
-        <FichePatientStack.Screen
+        <Stack.Screen
             name="FichePatient"
             component={FichePatientScreen}
             options={{title: "FichePatient"}}
         />
-    </MyPatientsStack.Navigator>
+    </Stack.Navigator>
 )

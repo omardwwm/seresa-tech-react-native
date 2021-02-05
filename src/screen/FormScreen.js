@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {
   StyleSheet,
   Text,
@@ -6,27 +6,29 @@ import {
   Dimensions,
   TouchableOpacity,
   Modal,
-  Button, Image
+  Image
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { ActivityIndicator, RadioButton } from "react-native-paper";
 import { getForm, hideFormModal, sendFormData, setIsLoading, getExercice, getPatient } from "../redux";
 import { connect } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
+import moment from 'moment';
 import CountDown from "react-native-countdown-component";
+
 
 const { width } = Dimensions.get("window");
 
 const _FormScreen = (props) => {
   const {
-    userReducer,
-    getForm,
-    sendFormData,
-    setIsLoading,
-    hideFormModal,
-    getExercice,
+      userReducer,
+      getForm,
+      sendFormData,
+      setIsLoading,
+      hideFormModal,
+      getExercice,
       getPatient
-  } = props;
+    } = props;
   const {
     form,
     user,
@@ -37,7 +39,41 @@ const _FormScreen = (props) => {
     formError,
   } = userReducer;
 
-  console.log(patients);
+  // useEffect(() => {
+  //   getPatient();
+  // }, []);
+  // console.log(patients);
+  // if (patients !== null) {
+    const allPatientsArray = patients && Object.keys(patients).map(function (i) {
+      return patients[i];
+    });
+    // console.log(allPatientsArray);
+    const currentPatient = allPatientsArray && allPatientsArray.filter(function (item){
+      return item.paciente ===  user.id;
+    });
+    // console.log(currentPatient);
+  let lastDateForm = currentPatient && currentPatient[0].date
+  let numberPhase = currentPatient && currentPatient[0]['phase du relevé'];
+  let dateForNextForm;
+  console.log(numberPhase);
+  switch (numberPhase){
+    case '0':
+      dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(8, 'days');
+       break;
+    case '1':
+      dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(15, 'days');
+      break;
+    case '4':
+      dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(21, 'days');
+      break;
+    default:
+      dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(21, 'days');
+  }
+
+    console.log(dateForNextForm);
+  // const limitDateLine = lastDateForm.setDate(lastDateForm.getDate() + daysOfPhase);
+  // console.log(lastDateForm2.setDate(lastDateForm2.getDate()));
+  // }
 
   const [checked, setChecked] = useState({
     form: {},
@@ -93,39 +129,42 @@ const _FormScreen = (props) => {
     );
   }*/
 
-  // if (patients !== null){
-  //   let allPatientsArray = Object.keys(patients).map(function (i) {
-  //     return patients[i];
-  //   });
-  //   // let thisPatientFiche = _.filter(allPatientsArray, {paciente: user.id});
-  //   console.log(allPatientsArray.filter(function (item){
-  //     return item.paciente === 179;
-  //   }));
-  //   console.log(user.id);
-  //
-  // }
-
   if (form != null) {
-    if (form.date !== undefined) {
-      return (
-          <View
-              style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-          >
-            <Text style={styles.title}>
-              Temps restant avant la prochaine phase :
-            </Text>
-            <CountDown
-                until={parseInt(
-                    (Date.parse(form.date.replace(/\s/g, "T")) - new Date()) / 1000
-                )}
-                size={30}
-            />
-          </View>
-      );
-    }
+    // if (form.date !== undefined) {
+    //   return (
+    //       <View
+    //           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+    //       >
+    //         <Text style={styles.title}>
+    //           Temps restant avant la prochaine phase :
+    //         </Text>
+    //         <CountDown
+    //             until={parseInt(
+    //                 (Date.parse(form.date.replace(/\s/g, "T")) - new Date()) / 1000
+    //             )}
+    //             size={30}
+    //         />
+    //       </View>
+    //   );
+    // }
 
     return (
         <View style={{ flex: 1 }}>
+
+          <View
+              style={{ justifyContent: "center", alignItems: "center" }}
+          >
+            <Text style={{...styles.title, fontSize: 16, marginBottom:5}}>
+              Temps restant avant la prochaine phase :
+            </Text>
+            <CountDown
+                until={parseInt
+                    (dateForNextForm - moment(new Date())) / 1000
+                }
+                size={16}
+            />
+          </View>
+
           <ScrollView
               horizontal
               decelerationRate={0}
@@ -147,12 +186,7 @@ const _FormScreen = (props) => {
                       <View
                           key={index}
                           style={{
-                            flexDirection: "row",
-                            flexWrap: 'wrap',
-                            // width: "30%",
-                            height: "5%",
-                            alignItems: "center",
-                            marginBottom: 18,
+                            flexDirection: "row", flexWrap: 'wrap', height: "5%", alignItems: "center", marginBottom: 20, marginLeft:10
                           }}
                       >
                         <RadioButton
@@ -163,13 +197,13 @@ const _FormScreen = (props) => {
                                   : "unchecked"
                             }
                         />
-                        <Text style={{marginRight:50}}>{index}</Text>
+                        <Text style={{marginRight:60}}>{index}</Text>
                       </View>
                   );
                 }
                 return (
                     <View key={index}>
-                      <Text style={{ ...styles.title, marginTop: 20 }}>
+                      <Text style={{ ...styles.title, marginTop: 10 }}>
                         {current.title}
                       </Text>
                       <View
@@ -225,7 +259,7 @@ const _FormScreen = (props) => {
                                 style={{
                                   ...styles.stepButton,
                                   position: "absolute",
-                                  right: 0,
+                                  right: 10,
                                 }}
                             >
                               <Text style={styles.textStyle}>&gt;</Text>
@@ -286,7 +320,7 @@ const _FormScreen = (props) => {
                                 style={{
                                   ...styles.stepButton,
                                   position: "absolute",
-                                  left: 0,
+                                  left: 5,
                                 }}
                             >
                               <Text style={styles.textStyle}>&#x3C;</Text>
@@ -299,7 +333,7 @@ const _FormScreen = (props) => {
                                 style={{
                                   ...styles.stepButton,
                                   position: "absolute",
-                                  right: 0,
+                                  right: 5,
                                 }}
                             >
                               <Text style={styles.textStyle}>&gt;</Text>
