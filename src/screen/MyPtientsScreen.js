@@ -15,6 +15,7 @@ import {
 import { connect } from "react-redux";
 import { getPatient } from "../redux"; // tu update, change by getMyPatents function , to create!!
 
+
 const _MyPatientsScreen = (props)=>{
     const {userReducer, getPatient} = props;
     const {patients, user} = userReducer;
@@ -23,38 +24,30 @@ const _MyPatientsScreen = (props)=>{
     }, []);
     // console.log(patients);
 
-        const allPatientsArray = patients && Object.keys(patients).map(function (i) {
+    const allPatientsArray = patients && Object.keys(patients).map(function (i) {
             return patients[i];
         });
     const myList = (allPatientsArray && allPatientsArray.filter(function (item){
         return item['id fisio'] === user.id;
     }));
-    console.log(myList && myList);
+    // console.log(myList && myList);
     return (
-        // <View>
-        //     <ScrollView>
-        //         <Text>THIS IS MYPATIENTS SCREEN</Text>
-        //         <Text>Page sous forme de liste des patients d'un fisio, avec un lien pour aller a la page fiche du patient</Text>
-        //         <TouchableOpacity onPress={() => props.navigation.navigate("FichePatient")} style={{backgroundColor:"#58e8b1"}} >
-        //             {/*integrer l'ID dans la navigation*/}
-        //             <Text >voir plus</Text>
-        //         </TouchableOpacity>
-        //     </ScrollView>
-        // </View>
         <SafeAreaView>
             <FlatList
                 data={myList}
                 renderItem={({ item }) => (
 
                     <View style={styles.item} key={item.id}>
-                        <Text>
-                            {item.date}  {item.name}
-                        </Text>
-                        <Text>Indice Oswestry: {item.indice}</Text>
-                        <Text>Patient suivie ou non A implementer!!</Text>
-                        <TouchableOpacity onPress={()=>props.navigation.navigate('FichePatient', {item})}>
-                            <Text style={styles.btnDetails}>Lire la suite</Text>
-                        </TouchableOpacity>
+                        <View style={styles.itemContent}>
+                            <Text>
+                                {item.date}  {item.name}
+                            </Text>
+                            <Text>Indice Oswestry: {item.indice}</Text>
+                            <TouchableOpacity onPress={()=>props.navigation.navigate('FichePatient', {item, myList})} style={{justifyContent: "center", alignItems: "center"}}>
+                                <Text style={styles.btnDetails}>Lire la suite</Text>
+                            </TouchableOpacity>
+                        </View>
+
                     </View>
                 )}
                 // keyExtractor={item => item.id}
@@ -70,18 +63,24 @@ const styles = StyleSheet.create({
         marginTop: StatusBar.currentHeight || 0,
     },
     item:{
-        padding: 10,
-        margin: 10,
-        fontSize: 18,
-        borderWidth: 1,
+        marginHorizontal: 5,
+        marginVertical:6,
         borderRadius:6,
-        backgroundColor:"#e3985a"
+        backgroundColor:'#8fe2b3',
+        shadowOffset: {width: 4, height:4},
+        shadowColor:"#000",
+        shadowRadius:2,
+        shadowOpacity:0.2
+    },
+    itemContent:{
+        marginHorizontal: 15,
+        marginVertical: 10
     },
     btnDetails:{
         alignItems: "center",
         textAlign:"center",
         justifyContent:"center",
-        backgroundColor: "#8fe2b3",
+        backgroundColor: "#d39f56",
         borderRadius: 6,
         width: 120
     }

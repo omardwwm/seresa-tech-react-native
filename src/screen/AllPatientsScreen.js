@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {ScrollView, Text, View, SafeAreaView, StyleSheet, TouchableOpacity, FlatList, VirtualizedList, StatusBar} from "react-native";
-// import { FontAwesome, FontAwesome5, MaterialCommunityIcons, Fontisto, Ionicons } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome5, MaterialCommunityIcons, Fontisto, Ionicons } from '@expo/vector-icons';
 
 
 import { connect } from "react-redux";
@@ -15,7 +15,7 @@ const _AllPatientsScreen = (props)=> {
     useEffect(() => {
         getPatient();
     }, []);
-    console.log(patients);
+    // console.log(patients);
     if (patients !== null) {
         const allPatientsArray = Object.keys(patients).map(function (i) {
             return patients[i];
@@ -30,14 +30,26 @@ const _AllPatientsScreen = (props)=> {
                     renderItem={({ item }) => (
 
                             <View style={styles.item} key={item.id}>
-                                <Text>
-                                    {item.date}  {item.name}
-                                </Text>
-                                <Text>Indice Oswestry: {item.indice}</Text>
-                                <Text>Patient suivie ou non A implementer!!</Text>
-                                <TouchableOpacity onPress={()=>props.navigation.navigate('FichePatient', {item})}>
-                                    <Text style={styles.btnDetails}>Lire la suite</Text>
-                                </TouchableOpacity>
+                                <View style={styles.itemContent}>
+                                    <Text>
+                                        {item.date}  {item.name}
+                                    </Text>
+                                    <Text>Indice Oswestry: {item.indice}</Text>
+                                    <View style={{marginVertical:3}}>
+                                        {item['id fisio']===0?
+                                            (
+                                                <Text><Fontisto name="doctor" size={24} color="grey" />  Non Suivi</Text>
+                                            ):
+                                            <Text><Fontisto name="doctor" size={24} color="green" />  Suivi</Text>
+
+                                        }
+                                    </View>
+
+                                    <TouchableOpacity onPress={()=>props.navigation.navigate('FichePatient', {item})} style={{alignItems: "center"}}>
+                                        <Text style={styles.btnDetails}>Lire la suite</Text>
+                                    </TouchableOpacity>
+                                </View>
+
                             </View>
                         )}
                     // keyExtractor={item => item.id}
@@ -60,13 +72,20 @@ const styles = StyleSheet.create({
         marginTop: StatusBar.currentHeight || 0,
     },
     item:{
-        padding: 10,
-        margin: 10,
-        fontSize: 18,
-        borderWidth: 1,
+        marginHorizontal: 5,
+        marginVertical:6,
         borderRadius:6,
-        backgroundColor:"#e3985a"
+        backgroundColor:"#d39f56",
+        shadowOffset: {width: 3, height:3},
+        shadowColor:'#232422',
+        shadowRadius:3,
+        shadowOpacity:0.5
     },
+    itemContent:{
+        marginHorizontal: 15,
+        marginVertical: 10
+    },
+
     btnDetails:{
         alignItems: "center",
         textAlign:"center",
