@@ -4,7 +4,7 @@ import { FontAwesome, FontAwesome5, MaterialCommunityIcons, Fontisto, Ionicons }
 
 
 import { connect } from "react-redux";
-import { getPatient } from "../redux";
+import { getPatient, getMyList } from "../redux";
 import {ActivityIndicator} from "react-native-paper";
 // tu update, change by getMyPatents function , to create!!
 
@@ -101,6 +101,6 @@ const mapStateToProps = (state) => ({
 });
 
 
-const AllPatientsScreen = connect(mapStateToProps, { getPatient })(_AllPatientsScreen);
+const AllPatientsScreen = connect(mapStateToProps, { getPatient, getMyList })(_AllPatientsScreen);
 
 export default AllPatientsScreen;

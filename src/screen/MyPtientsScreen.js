@@ -13,28 +13,34 @@ import {
 
 
 import { connect } from "react-redux";
-import { getPatient } from "../redux"; // tu update, change by getMyPatents function , to create!!
+import { getPatient, getMyList } from "../redux"; // tu update, change by getMyPatents function , to create!!
 
 
 const _MyPatientsScreen = (props)=>{
-    const {userReducer, getPatient} = props;
-    const {patients, user} = userReducer;
+    const {userReducer, getPatient, getMyList} = props;
+    const {patients, user, myOriginalList} = userReducer;
     useEffect(() => {
-        getPatient();
+        // getPatient();
+        getMyList();
     }, []);
     // console.log(patients);
+    // console.log(myOriginalList);
 
-    const allPatientsArray = patients && Object.keys(patients).map(function (i) {
-            return patients[i];
-        });
-    const myList = (allPatientsArray && allPatientsArray.filter(function (item){
+    // const allPatientsArray = patients && Object.keys(patients).map(function (i) {
+    //         return patients[i];
+    //     });
+    // const myList = (allPatientsArray && allPatientsArray.filter(function (item){
+    //     return item['id fisio'] === user.id;
+    // }));
+    const myListFromReducer = (myOriginalList && myOriginalList.filter(function (item){
         return item['id fisio'] === user.id;
     }));
     // console.log(myList && myList);
+    console.log(myListFromReducer);
     return (
         <SafeAreaView>
             <FlatList
-                data={myList}
+                data={myListFromReducer}
                 renderItem={({ item }) => (
 
                     <View style={styles.item} key={item.id}>
@@ -43,7 +49,7 @@ const _MyPatientsScreen = (props)=>{
                                 {item.date}  {item.name}
                             </Text>
                             <Text>Indice Oswestry: {item.indice}</Text>
-                            <TouchableOpacity onPress={()=>props.navigation.navigate('FichePatient', {item, myList})} style={{justifyContent: "center", alignItems: "center"}}>
+                            <TouchableOpacity onPress={()=>props.navigation.navigate('FichePatient', {item, myListFromReducer})} style={{justifyContent: "center", alignItems: "center"}}>
                                 <Text style={styles.btnDetails}>Lire la suite</Text>
                             </TouchableOpacity>
                         </View>
@@ -92,6 +98,6 @@ const mapStateToProps = (state) => ({
 });
 
 
-const MyPatientsScreen = connect(mapStateToProps, { getPatient })(_MyPatientsScreen);
+const MyPatientsScreen = connect(mapStateToProps, { getPatient, getMyList })(_MyPatientsScreen);
 
 export default MyPatientsScreen;

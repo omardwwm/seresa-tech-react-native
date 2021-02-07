@@ -15,6 +15,7 @@ const initialState = {
   formError: false,
   exercice: null,
   patients: null,
+  myOriginalList: null,
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -108,6 +109,22 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         patients: action.payload,
       };
+    case "GET_MY_LIST":
+      return {
+        ...state,
+        myOriginalList: action.payload,
+      }
+    case "STOP_SUIVRE_PATIENT":
+      //   console.log(action.data)
+      return {
+        ...state,
+        myOriginalList: state.myOriginalList.filter((item, patient) =>
+          // item.paciente !== 187,
+            item.paciente !== action.paciente,
+              // console.log(item.paciente)
+        )
+      };
+
     default:
       return state;
   }

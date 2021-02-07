@@ -186,18 +186,10 @@ export const changePassword = (value, user) => {
 };
 ////////////////function to stop-patient
 
-export const stopPatient = (user) => {
-  return async (dispatch) => {
-    try {
-      const response = await Axios.get(
-          `http://seresa-tech.net/wp-json/wcra/v1/stop_paciente/?param1=${user.juiz_secret_token_autolog[0]}&param2=${user.juiz_list_paciente[0]}`
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
-};
+export const stopPatient = (paciente) => ({
+  type: "STOP_SUIVRE_PATIENT",
+  paciente
+});
 
 ///////////////////////
 export const setIsLoading = () => {
@@ -268,6 +260,24 @@ export const getPatient = () => {
       );
       console.log("getAllPatient", response);
       dispatch({ type: "GET_ALL_PATIENTS", payload: response.data });
+    } catch (error) {
+      console.log("error getAllPatient", error.response);
+    }
+  };
+};
+
+////// A changer apres recuperation de la liste des patients du kine connecte
+export const getMyList = () => {
+  return async (dispatch) => {
+    try {
+      const response = await Axios.get(
+          `https://seresa-tech.net/index.php/wp-json/wcra/v1/get_all_results/?param1=0`
+      );
+      console.log("getMyPatients", response);
+      let testList = Object.keys(response.data).map(function (i){
+        return response.data[i]
+      })
+      dispatch({ type: "GET_MY_LIST", payload: testList });
     } catch (error) {
       console.log("error getAllPatient", error.response);
     }

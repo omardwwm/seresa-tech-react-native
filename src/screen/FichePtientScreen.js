@@ -5,20 +5,20 @@ import {ScrollView, Text, View, Button, StyleSheet, TouchableOpacity, Alert} fro
 
 
 import { connect } from "react-redux";
-import { getPatient } from "../redux"; // tu update, change by getPatientFiche function , to create!!
+import { getPatient, stopPatient } from "../redux"; // tu update, change by getPatientFiche function , to create!!
 
 
 const _FichePatientScreen = (props)=>{
-    const {userReducer, getPatient} = props;
+    const {userReducer, getPatient, stopPatient} = props;
     const {user, patients} = userReducer;
     // useEffect(() => {
     //     getPatient();
     // }, []);
     // console.log(patients);
     const {item} = props.route.params;
-    const {myList} = props.route.params;
+    const {myOriginalList} = props.route.params;
     // console.log(myList);
-    const [initialList, setInitialList] = useState(myList);
+    const [initialList, setInitialList] = useState(myOriginalList);
     // console.log(initialList);
     const idFisio = item['id fisio'];
 
@@ -33,13 +33,15 @@ const _FichePatientScreen = (props)=>{
 
     const removePatientFromMyList = ()=>{
         const itemToDelete = item.paciente;
-        console.log(itemToDelete);
-       const finalList = initialList.filter( patient=>
-            patient.paciente !== itemToDelete
+        stopPatient(itemToDelete);
+       //  const itemToDelete = item.paciente;
+       //  console.log(itemToDelete);
+       // const finalList = initialList.filter( patient=>
+       //      patient.paciente !== itemToDelete
             // patient.paciente !== 181
-        );
-        setInitialList({finalList})
-        console.log(finalList);
+        // );
+        // setInitialList({finalList})
+        // console.log(finalList);
         Alert.alert('remove patient function to implemente');
        // stopPatient(user); // to implement!!!
 
@@ -112,6 +114,6 @@ const mapStateToProps = (state) => ({
 });
 
 
-const FichePatientScreen = connect(mapStateToProps, { getPatient })(_FichePatientScreen);
+const FichePatientScreen = connect(mapStateToProps, { getPatient, stopPatient })(_FichePatientScreen);
 
 export default FichePatientScreen;
