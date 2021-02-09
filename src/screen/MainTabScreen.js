@@ -80,7 +80,7 @@ const _TabScreen = (props) => {
                 barStyle={{ backgroundColor: '#009387' }}
             >
                 <Tab.Screen
-                    name="HomeMainStack"
+                    name="Home"
                     component={MainStackScreen}
                     options={{
                         tabBarLabel: 'Home',
@@ -165,7 +165,7 @@ const _TabScreen = (props) => {
                 barStyle={{ backgroundColor: '#009387' }}
             >
                 <Tab.Screen
-                    name="HomeMainStack"
+                    name="Home"
                     component={MainStackScreen}
                     options={{
                         tabBarLabel: 'Home',

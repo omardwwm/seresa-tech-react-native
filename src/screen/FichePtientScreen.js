@@ -5,50 +5,39 @@ import {ScrollView, Text, View, Button, StyleSheet, TouchableOpacity, Alert} fro
 
 
 import { connect } from "react-redux";
-import { getPatient, stopPatient } from "../redux"; // tu update, change by getPatientFiche function , to create!!
+import { stopPatient, addPatient} from "../redux"; // tu update, change by getPatientFiche function , to create!!
 
 
 const _FichePatientScreen = (props)=>{
-    const {userReducer, getPatient, stopPatient} = props;
-    const {user, patients} = userReducer;
+    const {userReducer, stopPatient, addPatient} = props;
+    const {user} = userReducer;
     // useEffect(() => {
-    //     getPatient();
+    //     onAppLaunch();
     // }, []);
     // console.log(patients);
     const {item} = props.route.params;
-    const {myOriginalList} = props.route.params;
-    // console.log(myList);
-    const [initialList, setInitialList] = useState(myOriginalList);
-    // console.log(initialList);
+    console.log(item);
+    // console.log(user);
     const idFisio = item['id fisio'];
+    const fisio_id = user.id;
+    console.log(fisio_id);
+    const paciente_id = item.paciente;
+    console.log(paciente_id);
 
     const addThisPatientToMyList = ()=>{
-        // const itemToAdd = {item};
-        // const listAfterAdding = {...initialList};
-        // console.log(itemToAdd);
-        // setInitialList({listAfterAdding});
-        // console.log(initialList);
+        console.log(fisio_id);
+        console.log(paciente_id);
+        addPatient(paciente_id, fisio_id);
         Alert.alert('adding patient function to implemente');
     }
 
     const removePatientFromMyList = ()=>{
-        const itemToDelete = item.paciente;
-        stopPatient(itemToDelete);
-       //  const itemToDelete = item.paciente;
-       //  console.log(itemToDelete);
-       // const finalList = initialList.filter( patient=>
-       //      patient.paciente !== itemToDelete
-            // patient.paciente !== 181
-        // );
-        // setInitialList({finalList})
-        // console.log(finalList);
+        stopPatient(paciente_id, fisio_id);
         Alert.alert('remove patient function to implemente');
-       // stopPatient(user); // to implement!!!
-
     }
+
     return (
         <View style={styles.itemDetails}>
-
             <ScrollView>
                 <View style={styles.itemDetailsContent}>
                     <Text>Privé : Fiche {item['phase du relevé']} {item.name}</Text>
@@ -66,7 +55,6 @@ const _FichePatientScreen = (props)=>{
                     <Text>Estar sentado : {item['Estar sentado']}</Text>
                     <Text>Viajar : {item.Viajar}</Text>
                     <Text>Indice : {item.indice}</Text>
-
                     <TouchableOpacity  >
                         {idFisio===0 ?
                             (<Text onPress={addThisPatientToMyList} style={{backgroundColor:"#FD9854"}}>Suivre ce patient</Text>) :
@@ -85,7 +73,6 @@ const _FichePatientScreen = (props)=>{
                     </TouchableOpacity>
                     <Text>Selon le cas, page accessible avec l'Id du patient en navigation </Text>
                 </View>
-
             </ScrollView>
         </View>
     )
@@ -114,6 +101,6 @@ const mapStateToProps = (state) => ({
 });
 
 
-const FichePatientScreen = connect(mapStateToProps, { getPatient, stopPatient })(_FichePatientScreen);
+const FichePatientScreen = connect(mapStateToProps, { stopPatient, addPatient })(_FichePatientScreen);
 
 export default FichePatientScreen;

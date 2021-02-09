@@ -1,13 +1,10 @@
 import React, {useEffect} from "react";
 import {ScrollView, Text, View, SafeAreaView, StyleSheet, TouchableOpacity, FlatList, VirtualizedList, StatusBar} from "react-native";
-import { FontAwesome, FontAwesome5, MaterialCommunityIcons, Fontisto, Ionicons } from '@expo/vector-icons';
-
+import { Fontisto } from '@expo/vector-icons';
 
 import { connect } from "react-redux";
-import { getPatient, getMyList } from "../redux";
+import { getPatient } from "../redux";
 import {ActivityIndicator} from "react-native-paper";
-// tu update, change by getMyPatents function , to create!!
-
 
 const _AllPatientsScreen = (props)=> {
     const {userReducer, getPatient} = props;
@@ -20,15 +17,12 @@ const _AllPatientsScreen = (props)=> {
         const allPatientsArray = Object.keys(patients).map(function (i) {
             return patients[i];
         });
-
         // console.log(allPatientsArray);
-
         return (
             <SafeAreaView>
                 <FlatList
                     data={allPatientsArray}
                     renderItem={({ item }) => (
-
                             <View style={styles.item} key={item.id}>
                                 <View style={styles.itemContent}>
                                     <Text>
@@ -41,7 +35,6 @@ const _AllPatientsScreen = (props)=> {
                                                 <Text><Fontisto name="doctor" size={24} color="grey" />  Non Suivi</Text>
                                             ):
                                             <Text><Fontisto name="doctor" size={24} color="green" />  Suivi</Text>
-
                                         }
                                     </View>
 
@@ -54,6 +47,8 @@ const _AllPatientsScreen = (props)=> {
                         )}
                     // keyExtractor={item => item.id}
                     keyExtractor = { (item, index) => index.toString() }
+                    maxToRenderPerBatch={4}
+                    windowSize={4}
                 />
             </SafeAreaView>
         )
@@ -101,6 +96,6 @@ const mapStateToProps = (state) => ({
 });
 
 
-const AllPatientsScreen = connect(mapStateToProps, { getPatient, getMyList })(_AllPatientsScreen);
+const AllPatientsScreen = connect(mapStateToProps, { getPatient })(_AllPatientsScreen);
 
 export default AllPatientsScreen;

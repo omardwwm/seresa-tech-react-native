@@ -40,7 +40,8 @@ const _FormScreen = (props) => {
   } = userReducer;
 
   // useEffect(() => {
-  //   getPatient();
+  //   // getPatient();
+  //   getForm();
   // }, []);
   // console.log(patients);
   // if (patients !== null) {
@@ -48,6 +49,7 @@ const _FormScreen = (props) => {
       return patients[i];
     });
     // console.log(allPatientsArray);
+  // console.log(form);
     const currentPatient = allPatientsArray && allPatientsArray.filter(function (item){
       return item.paciente ===  user.id;
     });

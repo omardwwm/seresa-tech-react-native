@@ -16,6 +16,7 @@ const initialState = {
   exercice: null,
   patients: null,
   myOriginalList: null,
+  userMeta: null,
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -114,16 +115,21 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         myOriginalList: action.payload,
       }
-    case "STOP_SUIVRE_PATIENT":
-      //   console.log(action.data)
+    case "GET_USER_META":
       return {
         ...state,
-        myOriginalList: state.myOriginalList.filter((item, patient) =>
-          // item.paciente !== 187,
-            item.paciente !== action.paciente,
-              // console.log(item.paciente)
-        )
+        userMeta: action.payload,
       };
+    // case "STOP_SUIVRE_PATIENT":
+    //   //   console.log(action.data)
+    //   return {
+    //     ...state,
+    //     myOriginalList: state.myOriginalList.filter((item, patient) =>
+    //       // item.paciente !== 187,
+    //         item.paciente !== action.paciente,
+    //           // console.log(item.paciente)
+    //     )
+    //   };
 
     default:
       return state;

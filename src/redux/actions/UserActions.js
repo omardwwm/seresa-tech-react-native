@@ -87,17 +87,18 @@ export const onAppLaunch = () => {
   };
 };
 
-export const getUser = () => {
+export const getUser = (user) => {
   return async (dispatch) => {
     try {
       const response = await Axios.get(
-          // `http://seresa-tech.net/index.php/wp-json/wcra/v1/get_user_meta/?param1=${user.id}`
-        "http://seresa-tech.net/index.php/wp-json/wcra/v1/get_user_meta/?param1=10"
-
+          `http://seresa-tech.net/index.php/wp-json/wcra/v1/get_user_mobile/?param1=${user.id}`
+        // "http://seresa-tech.net/index.php/wp-json/wcra/v1/get_user_mobile/?param1=10"
       );
       console.log(response.data);
+      dispatch({type: "GET_USER_META"})
     } catch (error) {
       console.log(error);
+      dispatch({type: "GET_USER_META"})
     }
   };
 };
@@ -186,12 +187,38 @@ export const changePassword = (value, user) => {
 };
 ////////////////function to stop-patient
 
-export const stopPatient = (paciente) => ({
-  type: "STOP_SUIVRE_PATIENT",
-  paciente
-});
-
+// export const stopPatient = (paciente) => ({
+//   type: "STOP_SUIVRE_PATIENT",
+//   paciente
+// });
+export const stopPatient = (paciente_id, fisio_id) => {
+  return async () =>{
+    try {
+      const response = await Axios.get(
+          `https://seresa-tech.net/index.php/wp-json/wcra/v1/stop_paciente_mobile/?param1=${paciente_id}&&param2=${fisio_id}`,
+          console.log(fisio_id)
+      );
+      console.log(response.data);
+    } catch (error){
+      console.log(error.response);
+    }
+  }
+};
 ///////////////////////
+///////////////////////
+export const addPatient = (paciente_id, fisio_id) => {
+  return async () =>{
+    try {
+      const response = await Axios.get(
+          `https://seresa-tech.net/index.php/wp-json/wcra/v1/add_paciente_mobile/?param1=${paciente_id}&&param2=${fisio_id}`
+      );
+      console.log(response.data);
+    } catch (error){
+      console.log(error.response);
+    }
+  }
+};
+//////////////////////
 export const setIsLoading = () => {
   return (dispatch) => {
     dispatch({ type: "SET_IS_LOADING" });
@@ -204,7 +231,7 @@ export const getForm = (user) => {
       const response = await Axios.get(
         `http://seresa-tech.net/index.php/wp-json/wcra/v1/get_formulaire/?param1=${user.juiz_secret_token_autolog[0]}`
       );
-      // console.log("response getForm", response);
+      console.log("response getForm", response);
       dispatch({ type: "GET_FORM", form: response.data.json_survey });
     } catch (error) {
       console.log("error form", error.response);
@@ -267,19 +294,27 @@ export const getPatient = () => {
 };
 
 ////// A changer apres recuperation de la liste des patients du kine connecte
-export const getMyList = () => {
-  return async (dispatch) => {
-    try {
-      const response = await Axios.get(
-          `https://seresa-tech.net/index.php/wp-json/wcra/v1/get_all_results/?param1=0`
-      );
-      console.log("getMyPatients", response);
-      let testList = Object.keys(response.data).map(function (i){
-        return response.data[i]
-      })
-      dispatch({ type: "GET_MY_LIST", payload: testList });
-    } catch (error) {
-      console.log("error getAllPatient", error.response);
-    }
-  };
-};
+// export const getMyList = () => {
+//   return async (dispatch) => {
+//     try {
+//       const response = await Axios.get(
+//           `https://seresa-tech.net/index.php/wp-json/wcra/v1/get_all_results/?param1=0`
+//       );
+//       console.log("getMyPatients", response);
+//       let testList = Object.keys(response.data).map(function (i){
+//         return response.data[i]
+//       })
+//       dispatch({ type: "GET_MY_LIST", payload: testList });
+//     } catch (error) {
+//       console.log("error getAllPatient", error.response);
+//     }
+//   };
+// };
+
+//pour ajouter le patient
+//https://seresa-tech.net/index.php/wp-json/wcra/v1/add_paciente_mobile/?param1=${paciente_id}&&param2=${fisio_id}...
+
+// pour arreter de suivre
+// https://seresa-tech.net/index.php/wp-json/wcra/v1/stop_paciente_mobile/?param1=paciente_id&&param2=fisio_id
+
+// https://seresa-tech.net/index.php/wp-json/wcra/v1/get_user_mobile/?param1=user_id
