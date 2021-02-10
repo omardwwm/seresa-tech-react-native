@@ -18,37 +18,38 @@ const _AllPatientsScreen = (props)=> {
             return patients[i];
         });
         // console.log(allPatientsArray);
+        const renderItem=({ item }) => (
+            <View style={styles.item} key={item.id}>
+                <View style={styles.itemContent}>
+                    <Text>
+                        {item.date}  {item.name}
+                    </Text>
+                    <Text>Indice Oswestry: {item.indice}</Text>
+                    <View style={{marginVertical:3}}>
+                        {item['id fisio']===0?
+                            (
+                                <Text><Fontisto name="doctor" size={24} color="grey" />  Non Suivi</Text>
+                            ):
+                            <Text><Fontisto name="doctor" size={24} color="green" />  Suivi</Text>
+                        }
+                    </View>
+
+                    <TouchableOpacity onPress={()=>props.navigation.navigate('FichePatient', {item})} style={{alignItems: "center"}}>
+                        <Text style={styles.btnDetails}>Lire la suite</Text>
+                    </TouchableOpacity>
+                </View>
+
+            </View>
+        )
         return (
             <SafeAreaView>
                 <FlatList
                     data={allPatientsArray}
-                    renderItem={({ item }) => (
-                            <View style={styles.item} key={item.id}>
-                                <View style={styles.itemContent}>
-                                    <Text>
-                                        {item.date}  {item.name}
-                                    </Text>
-                                    <Text>Indice Oswestry: {item.indice}</Text>
-                                    <View style={{marginVertical:3}}>
-                                        {item['id fisio']===0?
-                                            (
-                                                <Text><Fontisto name="doctor" size={24} color="grey" />  Non Suivi</Text>
-                                            ):
-                                            <Text><Fontisto name="doctor" size={24} color="green" />  Suivi</Text>
-                                        }
-                                    </View>
-
-                                    <TouchableOpacity onPress={()=>props.navigation.navigate('FichePatient', {item})} style={{alignItems: "center"}}>
-                                        <Text style={styles.btnDetails}>Lire la suite</Text>
-                                    </TouchableOpacity>
-                                </View>
-
-                            </View>
-                        )}
+                    renderItem={renderItem}
                     // keyExtractor={item => item.id}
                     keyExtractor = { (item, index) => index.toString() }
-                    maxToRenderPerBatch={4}
-                    windowSize={4}
+                    maxToRenderPerBatch={10}
+                    windowSize={10}
                 />
             </SafeAreaView>
         )

@@ -18,7 +18,7 @@ import PresentationScreen from "./PresentationScreen";
 import PasswordRecuperationScreen from "./PasswordReuperationScreen";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { connect } from "react-redux";
-import {getExercice, getForm, getPatient, getUser, onUserLogin, onUserLogout} from "../redux";
+import {getExercice, getForm, getPatient, getUserMeta, onUserLogin, onUserLogout} from "../redux";
 import AllPatientsScreen from "./AllPatientsScreen";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
@@ -64,7 +64,7 @@ function getHeaderTitle(route) {
 }
 //the composantes of our TabButtonNavigation in function if user isLogged or not
 const _TabScreen = (props) => {
-    const { userReducer, getUser, onUserLogin } = props;
+    const { userReducer, getUserMeta, onUserLogin } = props;
     const { user, isUserLogged } = userReducer;
     // console.log(user && user.role);
     const role = user && user.role;
@@ -195,7 +195,7 @@ const mapStateToProps = (state) => ({
 });
 const TabScreen = connect(mapStateToProps, {
     onUserLogin,
-    getUser, getPatient
+    getUserMeta, getPatient
 })(_TabScreen);
 export default TabScreen;
 

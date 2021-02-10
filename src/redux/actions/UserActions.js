@@ -87,17 +87,17 @@ export const onAppLaunch = () => {
   };
 };
 
-export const getUser = (user) => {
+export const getUserMeta = (user_id) => {
   return async (dispatch) => {
     try {
       const response = await Axios.get(
-          `http://seresa-tech.net/index.php/wp-json/wcra/v1/get_user_mobile/?param1=${user.id}`
+          `http://seresa-tech.net/index.php/wp-json/wcra/v1/get_user_mobile/?param1=${user_id}`
         // "http://seresa-tech.net/index.php/wp-json/wcra/v1/get_user_mobile/?param1=10"
       );
-      console.log(response.data);
-      dispatch({type: "GET_USER_META"})
+      console.log(response);
+      dispatch({type: "GET_USER_META", payload: response.data})
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
       dispatch({type: "GET_USER_META"})
     }
   };
@@ -192,29 +192,48 @@ export const changePassword = (value, user) => {
 //   paciente
 // });
 export const stopPatient = (paciente_id, fisio_id) => {
-  return async () =>{
+  return async (dispatch) =>{
     try {
       const response = await Axios.get(
           `https://seresa-tech.net/index.php/wp-json/wcra/v1/stop_paciente_mobile/?param1=${paciente_id}&&param2=${fisio_id}`,
-          console.log(fisio_id)
       );
       console.log(response.data);
+      dispatch({
+        type: "STOP_PATIENT",
+        showModal: true,
+        isPatientStopped: true,
+      })
     } catch (error){
       console.log(error.response);
+      dispatch({
+        type: "STOP_PATIENT",
+        showModal: true,
+        isPatientStopped: false,
+      })
     }
   }
 };
 ///////////////////////
 ///////////////////////
 export const addPatient = (paciente_id, fisio_id) => {
-  return async () =>{
+  return async (dispatch) =>{
     try {
       const response = await Axios.get(
           `https://seresa-tech.net/index.php/wp-json/wcra/v1/add_paciente_mobile/?param1=${paciente_id}&&param2=${fisio_id}`
       );
       console.log(response.data);
+      dispatch({
+        type: "ADD_PATIENT",
+        showModal: true,
+        isPatientAdded: true,
+      })
     } catch (error){
       console.log(error.response);
+      dispatch({
+        type: "ADD_PATIENT",
+        showModal: true,
+        isPatientAdded: false,
+      })
     }
   }
 };

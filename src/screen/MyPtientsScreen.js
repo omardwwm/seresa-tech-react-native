@@ -30,32 +30,38 @@ const _MyPatientsScreen = (props)=>{
     const myList = (allPatientsArray && allPatientsArray.filter(function (item){
         return item['id fisio'] === user.id;
     }));
-    // console.log(myList && myList);
+    const myListLenght = myList && myList.length
+    console.log(myListLenght);
+    const renderMyList = ({ item }) => (
+
+        <View style={styles.item} key={item.id}>
+            <View style={styles.itemContent}>
+                <Text>
+                    {item.date}  {item.name}
+                </Text>
+                <Text>Indice Oswestry: {item.indice}</Text>
+                <TouchableOpacity onPress={()=>props.navigation.navigate('FichePatient', {item})} style={{justifyContent: "center", alignItems: "center"}}>
+                    <Text style={styles.btnDetails}>Lire la suite</Text>
+                </TouchableOpacity>
+            </View>
+
+        </View>
+    )
     return (
-        <SafeAreaView>
-            <FlatList
-                data={myList}
-                renderItem={({ item }) => (
+            <SafeAreaView>
+                {myListLenght === 0?
+                    (<Text>Vous ne suivez aucun patient, veuillez consulter la liste de tous les patient pour suivre des patients non suivis</Text>) :
+                    (<FlatList
+                        data={myList}
+                        renderItem={renderMyList}
+                        // keyExtractor={item => item.id}
+                        keyExtractor = { (item, index) => index.toString() }
+                        maxToRenderPerBatch={10}
+                        windowSize={10}
+                    />)
+                }
+            </SafeAreaView>
 
-                    <View style={styles.item} key={item.id}>
-                        <View style={styles.itemContent}>
-                            <Text>
-                                {item.date}  {item.name}
-                            </Text>
-                            <Text>Indice Oswestry: {item.indice}</Text>
-                            <TouchableOpacity onPress={()=>props.navigation.navigate('FichePatient', {item})} style={{justifyContent: "center", alignItems: "center"}}>
-                                <Text style={styles.btnDetails}>Lire la suite</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                    </View>
-                )}
-                // keyExtractor={item => item.id}
-                keyExtractor = { (item, index) => index.toString() }
-                maxToRenderPerBatch={10}
-                windowSize={10}
-            />
-        </SafeAreaView>
     )
 }
 

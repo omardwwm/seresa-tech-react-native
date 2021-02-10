@@ -17,6 +17,8 @@ const initialState = {
   patients: null,
   myOriginalList: null,
   userMeta: null,
+  isPatientStopped:false,
+  isPatientAdded: false,
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -114,11 +116,23 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         myOriginalList: action.payload,
-      }
+      };
     case "GET_USER_META":
       return {
         ...state,
         userMeta: action.payload,
+      };
+    case "ADD_PATIENT":
+      return {
+        ...state,
+        isPatientAdded: action.isPatientAdded,
+        showModal: action.showModal,
+      };
+    case "STOP_PATIENT":
+      return {
+        ...state,
+        isPatientStopped: action.isPatientStopped,
+        showModal: action.showModal,
       };
     // case "STOP_SUIVRE_PATIENT":
     //   //   console.log(action.data)
@@ -130,7 +144,6 @@ export const userReducer = (state = initialState, action) => {
     //           // console.log(item.paciente)
     //     )
     //   };
-
     default:
       return state;
   }
