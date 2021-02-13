@@ -19,6 +19,7 @@ const initialState = {
   userMeta: null,
   isPatientStopped:false,
   isPatientAdded: false,
+  isFetching: false,
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -111,6 +112,7 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         patients: action.payload,
+        isFetching: action.isFetching,
       };
     case "GET_MY_LIST":
       return {
@@ -125,14 +127,16 @@ export const userReducer = (state = initialState, action) => {
     case "ADD_PATIENT":
       return {
         ...state,
-        isPatientAdded: action.isPatientAdded,
+        isPatientAdded: false,
         showModal: action.showModal,
+        isFetching: action.isFetching,
       };
     case "STOP_PATIENT":
       return {
         ...state,
-        isPatientStopped: action.isPatientStopped,
+        isPatientStopped: false,
         showModal: action.showModal,
+        isFetching: action.isFetching,
       };
     // case "STOP_SUIVRE_PATIENT":
     //   //   console.log(action.data)

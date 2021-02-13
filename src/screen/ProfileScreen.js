@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import React from "react";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
-import { onUserLogin, hideModal, changePassword } from "../redux";
+// import { onUserLogin, hideModal } from "../redux";
 import { ScrollView } from "react-native-gesture-handler";
-import { Avatar, TextInput, Modal, Portal } from "react-native-paper";
+import { Avatar } from "react-native-paper";
 import * as Animatable from "react-native-animatable";
 
 const _ProfileScreen = (props) => {
-  const { userReducer, changePassword } = props;
+  const { userReducer } = props;
   const { user } = userReducer;
 
   if (user === null) {
     return null;
   }
   const role = user && user.role;
-  console.log(user);
+  // console.log(user);
 
   return (
     <ScrollView style={styles.scrollContainer}>
@@ -105,21 +105,21 @@ const styles = StyleSheet.create({
     margin: 10,
     width: "80%",
   },
-  modal: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
+  // modal: {
+  //   margin: 20,
+  //   backgroundColor: "white",
+  //   borderRadius: 20,
+  //   padding: 35,
+  //   alignItems: "center",
+  //   shadowColor: "#000",
+  //   shadowOffset: {
+  //     width: 0,
+  //     height: 2,
+  //   },
+  //   shadowOpacity: 0.25,
+  //   shadowRadius: 3.84,
+  //   elevation: 5,
+  // },
   profileBox: {
     marginTop: 30,
     borderBottomWidth: 2,
@@ -155,10 +155,6 @@ const mapStateToProps = (state) => ({
   userReducer: state.userReducer,
 });
 
-const ProfileScreen = connect(mapStateToProps, {
-  onUserLogin,
-  hideModal,
-  changePassword,
-})(_ProfileScreen);
+const ProfileScreen = connect(mapStateToProps)(_ProfileScreen);
 
 export default ProfileScreen;

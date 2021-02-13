@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Pressable, Image } from "react-native";
 import { FontAwesome, FontAwesome5, MaterialCommunityIcons, Fontisto, Ionicons } from '@expo/vector-icons';
@@ -18,7 +18,7 @@ import PresentationScreen from "./PresentationScreen";
 import PasswordRecuperationScreen from "./PasswordReuperationScreen";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { connect } from "react-redux";
-import {getExercice, getForm, getPatient, getUserMeta, onUserLogin, onUserLogout} from "../redux";
+import { onAppLaunch, getUserMeta, onUserLogin, onUserLogout} from "../redux";
 import AllPatientsScreen from "./AllPatientsScreen";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
@@ -64,12 +64,15 @@ function getHeaderTitle(route) {
 }
 //the composantes of our TabButtonNavigation in function if user isLogged or not
 const _TabScreen = (props) => {
-    const { userReducer, getUserMeta, onUserLogin } = props;
+    const { userReducer, onAppLaunch, getUserMeta, onUserLogin } = props;
     const { user, isUserLogged } = userReducer;
     // console.log(user && user.role);
+
+    useEffect(()=>{
+        onAppLaunch();
+    }, [])
+
     const role = user && user.role;
-
-
 
     if (isUserLogged){
         return (
@@ -194,8 +197,9 @@ const mapStateToProps = (state) => ({
     userReducer: state.userReducer,
 });
 const TabScreen = connect(mapStateToProps, {
+    onAppLaunch,
     onUserLogin,
-    getUserMeta, getPatient
+    getUserMeta
 })(_TabScreen);
 export default TabScreen;
 

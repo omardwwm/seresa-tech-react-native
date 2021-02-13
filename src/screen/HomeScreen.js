@@ -3,12 +3,12 @@ import { Image, StyleSheet, Text, View, Button, ImageBackground, TouchableOpacit
 import InolamLogo from "../assets/image/logo-inolam-blanc.png";
 import UscLogo from "../assets/image/logo-usc.png";
 import bgImg from "../assets/image/massage.jpg";
-import { onAppLaunch, getUser } from "../redux";
+import { onAppLaunch, getUserMeta } from "../redux";
 import { connect } from "react-redux";
 import AsyncStorage from "@react-native-community/async-storage";
 
 const _HomeScreen = (props) => {
-  const { onAppLaunch, getUser, userReducer } = props;
+  const { onAppLaunch, userReducer } = props;
   const { user, isUserLogged } = userReducer;
   // console.log(user);
 
@@ -19,7 +19,7 @@ const _HomeScreen = (props) => {
   const getToken = async () => {
     try {
       const token = await AsyncStorage.getItem("userToken");
-      console.log(token);
+      // console.log(token);
     } catch (error) {
       console.log(error);
     }
@@ -115,7 +115,7 @@ const mapStateToProps = (state) => ({
   userReducer: state.userReducer,
 });
 
-const HomeScreen = connect(mapStateToProps, { onAppLaunch, getUser })(
+const HomeScreen = connect(mapStateToProps, { onAppLaunch, getUserMeta })(
   _HomeScreen
 );
 

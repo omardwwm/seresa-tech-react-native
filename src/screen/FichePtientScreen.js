@@ -2,18 +2,19 @@ import React, {useEffect, useState} from "react";
 import {ScrollView, Text, View, Button, StyleSheet, TouchableOpacity, Alert, Modal} from "react-native";
 
 import { connect } from "react-redux";
-import { stopPatient, addPatient, getUserMeta, hideModal} from "../redux";
+import {stopPatient, addPatient, getUserMeta, hideModal, getPatient, setIsLoading} from "../redux";
 import {Ionicons} from "@expo/vector-icons"; // tu update, change by getPatientFiche function , to create!!
 
 
 const _FichePatientScreen = (props)=>{
     const {userReducer, stopPatient, addPatient, getUserMeta, hideModal} = props;
-    const {user, userMeta, showModal, isPatientAdded, isPatientStopped} = userReducer;
+    const {user, userMeta, showModal, isPatientAdded, isPatientStopped } = userReducer;
     const {item} = props.route.params;
     // console.log(item);
     const paciente_id = item.paciente;
     // console.log(paciente_id);
 
+    // const [willRefresh, setWillRefresh] = useState(false)
     // console.log(user);
     // idFisio est l'id du fisio qui suit le patient dont on consulte l'actuelle fiche
     const idFisio = item['id fisio'];
@@ -30,16 +31,23 @@ const _FichePatientScreen = (props)=>{
         }
     }, []);
 
+    const [added, setAdded] = useState(isPatientAdded);
+    const [stopped, setStopped] = useState(isPatientStopped);
+    // const [Fetching, setFetching] = useState(isFetching);
+
     const addThisPatientToMyList = ()=>{
-        addPatient(paciente_id, fisio_id);
+        addPatient(paciente_id, fisio_id).then(()=>{setAdded(true)});
     }
 
     const removePatientFromMyList = ()=>{
-        stopPatient(paciente_id, fisio_id);
+        stopPatient(paciente_id, fisio_id).then(()=>{setStopped(true)});
+        // getPatient();
     }
 
-    console.log(isPatientStopped);
-    console.log(isPatientAdded);
+    // console.log('isStopReducer', isPatientStopped);
+    // console.log('isAaaReducer', isPatientAdded);
+    // console.log('when add', added);
+    // console.log('when stop is', stopped)
     return (
         <View style={styles.itemDetails}>
             <ScrollView>
@@ -48,7 +56,9 @@ const _FichePatientScreen = (props)=>{
                     <Text>{item.date}</Text>
                     <Text>Sexe : {item.sexe}</Text>
                     <Text>Age : {item['âge']}</Text>
-                    <Text>Escala dolor : {item['escala dolor']}</Text>
+                    {item.escala_dolor?(<Text>Escala dolor : {item.escala_dolor}</Text>):
+                        (<Text>Escala dolor : {item['escala dolor']}</Text>)
+                    }
                     <Text>Estar de pie : {item['Estar de pie']}</Text>
                     <Text>Intensidad de dolor : {item['Intensidad de dolor']}</Text>
                     <Text>Dormir : {item.Dormir}</Text>
@@ -86,12 +96,16 @@ const _FichePatientScreen = (props)=>{
                 <View style={styles.centeredModal}>
                     <View style={styles.modal}>
                         <View>
-                            {isPatientAdded &&
-                                <>
+                            {added===true?
+                                <Text style={{ marginBottom: 10 }}>
+                                    vous suivez maintenant ce patient
+                                </Text>:
+                                stopped===true?
                                     <Text style={{ marginBottom: 10 }}>
-                                        vous suivez maintenant ce patient
-                                    </Text>
-
+                                        vous avez arreter!!
+                                    </Text>:
+                                    (<Text>TESTTTTT</Text>)
+                            }
                                     <Ionicons
                                         name="md-checkmark-circle"
                                         color="#59ed9c"
@@ -110,8 +124,6 @@ const _FichePatientScreen = (props)=>{
                                     >
                                         <Text style={styles.textStyle}>Ok</Text>
                                     </TouchableOpacity>
-                                </>
-                            }
                         </View>
                     </View>
                 </View>
@@ -186,6 +198,6 @@ const mapStateToProps = (state) => ({
 });
 
 
-const FichePatientScreen = connect(mapStateToProps, { getUserMeta, stopPatient, addPatient, hideModal })(_FichePatientScreen);
+const FichePatientScreen = connect(mapStateToProps, { getUserMeta, stopPatient, addPatient, hideModal, getPatient, setIsLoading })(_FichePatientScreen);
 
 export default FichePatientScreen;

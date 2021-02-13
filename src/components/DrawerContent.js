@@ -1,21 +1,13 @@
 import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import {
-  Avatar,
-  Caption,
-  Drawer,
-  Switch,
-  Text,
-  Title,
-  TouchableRipple,
-} from "react-native-paper";
+import {Avatar, Caption, Drawer, Switch, Text, Title, TouchableRipple,} from "react-native-paper";
 import { FontAwesome, FontAwesome5, MaterialCommunityIcons, AntDesign, Ionicons } from '@expo/vector-icons';
 import { connect } from "react-redux";
-import { onUserLogout, getForm, getExercice, getPatient } from "../redux";
+import { onUserLogout, onUserLogin, onAppLaunch } from "../redux";
 
 const _DrawerContent = (props) => {
-  const { userReducer, onUserLogout, getForm, getExercice, getPatient } = props;
+  const { userReducer, onUserLogout } = props;
   const { user, isUserLogged } = userReducer;
 
   const [isDarkTheme, setIsDarkTheme] = useState(false);
@@ -139,7 +131,7 @@ const _DrawerContent = (props) => {
                         )}
                         onPress={() => {
                           props.navigation.navigate("DatosScreen");
-                          getPatient();
+                          // getPatient();
                         }}
                         style={[styles.drawerItem]}
                       />
@@ -150,7 +142,7 @@ const _DrawerContent = (props) => {
                           )}
                           onPress={() => {
                             props.navigation.navigate("AllPatients");
-                            getPatient();
+                            // getPatient();
                           }}
                           style={[styles.drawerItem]}
                       />
@@ -163,7 +155,7 @@ const _DrawerContent = (props) => {
                                    )}
                                    onPress={() => {
                                      props.navigation.navigate("Form");
-                                     getForm(user); getPatient();
+                                     // getForm(user); getPatient();
                                    }}
                                    style={[styles.drawerItem]}
                       />
@@ -173,7 +165,7 @@ const _DrawerContent = (props) => {
                                        <FontAwesome5 name="layer-group" size={24} color="green" />
                                    )}
                                    onPress={() => {
-                                     getExercice(user);
+                                     // getExercice(user);
                                      props.navigation.navigate("Phases");
                                    }}
                                    style={[styles.drawerItem]}
@@ -298,8 +290,7 @@ const mapStateToProps = (state) => ({
 });
 
 export const DrawerContent = connect(mapStateToProps, {
+  onAppLaunch,
+  onUserLogin,
   onUserLogout,
-  getForm,
-  getExercice,
-  getPatient,
 })(_DrawerContent);

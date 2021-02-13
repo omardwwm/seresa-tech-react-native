@@ -1,5 +1,7 @@
 import AsyncStorage from "@react-native-community/async-storage";
 import Axios from "axios";
+import {set} from "react-native-reanimated";
+import {useState} from "react";
 
 export const onUserLogin = ({ email, password }) => {
   return async (dispatch) => {
@@ -197,11 +199,12 @@ export const stopPatient = (paciente_id, fisio_id) => {
       const response = await Axios.get(
           `https://seresa-tech.net/index.php/wp-json/wcra/v1/stop_paciente_mobile/?param1=${paciente_id}&&param2=${fisio_id}`,
       );
-      console.log(response.data);
+      // console.log(response.data);
       dispatch({
         type: "STOP_PATIENT",
         showModal: true,
         isPatientStopped: true,
+        isFetching: true
       })
     } catch (error){
       console.log(error.response);
@@ -209,11 +212,11 @@ export const stopPatient = (paciente_id, fisio_id) => {
         type: "STOP_PATIENT",
         showModal: true,
         isPatientStopped: false,
+        isFetching: false,
       })
     }
   }
 };
-///////////////////////
 ///////////////////////
 export const addPatient = (paciente_id, fisio_id) => {
   return async (dispatch) =>{
@@ -221,11 +224,12 @@ export const addPatient = (paciente_id, fisio_id) => {
       const response = await Axios.get(
           `https://seresa-tech.net/index.php/wp-json/wcra/v1/add_paciente_mobile/?param1=${paciente_id}&&param2=${fisio_id}`
       );
-      console.log(response.data);
+      // console.log(response.data);
       dispatch({
         type: "ADD_PATIENT",
         showModal: true,
         isPatientAdded: true,
+        isFetching: true,
       })
     } catch (error){
       console.log(error.response);
@@ -233,6 +237,7 @@ export const addPatient = (paciente_id, fisio_id) => {
         type: "ADD_PATIENT",
         showModal: true,
         isPatientAdded: false,
+        isFetching: false,
       })
     }
   }
@@ -304,8 +309,12 @@ export const getPatient = () => {
       const response = await Axios.get(
         `https://seresa-tech.net/index.php/wp-json/wcra/v1/get_all_results/?param1=0`
       );
-      console.log("getAllPatient", response);
-      dispatch({ type: "GET_ALL_PATIENTS", payload: response.data });
+      // console.log("getAllPatient", response);
+      dispatch({
+        type: "GET_ALL_PATIENTS",
+        payload: response.data,
+        isFetching: false,
+      });
     } catch (error) {
       console.log("error getAllPatient", error.response);
     }

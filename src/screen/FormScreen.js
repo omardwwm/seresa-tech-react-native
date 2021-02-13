@@ -39,10 +39,10 @@ const _FormScreen = (props) => {
     formError,
   } = userReducer;
 
-  // useEffect(() => {
-  //   // getPatient();
-  //   getForm();
-  // }, []);
+  useEffect(() => {
+    getPatient();
+    getForm(user);
+  }, []);
   // console.log(patients);
   // if (patients !== null) {
     const allPatientsArray = patients && Object.keys(patients).map(function (i) {
@@ -51,13 +51,13 @@ const _FormScreen = (props) => {
     // console.log(allPatientsArray);
   // console.log(form);
     const currentPatient = allPatientsArray && allPatientsArray.filter(function (item){
-      return item.paciente ===  user.id;
+      return user && item.paciente ===  user.id;
     });
     // console.log(currentPatient);
-  let lastDateForm = currentPatient && currentPatient[0].date
-  let numberPhase = currentPatient && currentPatient[0]['phase du relevé'];
+  let lastDateForm = user && currentPatient[0].date
+  let numberPhase = user && currentPatient[0]['phase du relevé'];
   let dateForNextForm;
-  console.log(numberPhase);
+  // console.log(numberPhase);
   switch (numberPhase){
     case '0':
       dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(8, 'days');
@@ -72,7 +72,7 @@ const _FormScreen = (props) => {
       dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(21, 'days');
   }
 
-    console.log(dateForNextForm);
+    // console.log(dateForNextForm);
   // const limitDateLine = lastDateForm.setDate(lastDateForm.getDate() + daysOfPhase);
   // console.log(lastDateForm2.setDate(lastDateForm2.getDate()));
   // }

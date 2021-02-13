@@ -1,14 +1,16 @@
-import React, {useEffect} from "react";
-import {ScrollView, Text, View, SafeAreaView, StyleSheet, TouchableOpacity, FlatList, VirtualizedList, StatusBar} from "react-native";
+import React, {useEffect, useState} from "react";
+import { Text, View, SafeAreaView, StyleSheet, TouchableOpacity, FlatList, StatusBar, RefreshControl} from "react-native";
 import { Fontisto } from '@expo/vector-icons';
+import ListBarSearch from "../components/ListSearchBar";
+// import filter from "lodash.filter";
 
 import { connect } from "react-redux";
-import { getPatient } from "../redux";
+import {getPatient} from "../redux";
 import {ActivityIndicator} from "react-native-paper";
 
 const _AllPatientsScreen = (props)=> {
     const {userReducer, getPatient} = props;
-    const {patients} = userReducer;
+    const {patients, isFetching} = userReducer;
     useEffect(() => {
         getPatient();
     }, []);
@@ -33,7 +35,6 @@ const _AllPatientsScreen = (props)=> {
                             <Text><Fontisto name="doctor" size={24} color="green" />  Suivi</Text>
                         }
                     </View>
-
                     <TouchableOpacity onPress={()=>props.navigation.navigate('FichePatient', {item})} style={{alignItems: "center"}}>
                         <Text style={styles.btnDetails}>Lire la suite</Text>
                     </TouchableOpacity>
@@ -41,15 +42,45 @@ const _AllPatientsScreen = (props)=> {
 
             </View>
         )
+        // console.log(isFetching);
+        const keyExtractor = (item, index) => index.toString();
+        const [Fetching, setFetching] = useState(isFetching);
+        ////////////////////// search bar
+        const [data, setData] = useState(allPatientsArray);
+        const [query, setQuery] = useState('');
+
+        const handleSearch = text => {
+            // const formattedQuery = text.toLowerCase();
+            const filteredData = allPatientsArray.filter(function (user){
+                return user.name.substring(0, text.length).toLowerCase() === text.toLowerCase();
+            });
+            setData(filteredData);
+            setQuery(text);
+        };
+        //////////// end search bar
+        const onRefresh = ()=>{
+            setFetching(true);
+            // getPatient().then(()=>{ setFetching(false)});
+            getPatient().then(()=>{setData(allPatientsArray)}).finally(()=>{setFetching(false)});
+        }
+
         return (
             <SafeAreaView>
                 <FlatList
-                    data={allPatientsArray}
+                    ListHeaderComponent={<ListBarSearch handleSearch={handleSearch} value={query}/>}
+                    data={data}
                     renderItem={renderItem}
                     // keyExtractor={item => item.id}
-                    keyExtractor = { (item, index) => index.toString() }
+                    keyExtractor = { keyExtractor }
                     maxToRenderPerBatch={10}
                     windowSize={10}
+                    // extraData={onRefresh}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={Fetching}
+                            onRefresh={onRefresh}
+                        />
+                    }
                 />
             </SafeAreaView>
         )

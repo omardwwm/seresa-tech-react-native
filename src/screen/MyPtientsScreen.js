@@ -1,28 +1,17 @@
-import React, {useEffect} from "react";
-import {
-    ScrollView,
-    Text,
-    View,
-    Button,
-    StyleSheet,
-    TouchableOpacity,
-    FlatList,
-    SafeAreaView,
-    StatusBar
-} from "react-native";
-
-
+import React, {useEffect, useState} from "react";
+import { Text, View, StyleSheet, TouchableOpacity, FlatList, SafeAreaView, StatusBar, RefreshControl } from "react-native";
 import { connect } from "react-redux";
-import { getPatient } from "../redux";
+import { getPatient, setIsLoading, addPatient, stopPatient } from "../redux";
 
 
 const _MyPatientsScreen = (props)=>{
     const { userReducer, getPatient } = props;
-    const { patients, user } = userReducer;
+    const { patients, user, isFetching } = userReducer;
     useEffect(() => {
         getPatient();
     }, []);
     // console.log(patients);
+    // console.log(isFetching);
 
     const allPatientsArray = patients && Object.keys(patients).map(function (i) {
             return patients[i];
@@ -31,7 +20,7 @@ const _MyPatientsScreen = (props)=>{
         return item['id fisio'] === user.id;
     }));
     const myListLenght = myList && myList.length
-    console.log(myListLenght);
+    // console.log(myListLenght);
     const renderMyList = ({ item }) => (
 
         <View style={styles.item} key={item.id}>
@@ -44,9 +33,15 @@ const _MyPatientsScreen = (props)=>{
                     <Text style={styles.btnDetails}>Lire la suite</Text>
                 </TouchableOpacity>
             </View>
-
         </View>
     )
+    const keyExtractor = (item, index) => index.toString();
+    const [Fetching, setFetching] = useState(isFetching);
+    const onRefresh = ()=>{
+        setFetching(true);
+        getPatient().then(()=>{ setFetching(false)});
+
+    }
     return (
             <SafeAreaView>
                 {myListLenght === 0?
@@ -55,9 +50,16 @@ const _MyPatientsScreen = (props)=>{
                         data={myList}
                         renderItem={renderMyList}
                         // keyExtractor={item => item.id}
-                        keyExtractor = { (item, index) => index.toString() }
+                        keyExtractor = { keyExtractor }
                         maxToRenderPerBatch={10}
                         windowSize={10}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={Fetching}
+                                onRefresh={onRefresh}
+                            />
+                        }
+                        // extraData={true}
                     />)
                 }
             </SafeAreaView>
@@ -100,6 +102,6 @@ const mapStateToProps = (state) => ({
 });
 
 
-const MyPatientsScreen = connect(mapStateToProps, { getPatient })(_MyPatientsScreen);
+const MyPatientsScreen = connect(mapStateToProps, { getPatient, setIsLoading, addPatient, stopPatient})(_MyPatientsScreen);
 
 export default MyPatientsScreen;

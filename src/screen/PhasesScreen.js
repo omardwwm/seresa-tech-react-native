@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { StyleSheet, Text, View, Button, Image, ScrollView, Dimensions } from "react-native";
-import { getForm, hideFormModal, sendFormData, getExercice } from "../redux";
+import { getExercice } from "../redux";
 import { ActivityIndicator } from "react-native-paper";
 import { connect } from "react-redux";
 // import Video from "react-native-video";
@@ -61,10 +61,7 @@ const mapStateToProps = (state) => ({
 });
 
 const PhasesScreen = connect(mapStateToProps, {
-  getForm,
-  sendFormData,
   getExercice,
-  hideFormModal,
 })(_PhasesScreen);
 
 export default PhasesScreen;
