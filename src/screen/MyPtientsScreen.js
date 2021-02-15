@@ -40,7 +40,6 @@ const _MyPatientsScreen = (props)=>{
     const onRefresh = ()=>{
         setFetching(true);
         getPatient().then(()=>{ setFetching(false)});
-
     }
     return (
             <SafeAreaView>

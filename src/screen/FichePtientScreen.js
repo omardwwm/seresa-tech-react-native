@@ -87,7 +87,7 @@ const _FichePatientScreen = (props)=>{
                                         </TouchableOpacity>
                                     </>
                                 ) :
-                                (<Text style={{... styles.btnText, backgroundColor:"#66983a", margin:10}}>Ce patient est suivi par le kine : {userMeta.data.last_name}</Text>)
+                                (<Text style={{... styles.btnText, backgroundColor:"#66983a", margin:10}}>Ce patient est suivi par le kine : {userMeta && userMeta.data.last_name}</Text>)
                         }
                     </View>
                 </View>

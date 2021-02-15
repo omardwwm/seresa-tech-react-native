@@ -1,13 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  TouchableOpacity,
-  Modal,
-  Image
-} from "react-native";
+import {StyleSheet, Text, View, Dimensions, TouchableOpacity, Modal, Image} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { ActivityIndicator, RadioButton } from "react-native-paper";
 import { getForm, hideFormModal, sendFormData, setIsLoading, getExercice, getPatient } from "../redux";
@@ -44,9 +36,11 @@ const _FormScreen = (props) => {
     getForm(user);
   }, []);
   // console.log(patients);
+  // console.log(user);
+  // console.log(form);
   // if (patients !== null) {
     const allPatientsArray = patients && Object.keys(patients).map(function (i) {
-      return patients[i];
+      return user && patients[i];
     });
     // console.log(allPatientsArray);
   // console.log(form);
@@ -54,8 +48,8 @@ const _FormScreen = (props) => {
       return user && item.paciente ===  user.id;
     });
     // console.log(currentPatient);
-  let lastDateForm = user && currentPatient[0].date
-  let numberPhase = user && currentPatient[0]['phase du relevé'];
+  let lastDateForm = user && currentPatient && currentPatient[0].date
+  let numberPhase = user && currentPatient && currentPatient[0]['phase du relevé'];
   let dateForNextForm;
   // console.log(numberPhase);
   switch (numberPhase){
@@ -444,7 +438,7 @@ const _FormScreen = (props) => {
   } else {
     return (
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <ActivityIndicator size="large" color="#FD9854" />
+          <ActivityIndicator size="large" color="#8fe2b3" />
         </View>
     );
   }

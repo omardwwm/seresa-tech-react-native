@@ -11,15 +11,24 @@ import {ActivityIndicator} from "react-native-paper";
 const _AllPatientsScreen = (props)=> {
     const {userReducer, getPatient} = props;
     const {patients, isFetching} = userReducer;
+    // console.log(patients);
+    const [Fetching, setFetching] = useState(isFetching);
+    const [query, setQuery] = useState('');
     useEffect(() => {
         getPatient();
+
     }, []);
-    // console.log(patients);
-    if (patients !== null) {
-        const allPatientsArray = Object.keys(patients).map(function (i) {
-            return patients[i];
-        });
-        // console.log(allPatientsArray);
+
+    const allPatientsArray = patients && Object.keys(patients).map(function (i) {
+        return patients[i];
+    });
+    // console.log(allPatientsArray);
+    const [data, setData] = useState(allPatientsArray);
+
+    if (allPatientsArray !== null) {
+        // const allPatientsArray = Object.keys(patients).map(function (i) {
+        //     return patients[i];
+        // });
         const renderItem=({ item }) => (
             <View style={styles.item} key={item.id}>
                 <View style={styles.itemContent}>
@@ -44,12 +53,15 @@ const _AllPatientsScreen = (props)=> {
         )
         // console.log(isFetching);
         const keyExtractor = (item, index) => index.toString();
-        const [Fetching, setFetching] = useState(isFetching);
+        // const [Fetching, setFetching] = useState(isFetching);
         ////////////////////// search bar
-        const [data, setData] = useState(allPatientsArray);
-        const [query, setQuery] = useState('');
+        // const [data, setData] = useState(allPatientsArray);
+        // const [query, setQuery] = useState('');
 
         const handleSearch = text => {
+            // if (text===''){
+            //     setData(allPatientsArray);
+            // }
             // const formattedQuery = text.toLowerCase();
             const filteredData = allPatientsArray.filter(function (user){
                 return user.name.substring(0, text.length).toLowerCase() === text.toLowerCase();
@@ -60,8 +72,8 @@ const _AllPatientsScreen = (props)=> {
         //////////// end search bar
         const onRefresh = ()=>{
             setFetching(true);
-            // getPatient().then(()=>{ setFetching(false)});
-            getPatient().then(()=>{setData(allPatientsArray)}).finally(()=>{setFetching(false)});
+            getPatient().then(()=>{ setFetching(false)}).then(()=>{setData(allPatientsArray)}).finally(()=>setQuery(''));
+            // getPatient().then(()=>{setData(allPatientsArray)}).finally(()=>{setFetching(false)});
         }
 
         return (
