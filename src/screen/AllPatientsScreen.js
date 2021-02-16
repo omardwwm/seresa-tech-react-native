@@ -11,7 +11,6 @@ import {ActivityIndicator} from "react-native-paper";
 const _AllPatientsScreen = (props)=> {
     const {userReducer, getPatient} = props;
     const {patients, isFetching} = userReducer;
-    // console.log(patients);
     const [Fetching, setFetching] = useState(isFetching);
     const [query, setQuery] = useState('');
     useEffect(() => {
@@ -19,11 +18,12 @@ const _AllPatientsScreen = (props)=> {
 
     }, []);
 
+    // console.log(patients);
     const allPatientsArray = patients && Object.keys(patients).map(function (i) {
         return patients[i];
     });
     // console.log(allPatientsArray);
-    const [data, setData] = useState(allPatientsArray);
+    const [data, setData] =  useState(allPatientsArray && allPatientsArray);
 
     if (allPatientsArray !== null) {
         // const allPatientsArray = Object.keys(patients).map(function (i) {
@@ -59,9 +59,9 @@ const _AllPatientsScreen = (props)=> {
         // const [query, setQuery] = useState('');
 
         const handleSearch = text => {
-            // if (text===''){
-            //     setData(allPatientsArray);
-            // }
+            if (text===''){
+                setData(allPatientsArray && allPatientsArray);
+            }
             // const formattedQuery = text.toLowerCase();
             const filteredData = allPatientsArray.filter(function (user){
                 return user.name.substring(0, text.length).toLowerCase() === text.toLowerCase();
