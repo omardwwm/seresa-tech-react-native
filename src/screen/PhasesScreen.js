@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, Text, View, Button, Image, ScrollView, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Button, Image, ScrollView, Dimensions, TouchableOpacity } from "react-native";
 import { getExercice } from "../redux";
 import { ActivityIndicator } from "react-native-paper";
 import { connect } from "react-redux";
@@ -15,7 +15,21 @@ const _PhasesScreen = (props) => {
   }, []);
   const { width } = Dimensions.get('window');
   if (exercice !== null) {
-    if (exercice.url == false) {
+    if (user && user.mod6_capabilities[0].slice(29, -7) > 5){
+      return (
+          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <Text>Vous avez fini votre parcours, veuillez contacter votre physio, ses coordonnes sont dans
+              <TouchableOpacity onPress={()=>props.navigation.navigate('Profile')}>
+                <Text style={{color:"#c66a3f", margin:5}}>ton espace personnel</Text>
+              </TouchableOpacity>
+            </Text>
+            {/*<TouchableOpacity>*/}
+            {/*  <Text></Text>*/}
+            {/*</TouchableOpacity>*/}
+          </View>
+      )
+    }
+    else if (exercice.url === false) {
       return (
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}

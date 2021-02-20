@@ -254,16 +254,17 @@ export const getForm = (user) => {
     try {
       const response = await Axios.get(
         `http://seresa-tech.net/index.php/wp-json/wcra/v1/get_formulaire/?param1=${user.juiz_secret_token_autolog[0]}`
+        //     `http://seresa-tech.net/index.php/wp-json/wcra/v1/get_formulaire/?param1=fdb61119f5c854ef1d45dac5cc06f06db0649b38`
       );
       console.log("response getForm", response);
-      dispatch({ type: "GET_FORM", form: response.data.json_survey });
+      dispatch({ type: "GET_FORM", form: response.data });
     } catch (error) {
       console.log("error form", error.response);
       dispatch({ type: "GET_FORM", form: error.response.data });
     }
   };
 };
-
+//json_survey
 const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
 export const sendFormData = (user, data) => {

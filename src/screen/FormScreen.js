@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {StyleSheet, Text, View, Dimensions, TouchableOpacity, Modal, Image} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { ActivityIndicator, RadioButton } from "react-native-paper";
-import { getForm, hideFormModal, sendFormData, setIsLoading, getExercice, getPatient } from "../redux";
+import { getForm, hideFormModal, sendFormData, setIsLoading } from "../redux";
 import { connect } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import moment from 'moment';
@@ -18,13 +18,13 @@ const _FormScreen = (props) => {
       sendFormData,
       setIsLoading,
       hideFormModal,
-      getExercice,
+      // getExercice,
       getPatient
     } = props;
   const {
     form,
     user,
-    patients,
+    // patients,
     isFormLoading,
     showFormModal,
     isLoading,
@@ -32,39 +32,40 @@ const _FormScreen = (props) => {
   } = userReducer;
 
   useEffect(() => {
-    getPatient();
+    // getPatient();
     getForm(user);
   }, []);
   // console.log(patients);
   // console.log(user);
-  // console.log(form);
+  // console.log('mon form', form);
+  // console.log('date du prochaine validation', form.date && form.date);
   // if (patients !== null) {
-    const allPatientsArray = patients && Object.keys(patients).map(function (i) {
-      return user && patients[i];
-    });
+  //   const allPatientsArray = patients && Object.keys(patients).map(function (i) {
+  //     return user && patients[i];
+  //   });
     // console.log(allPatientsArray);
   // console.log(form);
-    const currentPatient = allPatientsArray && allPatientsArray.filter(function (item){
-      return user && item.paciente ===  user.id;
-    });
+  //   const currentPatient = allPatientsArray && allPatientsArray.filter(function (item){
+  //     return user && item.paciente ===  user.id;
+  //   });
     // console.log(currentPatient);
-  let lastDateForm = user && currentPatient && currentPatient[0].date
-  let numberPhase = user && currentPatient && currentPatient[0]['phase du relevé'];
-  let dateForNextForm;
+  // let lastDateForm = user && currentPatient && currentPatient[0].date
+  // let numberPhase = user && currentPatient && currentPatient[0]['phase du relevé'];
+  // let dateForNextForm;
   // console.log(numberPhase);
-  switch (numberPhase){
-    case '0':
-      dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(8, 'days');
-       break;
-    case '1':
-      dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(15, 'days');
-      break;
-    case '4':
-      dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(21, 'days');
-      break;
-    default:
-      dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(21, 'days');
-  }
+  // switch (numberPhase){
+  //   case '0':
+  //     dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(8, 'days');
+  //      break;
+  //   case '1':
+  //     dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(15, 'days');
+  //     break;
+  //   case '4':
+  //     dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(21, 'days');
+  //     break;
+  //   default:
+  //     dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(21, 'days');
+  // }
 
     // console.log(dateForNextForm);
   // const limitDateLine = lastDateForm.setDate(lastDateForm.getDate() + daysOfPhase);
@@ -99,7 +100,7 @@ const _FormScreen = (props) => {
     console.log(checked.form);
     if (
         Object.keys(checked.form).length !==
-        Object.keys(form.pages[0].elements).length
+        Object.keys(form.json_survey.pages && form.json_survey.pages[0].elements).length
     ) {
       setChecked({
         ...checked,
@@ -113,7 +114,7 @@ const _FormScreen = (props) => {
   };
   const toggleModal = () => {
     hideFormModal(showFormModal);
-    getExercice(user);
+    // getExercice(user);
     props.navigation.navigate("Phases");
   };
   /*
@@ -125,7 +126,7 @@ const _FormScreen = (props) => {
     );
   }*/
 
-  if (form != null) {
+  if (form !== null) {
     // if (form.date !== undefined) {
     //   return (
     //       <View
@@ -155,7 +156,7 @@ const _FormScreen = (props) => {
             </Text>
             <CountDown
                 until={parseInt
-                    (dateForNextForm - moment(new Date())) / 1000
+                    (moment(form.date && form.date) - moment(new Date())) / 1000
                 }
                 size={16}
             />
@@ -170,7 +171,7 @@ const _FormScreen = (props) => {
               contentContainerStyle={{ marginBottom: 10 }}
               showsHorizontalScrollIndicator={false}
           >
-            {form.pages[0].elements.map((current, index) => {
+            {form.json_survey.pages[0].elements.map((current, index) => {
               if (current.type == "rating") {
                 const rating = [];
                 for (
@@ -248,7 +249,7 @@ const _FormScreen = (props) => {
                               <Text style={styles.textStyle}>&#x3C;</Text>
                             </TouchableOpacity>
                         )}
-                        {index == form.pages[0].elements.length - 1 ? null : (
+                        {index == form.json_survey.pages[0].elements.length - 1 ? null : (
                             <TouchableOpacity
                                 activeOpacity={0.8}
                                 onPress={() => handleNav(index + 1)}
@@ -322,7 +323,7 @@ const _FormScreen = (props) => {
                               <Text style={styles.textStyle}>&#x3C;</Text>
                             </TouchableOpacity>
                         )}
-                        {index == form.pages[0].elements.length - 1 ? null : (
+                        {index == form.json_survey.pages[0].elements.length - 1 ? null : (
                             <TouchableOpacity
                                 activeOpacity={0.8}
                                 onPress={() => handleNav(index + 1)}
@@ -337,7 +338,7 @@ const _FormScreen = (props) => {
                         )}
                       </View>
                       <View>
-                        {index=== form.pages[0].elements.length -1  ?
+                        {index=== form.json_survey.pages[0].elements.length -1  ?
                         <TouchableOpacity
                             style={{
                               ...styles.submitButton
@@ -521,12 +522,12 @@ const mapStateToProps = (state) => ({
 });
 
 const FormScreen = connect(mapStateToProps, {
-  getPatient,
+  // getPatient,
   getForm,
   sendFormData,
   setIsLoading,
   hideFormModal,
-  getExercice,
+  // getExercice,
 })(_FormScreen);
 
 export default FormScreen;
