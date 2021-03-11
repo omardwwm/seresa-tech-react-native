@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {StyleSheet, Text, View, Dimensions, TouchableOpacity, Modal, Image} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { ActivityIndicator, RadioButton } from "react-native-paper";
-import { getForm, hideFormModal, sendFormData, setIsLoading } from "../redux";
+import {getForm, hideFormModal, sendFormData, setIsLoading} from "../redux";
 import { connect } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import moment from 'moment';
@@ -12,32 +12,16 @@ import CountDown from "react-native-countdown-component";
 const { width } = Dimensions.get("window");
 
 const _FormScreen = (props) => {
-  const {
-      userReducer,
-      getForm,
-      sendFormData,
-      setIsLoading,
-      hideFormModal,
-      // getExercice,
-      getPatient
+  const {userReducer, getForm, sendFormData, setIsLoading, hideFormModal,
     } = props;
-  const {
-    form,
-    user,
-    // patients,
-    isFormLoading,
-    showFormModal,
-    isLoading,
-    formError,
+  const {form, user, isFormLoading, showFormModal, isLoading, formError
   } = userReducer;
 
   useEffect(() => {
-    // getPatient();
     getForm(user);
-  }, []);
-  // console.log(patients);
-  // console.log(user);
-  // console.log('mon form', form);
+  }, [user]);
+  // console.log('userInFormScreen', user);
+  // console.log('mon formm', form);
   // console.log('date du prochaine validation', form.date && form.date);
   // if (patients !== null) {
   //   const allPatientsArray = patients && Object.keys(patients).map(function (i) {
@@ -85,17 +69,14 @@ const _FormScreen = (props) => {
   const scrollRef = useRef();
 
   const handleNav = (number, step = null) => {
-    if (step == "last") number = number - 2;
+    if (step === "last") number = number - 2;
     scrollRef.current.scrollTo({
       x: viewLayout[number] - 10,
       animated: true,
     });
   };
-  /*
-  useEffect(() => {
-    getForm(user);
-  }, []);
-  */
+
+
   const handleSubmit = () => {
     console.log(checked.form);
     if (
@@ -114,7 +95,6 @@ const _FormScreen = (props) => {
   };
   const toggleModal = () => {
     hideFormModal(showFormModal);
-    // getExercice(user);
     props.navigation.navigate("Phases");
   };
   /*
@@ -156,7 +136,7 @@ const _FormScreen = (props) => {
             </Text>
             <CountDown
                 until={parseInt
-                    (moment(form.date && form.date) - moment(new Date())) / 1000
+                    (moment(form && form.date) - moment(new Date())) / 1000
                 }
                 size={16}
             />
@@ -171,8 +151,8 @@ const _FormScreen = (props) => {
               contentContainerStyle={{ marginBottom: 10 }}
               showsHorizontalScrollIndicator={false}
           >
-            {form.json_survey.pages[0].elements.map((current, index) => {
-              if (current.type == "rating") {
+            {form && form.json_survey.pages[0].elements.map((current, index) => {
+              if (current.type === "rating") {
                 const rating = [];
                 for (
                     let index = current.rateMin;
@@ -249,7 +229,7 @@ const _FormScreen = (props) => {
                               <Text style={styles.textStyle}>&#x3C;</Text>
                             </TouchableOpacity>
                         )}
-                        {index == form.json_survey.pages[0].elements.length - 1 ? null : (
+                        {index === form.json_survey.pages[0].elements.length - 1 ? null : (
                             <TouchableOpacity
                                 activeOpacity={0.8}
                                 onPress={() => handleNav(index + 1)}
@@ -266,7 +246,7 @@ const _FormScreen = (props) => {
                     </View>
                 );
               }
-              if (current.type == "radiogroup") {
+              if (current.type === "radiogroup") {
                 return (
                     <View
                         key={current.name}
@@ -323,7 +303,7 @@ const _FormScreen = (props) => {
                               <Text style={styles.textStyle}>&#x3C;</Text>
                             </TouchableOpacity>
                         )}
-                        {index == form.json_survey.pages[0].elements.length - 1 ? null : (
+                        {index === form.json_survey.pages[0].elements.length - 1 ? null : (
                             <TouchableOpacity
                                 activeOpacity={0.8}
                                 onPress={() => handleNav(index + 1)}
@@ -521,13 +501,6 @@ const mapStateToProps = (state) => ({
   userReducer: state.userReducer,
 });
 
-const FormScreen = connect(mapStateToProps, {
-  // getPatient,
-  getForm,
-  sendFormData,
-  setIsLoading,
-  hideFormModal,
-  // getExercice,
-})(_FormScreen);
+const FormScreen = connect(mapStateToProps, { getForm, sendFormData, setIsLoading, hideFormModal })(_FormScreen);
 
 export default FormScreen;

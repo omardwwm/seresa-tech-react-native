@@ -1,15 +1,7 @@
 import React, { useState } from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import {
-  Table,
-  TableWrapper,
-  Row,
-  Rows,
-  Col,
-  Cols,
-  Cell,
-} from "react-native-table-component";
+import {Table, TableWrapper, Row, Rows, Col, Cols, Cell,} from "react-native-table-component";
 import { connect } from "react-redux";
 import { getPatient } from "../redux";
 
@@ -17,7 +9,7 @@ import { getPatient } from "../redux";
 const _DatosScreen = (props) => {
   const { userReducer, getPatient } = props;
   const { patients } = userReducer;
-  console.log(patients);
+  // console.log(patients);
 
     let tableHeadArray = [];
   let tableDataArray = [];

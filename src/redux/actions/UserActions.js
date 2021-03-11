@@ -7,7 +7,6 @@ export const onUserLogin = ({ email, password }) => {
   return async (dispatch) => {
     try {
       const response = await Axios.post(
-          // was on Axios.get changed by OB 28/01 to Axios.post
         `http://seresa-tech.net/index.php/wp-json/wcra/v1/connect_user/?param1=${email}&param2=${password}`
       );
       console.log("login", response.data.user);

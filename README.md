@@ -17,7 +17,7 @@ télécharger la version stable de yarn : https://classic.yarnpkg.com/fr/docs/in
 ## Android studio :
 
 https://developer.android.com/studio
-Créer une emulateur via la fonction avd manager :
+Créer un emulateur via la fonction avd manager :
 
 - Téléphone Pixel 2 API 25
 - Version Android : 7.1.1

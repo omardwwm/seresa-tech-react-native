@@ -6,6 +6,9 @@ import imgDos from "../assets/image/presentation-dos.png";
 
 
 const PresentationScreen = (props)=>{
+    const user = props.route.params;
+    console.log('imuserfrompresentationscreen', user);
+    console.log(user && user.user.mod6_capabilities);
     return <View >
         <ScrollView>
             <View style={styles.container}>
@@ -51,11 +54,27 @@ const PresentationScreen = (props)=>{
                         style={{width: '100%', height: 250, marginTop:10}}
                 />
             </View>
-            <View>
+            {console.log('insiderender', user.user.mod6_capabilities[0].slice(11, 22))}
+            {user && user.user.role.slice(0,11) === "um_paciente" || user.user.mod6_capabilities[0].slice(11, 22)==="um_paciente" ? (
                 <TouchableOpacity onPress={() => props.navigation.navigate("Phases")} style={styles.btnStyle}>
                     <Text style={styles.textBtn}>Acceder a vos exercices</Text>
                 </TouchableOpacity>
-            </View>
+            ) : null
+            }
+
+            {/*{user && user.user.mod6_capabilities && user.mod6_capabilities[0].slice(11, 22) === "um_paciente" &&*/}
+            {/*<TouchableOpacity onPress={() => props.navigation.navigate("Phases")} style={styles.btnStyle}>*/}
+            {/*    <Text style={styles.textBtn}>Acceder a vos exercices</Text>*/}
+            {/*</TouchableOpacity>*/}
+
+            {/*}*/}
+            {/*{user &&*/}
+            {/*<View>*/}
+            {/*    <TouchableOpacity onPress={() => props.navigation.navigate("Phases")} style={styles.btnStyle}>*/}
+            {/*        <Text style={styles.textBtn}>Acceder a vos exercices</Text> }*/}
+            {/*    </TouchableOpacity>*/}
+            {/*</View> }*/}
+
 
         </ScrollView>
 

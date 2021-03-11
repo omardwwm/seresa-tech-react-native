@@ -2,7 +2,6 @@ import React, {useEffect} from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Pressable, Image } from "react-native";
 import { FontAwesome, FontAwesome5, MaterialCommunityIcons, Fontisto, Ionicons } from '@expo/vector-icons';
-
 import HomeScreen from "./HomeScreen";
 import RegisterScreen from "./RegisterScreen";
 import LoginScreen from "./LoginScreen";
@@ -74,6 +73,8 @@ const _TabScreen = (props) => {
 
     const role = user && user.role;
 
+    // console.log('userfromtabnavigation', user);
+    // console.log(user && user.mod6_capabilities[0].slice(11, 28))
     if (isUserLogged){
         return (
             <Tab.Navigator
@@ -106,7 +107,7 @@ const _TabScreen = (props) => {
                     }}
                 />
 
-                {role === "um_fisioterapeuta"?
+                {role && role === "um_fisioterapeuta" || user && user.mod6_capabilities[0].slice(11, 28) === "um_fisioterapeuta" ?
                     <>
                         <Tab.Screen
                             name="AllPatients"

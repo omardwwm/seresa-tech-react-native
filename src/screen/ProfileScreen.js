@@ -1,10 +1,11 @@
 import React, {useEffect} from "react";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, Linking } from "react-native";
 import { connect } from "react-redux";
 import { onUserLogin, hideModal, getUserMeta, getPatient } from "../redux";
 import { ScrollView } from "react-native-gesture-handler";
 import { Avatar } from "react-native-paper";
 import * as Animatable from "react-native-animatable";
+import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
 
 const _ProfileScreen = (props) => {
   const { userReducer, getUserMeta, getPatient } = props;
@@ -14,41 +15,57 @@ const _ProfileScreen = (props) => {
     return null;
   }
   const role = user && user.role;
-  let userId = user.id
-  // console.log(user);
+  // let userId = user.id
+  console.log('userProfile', user);
+  // useEffect(()=>{
+  //   getPatient();
+  // }, [])
 
-  useEffect(()=>{
-    getPatient();
-  }, [])
+  // console.log(patients);
+  //   const allPatientsArray = patients && Object.keys(patients).map(function (i) {
+  //     return user && patients[i];
+  //   });
+  //   const currentPatient = allPatientsArray && allPatientsArray.filter(function (item){
+  //     return item.paciente ===  userId;
+  //   });
+  //   const currentUser = currentPatient && currentPatient[0];
+    // console.log('Im current user', currentUser);
 
-    const allPatientsArray = patients && Object.keys(patients).map(function (i) {
-      return user && patients[i];
-    });
-    const currentPatient = allPatientsArray && allPatientsArray.filter(function (item){
-      return item.paciente ===  userId;
-    });
-    const currentUser = currentPatient && currentPatient[0];
-    console.log('Im current user', currentUser);
-
-    const myPhysioId = currentUser && currentUser['id fisio'];
-    console.log('his ID is : ', myPhysioId);
+    // const myPhysioId = currentUser && currentUser['id fisio'];
+    const myKine = user && user.juiz_list_fisio && user.juiz_list_fisio[0];
+    // console.log('im your kine now', myKine);
+    // console.log('his ID is : ', myPhysioId);
     useEffect(()=>{
-      if (myPhysioId !== 0){
-        getUserMeta(myPhysioId)
+      // console.log('id inside useeffet', myPhysioId);
+      if (myKine && myKine !== 0){
+        getUserMeta(myKine)
       }
-    }, [])
-  if (userMeta){
-    console.log('les donnes de kine: ', userMeta);
+    //  think to add "myKine" inside the empty array
+    }, [myKine])
+  // if (userMeta){
+  //   console.log('les donnes de kinee: ', userMeta);
+  // }
+  // const myPhysio = ()=>{
+  //   if (myPhysioId !== 0){
+  //     return userMeta && userMeta.data;
+  //   }
+  // }
+  const makeCall = ()=>{
+    let phoneNumber = userMeta && userMeta.data.phone_number[0];
+    if (Platform.OS === 'android') {
+      phoneNumber = `tel:${phoneNumber}`;
+    } else {
+      phoneNumber = `telprompt:${phoneNumber}`;
+    }
+
+    Linking.openURL(phoneNumber)
   }
-  const myPhysio = ()=>{
-    if (myPhysioId !== 0)
-      return userMeta && userMeta.data;
-  }
+
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
         <View style={styles.profileBox}>
-          {role && role !== "um_fisioterapeuta"?
+          {role && role !== "um_fisioterapeuta" || user && user.mod6_capabilities[0].slice(11, 22) === "um_paciente" ?
               (
                   (user && user.gender[0].slice(14, -3) === "Femme" || user && user.gender[0] === "Femme")?
                   (<Avatar.Image
@@ -95,33 +112,48 @@ const _ProfileScreen = (props) => {
           <Text style={styles.username}>{user && user.nickname}</Text>
         </View>
         <Animatable.View animation="bounceInLeft" duration={500}>
-          <Text>Firstname : {user && user.first_name}</Text>
-          <Text>Lastname : {user && user.last_name}</Text>
-          <Text>Phone number : {user && user.phone_number}</Text>
-          {/*<Text>Phase-Role : {user.mod6_capabilities[0].slice(29, 30)}</Text>*/}
-          <Text>Role : {user && user.role}</Text>
-          {/*<Text>genre : {user && user.gender[0].slice(14, -3)}</Text>*/}
-          {(role && role !== "um_fisioterapeuta") ? (
-              (myPhysioId && myPhysioId !== 0 ? (
+          {user && <Text>Firstname : {user.first_name}</Text>}
+          {user && <Text>Lastname : {user.last_name}</Text>}
+          {(role && role !== "um_fisioterapeuta" || user && user.mod6_capabilities[0].slice(11, 22) === "um_paciente") && <Text>Numero de phase : {user.mod6_capabilities[0].slice(29, 30)}</Text>}
+          {/*{user && <Text>Numero de phase : {user.mod6_capabilities[0].slice(29, 30)}</Text>}*/}
+          {user &&  <Text>Mon tel : {user.phone_number}</Text>}
+          {user && <Text>Email : {user.email}</Text>}
+          {(role && role !== "um_fisioterapeuta" || user && user.mod6_capabilities[0].slice(11, 22) === "um_paciente") ? (
+              (myKine && myKine !== 0 ? (
                       <>
-                        <Text>Contacter mon Physio</Text>
-                        <Text>le Dr : {myPhysio().first_name} {myPhysio().last_name}</Text>
-                        {myPhysio().user_email ? (
-                                <Text>{myPhysio().user_email}</Text>
-                            ):
-                            (<Text>Le physio n'a pas communique son Email</Text>)
-                        }
-                        {myPhysio().phone_number ? (
-                                <Text>{myPhysio().phone_number}</Text>
-                            ):
-                            (<Text>Le physio n'a pas communique un numero de telephone</Text>)
-                        }
-
+                        <View style={{alignItems: 'center', justifyContent:'center'}}>
+                          <Text>Contacter mon Physio</Text>
+                          <Text>le Dr : {userMeta && userMeta.data.first_name} {userMeta && userMeta.data.last_name}</Text>
+                          {userMeta && userMeta.email ? (
+                                  <TouchableOpacity onPress={()=> Linking.openURL(`mailto:${userMeta.email}`)}
+                                                    style={styles.contactStyle}
+                                  >
+                                    <Text style={{fontWeight: 'bold'}}>
+                                      <MaterialCommunityIcons name="email-edit-outline" size={20} color="black" />  {userMeta.email}
+                                    </Text>
+                                  </TouchableOpacity>
+                              ):
+                              (<Text>Le physio n'a pas communique son Email</Text>)
+                          }
+                          {userMeta && userMeta.data.phone_number ? (
+                                  <TouchableOpacity onPress={makeCall} style={styles.contactStyle}>
+                                    <Text>
+                                      <Ionicons name="phone-portrait-outline" color="#000000" size={20} style={{ alignSelf: "center"}}/>
+                                      {userMeta && userMeta.data.phone_number[0]}
+                                    </Text>
+                                  </TouchableOpacity>
+                              ):
+                              (<Text>Le physio n'a pas communique un numero de telephone</Text>)
+                          }
+                        </View>
                       </>
                   )
                   :(
                       <>
-                        <Text>Vous etes pas suivi, vous n'avez pas de physio traitant </Text>
+                        <View >
+                          <Text>Vous etes pas suivi, vous n'avez pas de physio traitant</Text>
+                          <Text>Contacter la direction : sur ces coordonnées (A INSERER PLUS TARD)</Text>
+                        </View>
                       </>
                   ))
               ):
@@ -129,7 +161,7 @@ const _ProfileScreen = (props) => {
           }
 
           <TouchableOpacity
-            style={styles.buttonBox}
+            style={{...styles.buttonBox, marginVertical:48}}
             onPress={() => props.navigation.navigate("PasswordChange")}
             activeOpacity={0.8}
           >
@@ -143,10 +175,10 @@ const _ProfileScreen = (props) => {
 
 const styles = StyleSheet.create({
   buttonBox: {
-    marginTop: 20,
+    marginHorizontal: 20,
     backgroundColor: "#FD9854",
-    padding: 10,
-    borderRadius: 20,
+    padding: 5,
+    borderRadius: 10,
   },
   container: {
     flex: 1,
@@ -179,7 +211,7 @@ const styles = StyleSheet.create({
   // },
   profileBox: {
     marginTop: 30,
-    borderBottomWidth: 2,
+    borderBottomWidth: 3,
     marginBottom: 30,
   },
   scrollContainer: {
@@ -206,12 +238,15 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
   },
+  contactStyle: { width: '85%', padding: 5, backgroundColor: '#87e3b4', borderRadius: 8, alignItems: 'center', marginVertical:12
+
+  }
 });
 
 const mapStateToProps = (state) => ({
   userReducer: state.userReducer,
 });
 
-const ProfileScreen = connect(mapStateToProps, {getUserMeta, getPatient})(_ProfileScreen);
+const ProfileScreen = connect(mapStateToProps, { getUserMeta })(_ProfileScreen);
 
 export default ProfileScreen;

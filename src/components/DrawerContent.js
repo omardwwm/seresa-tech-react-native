@@ -4,7 +4,7 @@ import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import {Avatar, Caption, Drawer, Switch, Text, Title, TouchableRipple,} from "react-native-paper";
 import { FontAwesome, FontAwesome5, MaterialCommunityIcons, AntDesign, Ionicons } from '@expo/vector-icons';
 import { connect } from "react-redux";
-import { onUserLogout, onUserLogin, onAppLaunch } from "../redux";
+import { onUserLogout, onUserLogin, onAppLaunch, getForm } from "../redux";
 
 const _DrawerContent = (props) => {
   const { userReducer, onUserLogout } = props;
@@ -23,7 +23,7 @@ const _DrawerContent = (props) => {
           {isUserLogged && (
             <View style={styles.userInfoSection}>
               <View style={{ flexDirection: "row-reverse" }}>
-                {role && role !== "um_fisioterapeuta"?
+                {role && role !== "um_fisioterapeuta" || user && user.mod6_capabilities[0].slice(11, 22) === "um_paciente" ?
                     //{/* ajouter le role admin ds la condition */}
                     (user.gender && user.gender[0].slice(14, -3) === "Femme" || user.gender && user.gender[0] === "Femme")? (<Avatar.Image
                         source={require("../assets/image/woman-avatar.png")}
@@ -155,7 +155,8 @@ const _DrawerContent = (props) => {
                                    )}
                                    onPress={() => {
                                      props.navigation.navigate("Form");
-                                     // getForm(user); getPatient();
+                                     // getForm(user)
+                                     // ; getPatient();
                                    }}
                                    style={[styles.drawerItem]}
                       />
@@ -293,4 +294,5 @@ export const DrawerContent = connect(mapStateToProps, {
   onAppLaunch,
   onUserLogin,
   onUserLogout,
+  getForm
 })(_DrawerContent);

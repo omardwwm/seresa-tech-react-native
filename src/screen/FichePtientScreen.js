@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from "react";
-import {ScrollView, Text, View, Button, StyleSheet, TouchableOpacity, Alert, Modal} from "react-native";
+import {ScrollView, Text, View, Button, StyleSheet, TouchableOpacity, Alert, Modal, Linking} from "react-native";
 
 import { connect } from "react-redux";
 import {stopPatient, addPatient, getUserMeta, hideModal, getPatient, setIsLoading} from "../redux";
-import {Ionicons} from "@expo/vector-icons"; // tu update, change by getPatientFiche function , to create!!
+import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons"; // tu update, change by getPatientFiche function , to create!!
 
 
 const _FichePatientScreen = (props)=>{
     const {userReducer, stopPatient, addPatient, getUserMeta, hideModal} = props;
     const {user, userMeta, showModal, isPatientAdded, isPatientStopped } = userReducer;
     const {item} = props.route.params;
-    // console.log(item);
+    console.log('itemfromlist', item);
     const paciente_id = item.paciente;
-    // console.log(paciente_id);
+    console.log(paciente_id);
 
     // const [willRefresh, setWillRefresh] = useState(false)
     // console.log(user);
@@ -25,6 +25,7 @@ const _FichePatientScreen = (props)=>{
         // const paciente_id = item.paciente;
         if (idFisio === fisio_id){
             getUserMeta(paciente_id);
+            // console.log('patientsusermetaomar', userMeta);
         }
         if (idFisio!==0 && idFisio !== fisio_id){
             getUserMeta(idFisio);
@@ -43,6 +44,16 @@ const _FichePatientScreen = (props)=>{
         stopPatient(paciente_id, fisio_id).then(()=>{setStopped(true)});
         // getPatient();
     }
+    const makeCall = ()=>{
+        let phoneNumber =userMeta && userMeta.data.phone_number[0];
+        if (Platform.OS === 'android') {
+            phoneNumber = `tel:${phoneNumber}`;
+        } else {
+            phoneNumber = `telprompt:${phoneNumber}`;
+        }
+
+        Linking.openURL(phoneNumber)
+    }
 
     // console.log('isStopReducer', isPatientStopped);
     // console.log('isAaaReducer', isPatientAdded);
@@ -52,8 +63,8 @@ const _FichePatientScreen = (props)=>{
         <View style={styles.itemDetails}>
             <ScrollView>
                 <View style={styles.itemDetailsContent}>
-                    <Text>Privé : Fiche {item['phase du relevé']} {item.name}</Text>
-                    <Text>{item.date}</Text>
+                    <Text>Privé : Fiche de la phase :  {item['phase du relevé']} du patient : {item.name}</Text>
+                    <Text>Date et heure de validation : {item.date}</Text>
                     <Text>Sexe : {item.sexe}</Text>
                     <Text>Age : {item['âge']}</Text>
                     {item.escala_dolor?(<Text>Escala dolor : {item.escala_dolor}</Text>):
@@ -80,14 +91,34 @@ const _FichePatientScreen = (props)=>{
                             idFisio===user.id ?
                                 (
                                     <>
-                                        <Text>Contacter le patient: Tel: {userMeta && userMeta.data.phone_number[0]}</Text>
-                                        <Text style={{backgroundColor:"#66983a", marginBottom:8}}>Vous suivez deja ce patient</Text>
+                                        <Text style={{justifyContent: 'center', textAlign:'center', margin: 16}}>Contacter votre patient : </Text>
+                                        {userMeta &&
+                                            <TouchableOpacity onPress={()=> Linking.openURL(`mailto:${userMeta.email}`)}>
+                                                <Text style={{...styles.btnAddStop, marginVertical:10, fontWeight: 'bold', textAlign: 'center'}} >
+                                                    <MaterialCommunityIcons name="email-edit-outline" size={20} color="black" /> {userMeta && userMeta.email}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        }
+
+                                        {userMeta && userMeta.data &&
+                                        <TouchableOpacity onPress={makeCall} style={{...styles.btnAddStop, marginVertical:10}}>
+                                            <Text style={{fontWeight: 'bold', textAlign: 'center'}}>Appeler
+                                                <Ionicons name="phone-portrait-outline" color="#59ed9c" size={20} style={{ alignSelf: "center" }}/>
+                                                {userMeta.data.phone_number[0]}
+                                            </Text>
+
+                                        </TouchableOpacity>
+                                        }
+                                        {/*<Text style={{backgroundColor:"#66983a", marginBottom:8}}>Vous suivez deja ce patient</Text>*/}
                                         <TouchableOpacity style={styles.btnAddStop}>
                                             <Text onPress={removePatientFromMyList} style={styles.btnText}>Arreter de suivre ce patient</Text>
                                         </TouchableOpacity>
                                     </>
                                 ) :
-                                (<Text style={{... styles.btnText, backgroundColor:"#66983a", margin:10}}>Ce patient est suivi par le kine : {userMeta && userMeta.data.last_name}</Text>)
+                                (
+                                    userMeta && userMeta.data && userMeta.data.full_name &&
+                                    <Text style={{... styles.btnText, backgroundColor:"#66983a", margin:10}}>Ce patient est suivi par le Dr : {userMeta && userMeta.data.full_name[0]}</Text>
+                                )
                         }
                     </View>
                 </View>
@@ -102,7 +133,7 @@ const _FichePatientScreen = (props)=>{
                                 </Text>:
                                 stopped===true?
                                     <Text style={{ marginBottom: 10 }}>
-                                        vous avez arreter!!
+                                        vous avez arreté de suivre ce patient !!
                                     </Text>:
                                     (<Text>TESTTTTT</Text>)
                             }

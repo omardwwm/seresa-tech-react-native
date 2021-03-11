@@ -59,7 +59,7 @@ const _HomeScreen = (props) => {
         }
         {
           isUserLogged && (
-              <TouchableOpacity onPress={() => props.navigation.navigate("Presentation")} style={styles.homeBtnStyle}>
+              <TouchableOpacity onPress={() => props.navigation.navigate("Presentation", {user})} style={styles.homeBtnStyle}>
                 <Text style={styles.textBtn}>voir plus d'informations</Text>
               </TouchableOpacity>
           )

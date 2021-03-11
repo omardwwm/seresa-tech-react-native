@@ -26,9 +26,6 @@ const _AllPatientsScreen = (props)=> {
     const [data, setData] =  useState(allPatientsArray && allPatientsArray);
 
     if (allPatientsArray !== null) {
-        // const allPatientsArray = Object.keys(patients).map(function (i) {
-        //     return patients[i];
-        // });
         const renderItem=({ item }) => (
             <View style={styles.item} key={item.id}>
                 <View style={styles.itemContent}>
@@ -57,7 +54,6 @@ const _AllPatientsScreen = (props)=> {
         ////////////////////// search bar
         // const [data, setData] = useState(allPatientsArray);
         // const [query, setQuery] = useState('');
-
         const handleSearch = text => {
             if (text===''){
                 setData(allPatientsArray && allPatientsArray);
@@ -82,11 +78,9 @@ const _AllPatientsScreen = (props)=> {
                     ListHeaderComponent={<ListBarSearch handleSearch={handleSearch} value={query}/>}
                     data={data}
                     renderItem={renderItem}
-                    // keyExtractor={item => item.id}
                     keyExtractor = { keyExtractor }
                     maxToRenderPerBatch={10}
                     windowSize={10}
-                    // extraData={onRefresh}
                     refreshControl={
                         <RefreshControl
                             refreshing={Fetching}

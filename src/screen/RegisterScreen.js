@@ -1,26 +1,12 @@
 import React, { useState } from "react";
 import Conditions from "./ConditionsModalScreen";
-import {
-  Alert,
-  Modal,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ActivityIndicator, CheckBox, TouchableHighlight
-} from "react-native";
+import {Alert, Modal, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, CheckBox, TouchableHighlight} from "react-native";
 import {RadioButton, TextInput} from "react-native-paper";
 import { ScrollView } from "react-native-gesture-handler";
 import * as Animatable from "react-native-animatable";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { connect } from "react-redux";
-import {
-  userRegister,
-  hideRegisterModal,
-  checkEmail,
-  checkUsername,
-  setIsLoading,
-} from "../redux";
+import {userRegister, hideRegisterModal, checkEmail, checkUsername, setIsLoading } from "../redux";
 import { Ionicons } from "@expo/vector-icons";
 
 const formatDate = (date) => {
