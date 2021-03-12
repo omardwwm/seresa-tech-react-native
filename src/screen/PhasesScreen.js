@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 // import Video from "react-native-video";
 import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
 import { Video } from 'expo-av';
+import {Card} from "react-native-elements";
 
 
 const _PhasesScreen = (props) => {
@@ -18,18 +19,18 @@ const _PhasesScreen = (props) => {
   if (exercice !== null) {
     if (user && user.mod6_capabilities[0].slice(29, -7) > 5){
       return (
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center", textAlign:'center', margin:10 }}>
-            <Text>Vous avez fini votre parcours, veuillez contacter votre physio, {"\n"}{"\n"}ses coordonnes sont dans {' '}
-            <TouchableOpacity onPress={()=>props.navigation.navigate('Profile')} style={{backgroundColor:"#c66a3f", padding:2, margin:5}}>
-              <Text >
-                <MaterialCommunityIcons name="cursor-default-click" size={20} color="black" />
-                votre espace personnel
+          <View style={{ flex: 1, justifyContent: "center", alignItems: "center", margin:8 }}>
+            <Card>
+              <Card.Title>Infos exercices</Card.Title>
+              <Text>Vous avez fini votre parcours et vous n'avez pas d'exercices a faire pour le moment, veuillez contacter votre physio, ses coordonnes sont dans {' '}
+                <TouchableOpacity onPress={()=>props.navigation.navigate('Profile')} style={{backgroundColor:"#b0e277", padding:2, margin:5}}>
+                  <Text >
+                    <MaterialCommunityIcons name="cursor-default-click" size={20} color="black" />
+                    votre espace personnel
+                  </Text>
+                </TouchableOpacity>
               </Text>
-            </TouchableOpacity>
-            </Text>
-            {/*<TouchableOpacity>*/}
-            {/*  <Text></Text>*/}
-            {/*</TouchableOpacity>*/}
+            </Card>
           </View>
       )
     }

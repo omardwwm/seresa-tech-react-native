@@ -6,6 +6,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Avatar } from "react-native-paper";
 import * as Animatable from "react-native-animatable";
 import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
+import { Card } from 'react-native-elements'
 
 const _ProfileScreen = (props) => {
   const { userReducer, getUserMeta, getPatient } = props;
@@ -40,7 +41,6 @@ const _ProfileScreen = (props) => {
       if (myKine && myKine !== 0){
         getUserMeta(myKine)
       }
-    //  think to add "myKine" inside the empty array
     }, [myKine])
   // if (userMeta){
   //   console.log('les donnes de kinee: ', userMeta);
@@ -70,7 +70,7 @@ const _ProfileScreen = (props) => {
                   (user && user.gender[0].slice(14, -3) === "Femme" || user && user.gender[0] === "Femme")?
                   (<Avatar.Image
                       source={require("../assets/image/woman-avatar.png")}
-                      size={150}
+                      size={120}
                       style={{
                         marginRight: 10,
                         backgroundColor: "gold",
@@ -112,47 +112,55 @@ const _ProfileScreen = (props) => {
           <Text style={styles.username}>{user && user.nickname}</Text>
         </View>
         <Animatable.View animation="bounceInLeft" duration={500}>
-          {user && <Text>Firstname : {user.first_name}</Text>}
-          {user && <Text>Lastname : {user.last_name}</Text>}
-          {(role && role !== "um_fisioterapeuta" || user && user.mod6_capabilities[0].slice(11, 22) === "um_paciente") && <Text>Numero de phase : {user.mod6_capabilities[0].slice(29, 30)}</Text>}
-          {/*{user && <Text>Numero de phase : {user.mod6_capabilities[0].slice(29, 30)}</Text>}*/}
-          {user &&  <Text>Mon tel : {user.phone_number}</Text>}
-          {user && <Text>Email : {user.email}</Text>}
+          <Card>
+            <Card.Title>Mes infos</Card.Title>
+            {user && <Text>Firstname : {user.first_name}</Text>}
+            {user && <Text>Lastname : {user.last_name}</Text>}
+            {(role && role !== "um_fisioterapeuta" || user && user.mod6_capabilities[0].slice(11, 22) === "um_paciente") && <Text>Numero de phase : {user.mod6_capabilities[0].slice(29, 30)}</Text>}
+            {user &&  <Text>Mon tel : {user.phone_number}</Text>}
+            {user && <Text>Email : {user.email}</Text>}
+          </Card>
+
           {(role && role !== "um_fisioterapeuta" || user && user.mod6_capabilities[0].slice(11, 22) === "um_paciente") ? (
               (myKine && myKine !== 0 ? (
                       <>
-                        <View style={{alignItems: 'center', justifyContent:'center'}}>
-                          <Text>Contacter mon Physio</Text>
-                          <Text>le Dr : {userMeta && userMeta.data.first_name} {userMeta && userMeta.data.last_name}</Text>
-                          {userMeta && userMeta.email ? (
-                                  <TouchableOpacity onPress={()=> Linking.openURL(`mailto:${userMeta.email}`)}
-                                                    style={styles.contactStyle}
-                                  >
-                                    <Text style={{fontWeight: 'bold'}}>
-                                      <MaterialCommunityIcons name="email-edit-outline" size={20} color="black" />  {userMeta.email}
-                                    </Text>
-                                  </TouchableOpacity>
-                              ):
-                              (<Text>Le physio n'a pas communique son Email</Text>)
-                          }
-                          {userMeta && userMeta.data.phone_number ? (
-                                  <TouchableOpacity onPress={makeCall} style={styles.contactStyle}>
-                                    <Text>
-                                      <Ionicons name="phone-portrait-outline" color="#000000" size={20} style={{ alignSelf: "center"}}/>
-                                      {userMeta && userMeta.data.phone_number[0]}
-                                    </Text>
-                                  </TouchableOpacity>
-                              ):
-                              (<Text>Le physio n'a pas communique un numero de telephone</Text>)
-                          }
-                        </View>
+                        <Card>
+                          <Card.Title>Mon physio</Card.Title>
+                          <View style={{alignItems: 'center', justifyContent:'center'}}>
+                            <Text>le Dr : {userMeta && userMeta.data.first_name} {userMeta && userMeta.data.last_name}</Text>
+                            {userMeta && userMeta.email ? (
+                                    <TouchableOpacity onPress={()=> Linking.openURL(`mailto:${userMeta.email}`)}
+                                                      style={styles.contactStyle}
+                                    >
+                                      <Text style={{fontWeight: 'bold'}}>
+                                        <MaterialCommunityIcons name="email-edit-outline" size={20} color="black" />  {userMeta.email}
+                                      </Text>
+                                    </TouchableOpacity>
+                                ):
+                                (<Text>Le physio n'a pas communique son Email</Text>)
+                            }
+                            {userMeta && userMeta.data.phone_number ? (
+                                    <TouchableOpacity onPress={makeCall} style={styles.contactStyle}>
+                                      <Text>
+                                        <Ionicons name="phone-portrait-outline" color="#000000" size={20} style={{ alignSelf: "center"}}/>
+                                        {userMeta && userMeta.data.phone_number[0]}
+                                      </Text>
+                                    </TouchableOpacity>
+                                ):
+                                (<Text><Ionicons name="phone-portrait-outline" color="#000000" size={20} style={{ alignSelf: "center"}}/>Le physio n'a pas communique de numero</Text>)
+                            }
+                          </View>
+                        </Card>
                       </>
                   )
                   :(
                       <>
                         <View >
-                          <Text>Vous etes pas suivi, vous n'avez pas de physio traitant</Text>
-                          <Text>Contacter la direction : sur ces coordonnées (A INSERER PLUS TARD)</Text>
+                          <Card>
+                            <Card.Title>Mon physio</Card.Title>
+                            <Text>Vous n'etes pas suivi, vous n'avez pas de physio traitant</Text>
+                            <Text>Contacter la direction : sur ces coordonnées (A INSERER PLUS TARD)</Text>
+                          </Card>
                         </View>
                       </>
                   ))

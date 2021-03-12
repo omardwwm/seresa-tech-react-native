@@ -4,9 +4,10 @@ import { ScrollView } from "react-native-gesture-handler";
 import { ActivityIndicator, RadioButton } from "react-native-paper";
 import {getForm, hideFormModal, sendFormData, setIsLoading} from "../redux";
 import { connect } from "react-redux";
-import { Ionicons } from "@expo/vector-icons";
+import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
 import moment from 'moment';
 import CountDown from "react-native-countdown-component";
+import { Card } from 'react-native-elements'
 
 
 const { width } = Dimensions.get("window");
@@ -105,6 +106,24 @@ const _FormScreen = (props) => {
       </View>
     );
   }*/
+  if (user && user.mod6_capabilities[0].slice(29, 30) >5){
+    return (
+        <View style={{justifyContent:'center', alignItems:'center', textAlign:'center', margin:10 }}>
+          <Card>
+            <Card.Title>Infos</Card.Title>
+            <Text>
+              Vous semblez finir votre proocole et vous n'avez pas de formulaire a remplir.{"\n"}Pour connaitre la suite de vos soins, veuillez contacter votre physio depuis <TouchableOpacity onPress={()=>props.navigation.navigate('Profile')} style={{backgroundColor:"#b0e277", padding:2, margin:5}}>
+              <Text >
+                <MaterialCommunityIcons name="cursor-default-click" size={20} color="black" />
+                votre espace personnel
+              </Text>
+            </TouchableOpacity>
+            </Text>
+          </Card>
+        </View>
+    );
+
+  }
 
   if (form !== null) {
     // if (form.date !== undefined) {
@@ -134,12 +153,29 @@ const _FormScreen = (props) => {
             <Text style={{...styles.title, fontSize: 16, marginBottom:5}}>
               Temps restant avant la prochaine phase :
             </Text>
-            <CountDown
-                until={parseInt
+            {user && user.mod6_capabilities[0].slice(29, 30) >=0 && user.mod6_capabilities[0].slice(29, 30)<6 ?
+                (<CountDown
+                    until={parseInt
                     (moment(form && form.date) - moment(new Date())) / 1000
-                }
-                size={16}
-            />
+                    }
+                    size={16}
+                />):
+                (
+                    <>
+                      <View>
+                        <Text>
+                          Vous semblez finir votre proocole ou votre situation ne vous permet pas de remplir le formulaire, contacter votre physio depuis <TouchableOpacity onPress={()=>props.navigation.navigate('Profile')} style={{backgroundColor:"#b0e277", padding:2, margin:5}}>
+                          <Text >
+                            <MaterialCommunityIcons name="cursor-default-click" size={20} color="black" />
+                            votre espace personnel
+                          </Text>
+                        </TouchableOpacity>
+                        </Text>
+                      </View>
+                    </>
+                )
+            }
+
           </View>
 
           <ScrollView
@@ -328,7 +364,7 @@ const _FormScreen = (props) => {
                             }}
                         >
                           {isLoading ? (
-                              <ActivityIndicator size="large" color="white" />
+                              <ActivityIndicator size="large" color="#59ed9c" />
                           ) : (
                               <Text style={styles.textStyle}>Valider mon formulaire</Text>
                           )

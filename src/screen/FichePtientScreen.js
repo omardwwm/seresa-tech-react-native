@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {ScrollView, Text, View, Button, StyleSheet, TouchableOpacity, Alert, Modal, Linking} from "react-native";
-
 import { connect } from "react-redux";
 import {stopPatient, addPatient, getUserMeta, hideModal, getPatient, setIsLoading} from "../redux";
 import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons"; // tu update, change by getPatientFiche function , to create!!
+import { Card } from 'react-native-elements'
 
 
 const _FichePatientScreen = (props)=>{
@@ -63,23 +63,28 @@ const _FichePatientScreen = (props)=>{
         <View style={styles.itemDetails}>
             <ScrollView>
                 <View style={styles.itemDetailsContent}>
-                    <Text>Privé : Fiche de la phase :  {item['phase du relevé']} du patient : {item.name}</Text>
-                    <Text>Date et heure de validation : {item.date}</Text>
-                    <Text>Sexe : {item.sexe}</Text>
-                    <Text>Age : {item['âge']}</Text>
-                    {item.escala_dolor?(<Text>Escala dolor : {item.escala_dolor}</Text>):
-                        (<Text>Escala dolor : {item['escala dolor']}</Text>)
-                    }
-                    <Text>Estar de pie : {item['Estar de pie']}</Text>
-                    <Text>Intensidad de dolor : {item['Intensidad de dolor']}</Text>
-                    <Text>Dormir : {item.Dormir}</Text>
-                    <Text>Levantar peso : {item['Levantar peso']}</Text>
-                    <Text>Actividad sexual : {item['Actividad sexual']}</Text>
-                    <Text>Andar : {item.Andar}</Text>
-                    <Text>Vida social : {item['Vida social']}</Text>
-                    <Text>Estar sentado : {item['Estar sentado']}</Text>
-                    <Text>Viajar : {item.Viajar}</Text>
-                    <Text>Indice : {item.indice}</Text>
+                    <Card>
+                        <Card.Title>Privé : Fiche de la phase :  {item['phase du relevé']}{"\n"}Patient : {item.name}</Card.Title>
+                    </Card>
+                    <Card>
+                        <Card.Title>Detail de la phase</Card.Title>
+                        <Text>Validée le : {item.date}</Text>
+                        <Text>Sexe : {item.sexe}</Text>
+                        <Text>Age : {item['âge']}</Text>
+                        {item.escala_dolor?(<Text>Escala dolor : {item.escala_dolor}</Text>):
+                            (<Text>Escala dolor : {item['escala dolor']}</Text>)
+                        }
+                        <Text>Estar de pie : {item['Estar de pie']}</Text>
+                        <Text>Intensidad de dolor : {item['Intensidad de dolor']}</Text>
+                        <Text>Dormir : {item.Dormir}</Text>
+                        <Text>Levantar peso : {item['Levantar peso']}</Text>
+                        <Text>Actividad sexual : {item['Actividad sexual']}</Text>
+                        <Text>Andar : {item.Andar}</Text>
+                        <Text>Vida social : {item['Vida social']}</Text>
+                        <Text>Estar sentado : {item['Estar sentado']}</Text>
+                        <Text>Viajar : {item.Viajar}</Text>
+                        <Text>Indice : {item.indice}</Text>
+                    </Card>
 
                     <View  >
                         {idFisio===0 ?
@@ -95,15 +100,15 @@ const _FichePatientScreen = (props)=>{
                                         {userMeta &&
                                             <TouchableOpacity onPress={()=> Linking.openURL(`mailto:${userMeta.email}`)}>
                                                 <Text style={{...styles.btnAddStop, marginVertical:10, fontWeight: 'bold', textAlign: 'center'}} >
-                                                    <MaterialCommunityIcons name="email-edit-outline" size={20} color="black" /> {userMeta && userMeta.email}
+                                                    <MaterialCommunityIcons name="email-edit-outline" size={20} color="#ffffff" /> {userMeta && userMeta.email}
                                                 </Text>
                                             </TouchableOpacity>
                                         }
 
                                         {userMeta && userMeta.data &&
                                         <TouchableOpacity onPress={makeCall} style={{...styles.btnAddStop, marginVertical:10}}>
-                                            <Text style={{fontWeight: 'bold', textAlign: 'center'}}>Appeler
-                                                <Ionicons name="phone-portrait-outline" color="#59ed9c" size={20} style={{ alignSelf: "center" }}/>
+                                            <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
+                                                <Ionicons name="phone-portrait-outline" color="#ffffff" size={20} style={{ alignSelf: "center" }}/>
                                                 {userMeta.data.phone_number[0]}
                                             </Text>
 
@@ -117,9 +122,27 @@ const _FichePatientScreen = (props)=>{
                                 ) :
                                 (
                                     userMeta && userMeta.data && userMeta.data.full_name &&
-                                    <Text style={{... styles.btnText, backgroundColor:"#66983a", margin:10}}>Ce patient est suivi par le Dr : {userMeta && userMeta.data.full_name[0]}</Text>
+                                        <Card>
+                                            <Card.Title>Son physio</Card.Title>
+                                            <Text style={{... styles.btnText}}>Ce patient est suivi par le Dr : {userMeta && userMeta.data.full_name[0]}</Text>
+                                            <TouchableOpacity onPress={()=> Linking.openURL(`mailto:${userMeta.email}`)}
+                                                              style={styles.contactStyle}>
+                                                <Text style={{fontWeight: 'bold'}}>
+                                                    <MaterialCommunityIcons name="email-edit-outline" size={20} color="black" />  {userMeta.email}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </Card>
+
+
                                 )
                         }
+                        {/*<TouchableOpacity onPress={()=> Linking.openURL(`mailto:${userMeta.email}`)}*/}
+                        {/*                  style={styles.contactStyle}*/}
+                        {/*>*/}
+                        {/*    <Text style={{fontWeight: 'bold'}}>*/}
+                        {/*        <MaterialCommunityIcons name="email-edit-outline" size={20} color="black" />  {userMeta.email}*/}
+                        {/*    </Text>*/}
+                        {/*</TouchableOpacity>*/}
                     </View>
                 </View>
             </ScrollView>
@@ -168,7 +191,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 5,
         marginVertical:6,
         borderRadius:6,
-        backgroundColor:"#ffffff",
+        backgroundColor:"#8fe2b3",
         shadowOffset: {width: 5, height:5},
         shadowColor:'#000',
         shadowRadius:3,
@@ -222,6 +245,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "center",
     },
+    contactStyle: { width: '85%', padding: 5, backgroundColor: '#8fe2b3', borderRadius: 8, alignItems: 'center', marginVertical:12}
 })
 
 const mapStateToProps = (state) => ({

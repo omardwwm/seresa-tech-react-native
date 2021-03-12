@@ -15,7 +15,6 @@ const _AllPatientsScreen = (props)=> {
     const [query, setQuery] = useState('');
     useEffect(() => {
         getPatient();
-
     }, []);
 
     // console.log(patients);
