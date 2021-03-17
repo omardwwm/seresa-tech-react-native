@@ -1,21 +1,23 @@
 import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import {Avatar, Caption, Drawer, Switch, Text, Title, TouchableRipple,} from "react-native-paper";
+import {Avatar, Caption, Drawer, Switch, Text, Title, TouchableRipple, useTheme} from "react-native-paper";
 import { FontAwesome, FontAwesome5, MaterialCommunityIcons, AntDesign, Ionicons } from '@expo/vector-icons';
 import { connect } from "react-redux";
-import { onUserLogout, onUserLogin, onAppLaunch, getForm } from "../redux";
+import {onUserLogout, onUserLogin, onAppLaunch, getForm, getPatient} from "../redux";
+
 
 const _DrawerContent = (props) => {
   const { userReducer, onUserLogout } = props;
   const { user, isUserLogged } = userReducer;
-
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const role = user && user.role;
 
-  const toggleTheme = () => {
-    setIsDarkTheme(!isDarkTheme);
-  };
+  const paperTheme = useTheme();
+  const toggleTheme = useTheme();
+  // const toggleTheme = () => {
+  //   setIsDarkTheme(!isDarkTheme);
+  // };
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -79,7 +81,7 @@ const _DrawerContent = (props) => {
                 <DrawerItem
                   label="Inscribirse"
                   icon={({ color, size }) => (
-                      <FontAwesome name="sign-in" size={24} color="black" />
+                      <FontAwesome name="sign-in" size={24} color="#67b4aa" />
                   )}
                   onPress={() => {
                     props.navigation.navigate("Inscription");
@@ -89,7 +91,7 @@ const _DrawerContent = (props) => {
                 <DrawerItem
                   label="Conexion"
                   icon={({ color, size }) => (
-                      <MaterialCommunityIcons name="login" size={24} color="black" />
+                      <MaterialCommunityIcons name="login" size={24} color="#67b4aa" />
                   )}
                   onPress={() => {
                     props.navigation.navigate("Login");
@@ -122,7 +124,7 @@ const _DrawerContent = (props) => {
                   }}
                   style={[styles.drawerItem]}
                 />
-                {role === "um_fisioterapeuta"?
+                {role && role === "um_fisioterapeuta" || user && user.mod6_capabilities[0].slice(11, 28) === "um_fisioterapeuta"?
                     <>
                       <DrawerItem
                         label="Datos"
@@ -131,7 +133,7 @@ const _DrawerContent = (props) => {
                         )}
                         onPress={() => {
                           props.navigation.navigate("DatosScreen");
-                          // getPatient();
+                          getPatient();
                         }}
                         style={[styles.drawerItem]}
                       />
@@ -163,7 +165,7 @@ const _DrawerContent = (props) => {
                       <DrawerItem
                                    label="Phases"
                                    icon={({ color, size }) => (
-                                       <FontAwesome5 name="layer-group" size={24} color="green" />
+                                       <FontAwesome5 name="layer-group" size={24} color="#67b4aa" />
                                    )}
                                    onPress={() => {
                                      // getExercice(user);
@@ -200,15 +202,16 @@ const _DrawerContent = (props) => {
             )}
           </Drawer.Section>
           <Drawer.Section title="Preferences">
-            <TouchableRipple
-              onPress={() => {
-                toggleTheme();
-              }}
+            <TouchableRipple onPress={props.toggleTheme}
+              // onPress={() => {
+              //   toggleTheme();
+              // }}
             >
               <View style={styles.preference}>
                 <Text>Dark Theme</Text>
                 <View pointerEvents="none">
-                  <Switch value={isDarkTheme} />
+                  <Switch value={paperTheme.dark} />
+                  {/*<Switch value={isDarkTheme} />*/}
                 </View>
               </View>
             </TouchableRipple>
@@ -294,5 +297,6 @@ export const DrawerContent = connect(mapStateToProps, {
   onAppLaunch,
   onUserLogin,
   onUserLogout,
-  getForm
+  getForm,
+  getPatient
 })(_DrawerContent);

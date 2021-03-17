@@ -257,8 +257,9 @@ export const getForm = (user) => {
       console.log("response getForm", response);
       dispatch({ type: "GET_FORM", form: response.data });
     } catch (error) {
-      console.log("error form", error.response);
+      // console.log("error form", error.response);
       dispatch({ type: "GET_FORM", form: error.response });
+    //  modified 12/03/2021
     }
   };
 };

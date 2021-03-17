@@ -1,21 +1,15 @@
 import React, { useState } from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  Modal,
-  TouchableOpacity,
-  ActivityIndicator, Button
-} from "react-native";
+import {Text, View, StyleSheet, Modal, TouchableOpacity, ActivityIndicator, Button} from "react-native";
 import { TextInput } from "react-native-paper";
 import { connect } from "react-redux";
 import { onUserLogin, hideModal, setIsLoading } from "../redux";
 import { Ionicons } from "@expo/vector-icons";
+import {useTheme} from "@react-navigation/native";
 
 const _LoginScreen = (props) => {
   const { onUserLogin, userReducer, hideModal, setIsLoading } = props;
   const { showModal, isUserLogged, isLoading } = userReducer;
-
+  const {colors} = useTheme();
   const [login, setLogin] = useState({
     username: "",
     password: "",
@@ -43,11 +37,11 @@ const _LoginScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputBox}>
+      <View style={{...styles.inputBox, }}>
         <TextInput
           label="nombre del usuario"
           mode="outlined"
-          style={styles.textInput}
+          style={{...styles.textInput, backgroundColor:colors.background ,color:colors.text}}
           onChangeText={(text) => handleChange(text, "username")}
           value={login.username}
           textContentType="nickname"
@@ -57,7 +51,7 @@ const _LoginScreen = (props) => {
         <TextInput
           label="Contraseña"
           mode="outlined"
-          style={styles.textInput}
+          style={{...styles.textInput, backgroundColor:colors.background ,color:colors.text}}
           onChangeText={(text) => handleChange(text, "password")}
           value={login.password}
           textContentType="newPassword"

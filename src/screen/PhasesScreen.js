@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { StyleSheet, Text, View, Button, Image, ScrollView, Dimensions, TouchableOpacity } from "react-native";
 import { getExercice } from "../redux";
-import { ActivityIndicator } from "react-native-paper";
+import { ActivityIndicator, useTheme } from "react-native-paper";
 import { connect } from "react-redux";
-// import Video from "react-native-video";
 import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
 import { Video } from 'expo-av';
 import {Card} from "react-native-elements";
@@ -16,6 +15,7 @@ const _PhasesScreen = (props) => {
     getExercice(user);
   }, []);
   const { width } = Dimensions.get('window');
+  const {colors} = useTheme();
   if (exercice !== null) {
     if (user && user.mod6_capabilities[0].slice(29, -7) > 5){
       return (
@@ -23,7 +23,7 @@ const _PhasesScreen = (props) => {
             <Card>
               <Card.Title>Infos exercices</Card.Title>
               <Text>Vous avez fini votre parcours et vous n'avez pas d'exercices a faire pour le moment, veuillez contacter votre physio, ses coordonnes sont dans {' '}
-                <TouchableOpacity onPress={()=>props.navigation.navigate('Profile')} style={{backgroundColor:"#b0e277", padding:2, margin:5}}>
+                <TouchableOpacity onPress={()=>props.navigation.navigate('Profile')} style={{backgroundColor:"#8fe2b3", padding:4, borderRadius:5}}>
                   <Text >
                     <MaterialCommunityIcons name="cursor-default-click" size={20} color="black" />
                     votre espace personnel
@@ -39,14 +39,14 @@ const _PhasesScreen = (props) => {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <Text>Veuillez remplir le formulaire</Text>
+          <Text style={{color:colors.text}}>Veuillez remplir le formulaire</Text>
         </View>
       );
     } else {
       return (
         <ScrollView>
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Text>La phase N { user && user.mod6_capabilities[0].slice(29, -7)}</Text>
+            <Text style={{color:colors.text}}>La phase N { user && user.mod6_capabilities[0].slice(29, -7)}</Text>
             <Image source={{uri:`${exercice.url[0]}`}} style={{width:250, height:250}}/>
             <View style={{margin:10}}>
               <Video

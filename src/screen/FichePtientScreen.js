@@ -4,16 +4,16 @@ import { connect } from "react-redux";
 import {stopPatient, addPatient, getUserMeta, hideModal, getPatient, setIsLoading} from "../redux";
 import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons"; // tu update, change by getPatientFiche function , to create!!
 import { Card } from 'react-native-elements'
+import {ActivityIndicator} from "react-native-paper";
 
 
 const _FichePatientScreen = (props)=>{
     const {userReducer, stopPatient, addPatient, getUserMeta, hideModal} = props;
     const {user, userMeta, showModal, isPatientAdded, isPatientStopped } = userReducer;
     const {item} = props.route.params;
-    console.log('itemfromlist', item);
+    // console.log('itemfromlist', item);
     const paciente_id = item.paciente;
-    console.log(paciente_id);
-
+    // console.log(paciente_id);
     // const [willRefresh, setWillRefresh] = useState(false)
     // console.log(user);
     // idFisio est l'id du fisio qui suit le patient dont on consulte l'actuelle fiche
@@ -93,56 +93,58 @@ const _FichePatientScreen = (props)=>{
                                     <Text onPress={addThisPatientToMyList} style={styles.btnText}>Suivre ce patient</Text>
                                 </TouchableOpacity>
                             ) :
-                            idFisio===user.id ?
+                            (idFisio===user.id ?
                                 (
-                                    <>
-                                        <Text style={{justifyContent: 'center', textAlign:'center', margin: 16}}>Contacter votre patient : </Text>
-                                        {userMeta &&
-                                            <TouchableOpacity onPress={()=> Linking.openURL(`mailto:${userMeta.email}`)}>
-                                                <Text style={{...styles.btnAddStop, marginVertical:10, fontWeight: 'bold', textAlign: 'center'}} >
-                                                    <MaterialCommunityIcons name="email-edit-outline" size={20} color="#ffffff" /> {userMeta && userMeta.email}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        }
+                                    userMeta && userMeta.email && userMeta.data && userMeta.data.phone_number ?
+                                            <>
+                                                <Card>
+                                                    <Card.Title>Contacter votre patient</Card.Title>
+                                                    {/*<Text style={{justifyContent: 'center', textAlign:'center', margin: 16}}>Contacter votre patient : </Text>*/}
+                                                    <TouchableOpacity onPress={()=> Linking.openURL(`mailto:${userMeta.email}`)} style={{...styles.btnAddStop, backgroundColor:'#8fe2b3'}}>
+                                                        <Text style={{ fontWeight: 'bold', textAlign: 'center', padding:3}}>Write{' '}
+                                                            <MaterialCommunityIcons name="email-edit-outline" size={20} color="#ffffff" /> {userMeta && userMeta.email}
+                                                        </Text>
+                                                    </TouchableOpacity>
 
-                                        {userMeta && userMeta.data &&
-                                        <TouchableOpacity onPress={makeCall} style={{...styles.btnAddStop, marginVertical:10}}>
-                                            <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
-                                                <Ionicons name="phone-portrait-outline" color="#ffffff" size={20} style={{ alignSelf: "center" }}/>
-                                                {userMeta.data.phone_number[0]}
-                                            </Text>
+                                                    <TouchableOpacity onPress={makeCall} style={{...styles.btnAddStop, backgroundColor:'#8fe2b3'}}>
+                                                        <Text style={{fontWeight: 'bold', textAlign: 'center', padding:3}}>Call{' '}
+                                                            <Ionicons name="phone-portrait-outline" color="#ffffff" size={20} style={{ alignSelf: "center" }}/>
+                                                            {userMeta.data.phone_number[0]}
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                    {/*<Text style={{backgroundColor:"#66983a", marginBottom:8}}>Vous suivez deja ce patient</Text>*/}
+                                                    <TouchableOpacity style={{...styles.btnAddStop, marginVertical:20}}>
+                                                        <Text onPress={removePatientFromMyList} style={styles.btnText}>Arreter de suivre ce patient</Text>
+                                                    </TouchableOpacity>
+                                                </Card>
+                                            </>:
+                                                (
+                                                    <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+                                                        <ActivityIndicator size="large" color="#FD9854"/>
+                                                    </View>
+                                                )
 
-                                        </TouchableOpacity>
-                                        }
-                                        {/*<Text style={{backgroundColor:"#66983a", marginBottom:8}}>Vous suivez deja ce patient</Text>*/}
-                                        <TouchableOpacity style={styles.btnAddStop}>
-                                            <Text onPress={removePatientFromMyList} style={styles.btnText}>Arreter de suivre ce patient</Text>
-                                        </TouchableOpacity>
-                                    </>
                                 ) :
                                 (
-                                    userMeta && userMeta.data && userMeta.data.full_name &&
-                                        <Card>
+                                    userMeta && userMeta.data && userMeta.data.full_name ?
+                                        (<Card>
                                             <Card.Title>Son physio</Card.Title>
                                             <Text style={{... styles.btnText}}>Ce patient est suivi par le Dr : {userMeta && userMeta.data.full_name[0]}</Text>
                                             <TouchableOpacity onPress={()=> Linking.openURL(`mailto:${userMeta.email}`)}
                                                               style={styles.contactStyle}>
-                                                <Text style={{fontWeight: 'bold'}}>
+                                                <Text style={{fontWeight: 'bold'}}>Write{' '}
                                                     <MaterialCommunityIcons name="email-edit-outline" size={20} color="black" />  {userMeta.email}
                                                 </Text>
                                             </TouchableOpacity>
-                                        </Card>
-
-
+                                        </Card>):
+                                        (
+                                            <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+                                                <ActivityIndicator size="large" color="#FD9854"/>
+                                            </View>
+                                        )
                                 )
+                            )
                         }
-                        {/*<TouchableOpacity onPress={()=> Linking.openURL(`mailto:${userMeta.email}`)}*/}
-                        {/*                  style={styles.contactStyle}*/}
-                        {/*>*/}
-                        {/*    <Text style={{fontWeight: 'bold'}}>*/}
-                        {/*        <MaterialCommunityIcons name="email-edit-outline" size={20} color="black" />  {userMeta.email}*/}
-                        {/*    </Text>*/}
-                        {/*</TouchableOpacity>*/}
                     </View>
                 </View>
             </ScrollView>
@@ -203,9 +205,9 @@ const styles = StyleSheet.create({
         padding:8,
     },
     btnAddStop:{
-        marginVertical:15,
+        marginVertical:12,
         alignItems:"center",
-        borderRadius: 10,
+        borderRadius: 8,
     },
     btnText:{
         textAlign:"center",

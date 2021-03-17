@@ -22,21 +22,6 @@ import AllPatientsScreen from "./AllPatientsScreen";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 
-// const HomeStack = createStackNavigator();
-// const RegisterStack = createStackNavigator();
-// const LoginStack = createStackNavigator();
-// const ProfileStack = createStackNavigator();
-// const FormStack = createStackNavigator();
-// const PhasesStack = createStackNavigator();
-// const PasswordChangeStack = createStackNavigator();
-// const DatosStack = createStackNavigator();
-// const PresentationStack = createStackNavigator();
-// const PasswordRecuperationStack = createStackNavigator();
-// const TabStack = createStackNavigator();
-// const MainStack = createStackNavigator();
-// const MyPatientsStack = createStackNavigator();
-// const FichePatientStack = createStackNavigator();
-// const AllPatientsStack = createStackNavigator();
 const Stack = createStackNavigator();
 
 const Tab = createMaterialBottomTabNavigator();
@@ -145,17 +130,6 @@ const _TabScreen = (props) => {
                             ),
                         }}
                     />
-                        {/*<Tab.Screen*/}
-                        {/*    name="Form"*/}
-                        {/*    component={FormStackScreen}*/}
-                        {/*    options={{*/}
-                        {/*        tabBarLabel: 'Formulaire',*/}
-                        {/*        tabBarColor: '#009387',*/}
-                        {/*        tabBarIcon: ({color}) => (*/}
-                        {/*            <MaterialCommunityIcons name="format-list-checkbox" color={color} size={26}/>*/}
-                        {/*        ),*/}
-                        {/*    }}*/}
-                        {/*/>*/}
                     </>
                 }
             </Tab.Navigator>

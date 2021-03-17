@@ -12,7 +12,6 @@ const _MyPatientsScreen = (props)=>{
     }, []);
     // console.log(patients);
     // console.log(isFetching);
-
     const allPatientsArray = patients && Object.keys(patients).map(function (i) {
             return patients[i];
         });
@@ -22,7 +21,6 @@ const _MyPatientsScreen = (props)=>{
     const myListLenght = myList && myList.length
     // console.log(myListLenght);
     const renderMyList = ({ item }) => (
-
         <View style={styles.item} key={item.id}>
             <View style={styles.itemContent}>
                 <Text>
@@ -58,11 +56,9 @@ const _MyPatientsScreen = (props)=>{
                                 onRefresh={onRefresh}
                             />
                         }
-                        // extraData={true}
                     />)
                 }
             </SafeAreaView>
-
     )
 }
 
@@ -72,8 +68,8 @@ const styles = StyleSheet.create({
         marginTop: StatusBar.currentHeight || 0,
     },
     item:{
-        marginHorizontal: 5,
-        marginVertical:6,
+        marginHorizontal: 10,
+        marginVertical:10,
         borderRadius:6,
         backgroundColor:'#8fe2b3',
         shadowOffset: {width: 4, height:4},
@@ -91,7 +87,8 @@ const styles = StyleSheet.create({
         justifyContent:"center",
         backgroundColor: "#d39f56",
         borderRadius: 6,
-        width: 120
+        width: 120,
+        padding: 5
     }
 });
 
@@ -99,7 +96,6 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
     userReducer: state.userReducer,
 });
-
 
 const MyPatientsScreen = connect(mapStateToProps, { getPatient, setIsLoading, addPatient, stopPatient})(_MyPatientsScreen);
 

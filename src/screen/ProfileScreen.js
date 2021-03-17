@@ -6,7 +6,9 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Avatar } from "react-native-paper";
 import * as Animatable from "react-native-animatable";
 import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
-import { Card } from 'react-native-elements'
+import { Card } from 'react-native-elements';
+import {useTheme} from "@react-navigation/native";
+// import {colors} from "react-native-elements";
 
 const _ProfileScreen = (props) => {
   const { userReducer, getUserMeta, getPatient } = props;
@@ -15,22 +17,11 @@ const _ProfileScreen = (props) => {
   if (user === null) {
     return null;
   }
+  const {colors} = useTheme();
   const role = user && user.role;
   // let userId = user.id
-  console.log('userProfile', user);
-  // useEffect(()=>{
-  //   getPatient();
-  // }, [])
-
+  // console.log('userProfile', user);
   // console.log(patients);
-  //   const allPatientsArray = patients && Object.keys(patients).map(function (i) {
-  //     return user && patients[i];
-  //   });
-  //   const currentPatient = allPatientsArray && allPatientsArray.filter(function (item){
-  //     return item.paciente ===  userId;
-  //   });
-  //   const currentUser = currentPatient && currentPatient[0];
-    // console.log('Im current user', currentUser);
 
     // const myPhysioId = currentUser && currentUser['id fisio'];
     const myKine = user && user.juiz_list_fisio && user.juiz_list_fisio[0];
@@ -41,14 +32,14 @@ const _ProfileScreen = (props) => {
       if (myKine && myKine !== 0){
         getUserMeta(myKine)
       }
-    }, [myKine])
+      if ( role === "um_fisioterapeuta" || user && user.mod6_capabilities[0].slice(11, 28) === "um_fisioterapeuta"){
+        let idPhysio = user && user.id
+        getUserMeta(idPhysio);
+        // console.log('userDetailMetaIsThisokkk', userMeta.data)
+      }
+    }, [user])
   // if (userMeta){
   //   console.log('les donnes de kinee: ', userMeta);
-  // }
-  // const myPhysio = ()=>{
-  //   if (myPhysioId !== 0){
-  //     return userMeta && userMeta.data;
-  //   }
   // }
   const makeCall = ()=>{
     let phoneNumber = userMeta && userMeta.data.phone_number[0];
@@ -64,7 +55,7 @@ const _ProfileScreen = (props) => {
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
-        <View style={styles.profileBox}>
+        <View style={{...styles.profileBox, borderBottomColor:colors.text}}>
           {role && role !== "um_fisioterapeuta" || user && user.mod6_capabilities[0].slice(11, 22) === "um_paciente" ?
               (
                   (user && user.gender[0].slice(14, -3) === "Femme" || user && user.gender[0] === "Femme")?
@@ -85,40 +76,28 @@ const _ProfileScreen = (props) => {
                           />
                 )
               : null}
-          {/*{user.gender[0].slice(14, -3) === "Femme" ? (<Avatar.Image*/}
-          {/*    source={require("../assets/image/woman-avatar.png")}*/}
-          {/*    size={150}*/}
-          {/*    style={{*/}
-          {/*      marginRight: 10,*/}
-          {/*      backgroundColor: "gold",*/}
-          {/*    }}*/}
-          {/*/>): <Avatar.Image*/}
-          {/*    source={require("../assets/image/man-avatar.png")}*/}
-          {/*    size={150}*/}
-          {/*    style={{*/}
-          {/*      marginRight: 10,*/}
-          {/*      backgroundColor: "gold",*/}
-          {/*    }}*/}
-          {/*/>}*/}
-
-          {/*<Avatar.Image*/}
-          {/*  source={require("../assets/image/massage.jpg")}*/}
-          {/*  size={150}*/}
-          {/*  style={{*/}
-          {/*    marginRight: 10,*/}
-          {/*    backgroundColor: "gold",*/}
-          {/*  }}*/}
-          {/*/>*/}
-          <Text style={styles.username}>{user && user.nickname}</Text>
+          <Text style={{...styles.username, color:colors.text}}>{user && user.nickname}</Text>
         </View>
         <Animatable.View animation="bounceInLeft" duration={500}>
           <Card>
             <Card.Title>Mes infos</Card.Title>
             {user && <Text>Firstname : {user.first_name}</Text>}
             {user && <Text>Lastname : {user.last_name}</Text>}
-            {(role && role !== "um_fisioterapeuta" || user && user.mod6_capabilities[0].slice(11, 22) === "um_paciente") && <Text>Numero de phase : {user.mod6_capabilities[0].slice(29, 30)}</Text>}
-            {user &&  <Text>Mon tel : {user.phone_number}</Text>}
-            {user && <Text>Email : {user.email}</Text>}
+            {(role && role !== "um_fisioterapeuta" || user && user.mod6_capabilities[0].slice(11, 22) === "um_paciente") && user.mod6_capabilities[0].slice(29, 30)<=5 ?
+                (<Text>Numero de phase : {user.mod6_capabilities[0].slice(29, 30)}</Text>):
+                (
+                    (role && role !== "um_fisioterapeuta" || user && user.mod6_capabilities[0].slice(11, 22) === "um_paciente")?
+                    <Text>Numero de phase: Vous avez effectué toutes les phases</Text>:
+                        null
+                )
+            }
+
+            {(role && role === "um_paciente" || user && user.mod6_capabilities[0].slice(11, 22) === "um_paciente") &&  <Text>Mon tel : {user.phone_number}</Text>}
+            {user && user.email && <Text>Email : {user.email}</Text>}
+            {/*{ (role === "um_fisioterapeuta" || user.mod6_capabilities[0].slice(11, 28) === "um_fisioterapeuta") && userMeta && <Text>Email : {userMeta.email}</Text> }*/}
+            { (role === "um_fisioterapeuta" || user.mod6_capabilities[0].slice(11, 28) === "um_fisioterapeuta") && user && (user.phone_number ?
+                <Text>Tel : {user.phone_number[0]}</Text> : <Text>Tel : Vous n'avez pas communique de numero</Text>)
+            }
           </Card>
 
           {(role && role !== "um_fisioterapeuta" || user && user.mod6_capabilities[0].slice(11, 22) === "um_paciente") ? (
@@ -132,7 +111,7 @@ const _ProfileScreen = (props) => {
                                     <TouchableOpacity onPress={()=> Linking.openURL(`mailto:${userMeta.email}`)}
                                                       style={styles.contactStyle}
                                     >
-                                      <Text style={{fontWeight: 'bold'}}>
+                                      <Text style={{fontWeight: 'bold'}}>Send{' '}
                                         <MaterialCommunityIcons name="email-edit-outline" size={20} color="black" />  {userMeta.email}
                                       </Text>
                                     </TouchableOpacity>
@@ -141,7 +120,7 @@ const _ProfileScreen = (props) => {
                             }
                             {userMeta && userMeta.data.phone_number ? (
                                     <TouchableOpacity onPress={makeCall} style={styles.contactStyle}>
-                                      <Text>
+                                      <Text>Call
                                         <Ionicons name="phone-portrait-outline" color="#000000" size={20} style={{ alignSelf: "center"}}/>
                                         {userMeta && userMeta.data.phone_number[0]}
                                       </Text>
@@ -159,7 +138,14 @@ const _ProfileScreen = (props) => {
                           <Card>
                             <Card.Title>Mon physio</Card.Title>
                             <Text>Vous n'etes pas suivi, vous n'avez pas de physio traitant</Text>
-                            <Text>Contacter la direction : sur ces coordonnées (A INSERER PLUS TARD)</Text>
+                            <Text>Contacter le Dr resposable du protocole :  </Text>
+                            <TouchableOpacity onPress={()=> Linking.openURL('mailto:andrea@fake.me')}
+                                              style={styles.contactStyle}
+                            >
+                              <Text style={{fontWeight: 'bold'}}>Send{' '}
+                                <MaterialCommunityIcons name="email-edit-outline" size={20} color="black" />{'  '}andrea@fake.me
+                              </Text>
+                            </TouchableOpacity>
                           </Card>
                         </View>
                       </>
@@ -219,7 +205,7 @@ const styles = StyleSheet.create({
   // },
   profileBox: {
     marginTop: 30,
-    borderBottomWidth: 3,
+    borderBottomWidth: 4,
     marginBottom: 30,
   },
   scrollContainer: {

@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import Conditions from "./ConditionsModalScreen";
-import {Alert, Modal, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, CheckBox, TouchableHighlight} from "react-native";
-import {RadioButton, TextInput} from "react-native-paper";
+import {Alert, Modal, StyleSheet, View, Text, TouchableOpacity, ActivityIndicator, TouchableHighlight} from "react-native";
+import CheckBox from '@react-native-community/checkbox';
+import {RadioButton, TextInput, List, Switch} from "react-native-paper";
 import { ScrollView } from "react-native-gesture-handler";
 import * as Animatable from "react-native-animatable";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { connect } from "react-redux";
-import {userRegister, hideRegisterModal, checkEmail, checkUsername, setIsLoading } from "../redux";
+import {userRegister, hideRegisterModal, checkEmail, checkUsername, setIsLoading, hideModal} from "../redux";
 import { Ionicons } from "@expo/vector-icons";
+import {useTheme} from "@react-navigation/native";
+import {colors} from "react-native-elements";
+
 
 const formatDate = (date) => {
   let d = new Date(date),
@@ -22,6 +26,7 @@ const formatDate = (date) => {
 };
 
 const _RegisterScreen = (props) => {
+  const {colors} = useTheme();
   const {
     userRegister,
     userReducer,
@@ -87,7 +92,7 @@ const _RegisterScreen = (props) => {
 
   const handleSubmit = () => {
     if (form.dateOfBirthToSend === null) {
-      console.log("allo?");
+      console.log("faut choisir une date a ajouter!!");
       setTodayDate();
     }
     console.log(form);
@@ -453,7 +458,7 @@ const _RegisterScreen = (props) => {
             </Animatable.View>
           )}
         </View>
-        <View style={{flexDirection:"row"}}>
+        <View style={{flexDirection:"row", backgroundColor:colors.background,}}>
           <RadioButton
             value={form.gender}
             status={checked === 'Femme' ? 'checked' : 'unChecked'}
@@ -465,7 +470,7 @@ const _RegisterScreen = (props) => {
                 }))}
             // error={!form.isValidGender}
            />
-           <Text>Femme</Text>
+           <Text style={{color:colors.text}}>Femme</Text>
           <RadioButton
               value={form.gender}
               status={checked === 'Homme' ? 'checked' : 'unChecked'}
@@ -478,7 +483,7 @@ const _RegisterScreen = (props) => {
                   )}
               // error={!form.isValidGender}
           />
-          <Text>Homme</Text>
+          <Text style={{color:colors.text}}>Homme</Text>
         </View>
         <View>
           {form.isValidGender ? null : (
@@ -500,7 +505,7 @@ const _RegisterScreen = (props) => {
             },
           ]}
         >
-          <Text style={{ fontSize: 16, fontWeight: "bold", marginTop: 15 }}>
+          <Text style={{ fontSize: 16, fontWeight: "bold", marginTop: 15, color:colors.text }}>
             Fecha de nacimiento :
           </Text>
           <TouchableOpacity style={styles.buttonBox} onPress={() => showDate()}>
@@ -519,20 +524,22 @@ const _RegisterScreen = (props) => {
 
         <View style={{ flexDirection: 'row' }}>
           <CheckBox
+              disabled={false}
               value={isCheckedConditions}
               onValueChange={setCheckedConditions}
+              tintColors={{true: colors.text, false: colors.text}}
           />
-          <Text style={{marginTop: 5, textAlign:"center"}}>Veuillez confirmer que vous acceptez notre politique{"\n"}de confidentialité</Text>
+          <Text style={{marginTop: 5, textAlign:"center", color:colors.text}}>Veuillez confirmer que vous acceptez notre politique{"\n"}de confidentialité</Text>
         </View>
         <TouchableOpacity disabled={!isCheckedConditions}
-          style={isCheckedConditions? styles.submitButton : {...styles.submitButton, backgroundColor: '#d7b1a4'}}
+          style={isCheckedConditions? styles.submitButton : {...styles.submitButton, opacity:0.5}}
           onPress={() => handleSubmit()}
           activeOpacity={0.8}
         >
           {isLoading ? (
             <ActivityIndicator size="large" color="white" />
           ) : (
-            <Text style={styles.submitText}>Inscribirse</Text>
+            <Text style={{...styles.submitText, color:colors.text}}>Inscribirse</Text>
           )}
         </TouchableOpacity>
 
@@ -684,23 +691,24 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     marginTop: 20,
-    backgroundColor: "#FD9854",
+    backgroundColor: "#8fe2b3",
     padding: 10,
     borderRadius: 20,
     marginBottom: 100,
   },
   submitText: {
+    backgroundColor:colors.background,
     textAlign: "center",
-    color: "white",
+    color: colors.text,
     fontSize: 20,
     fontWeight: "bold",
   },
   textInput: {
-    backgroundColor: "white",
+    // backgroundColor: colors.background,
     marginTop: 10,
   },
   textStyle: {
-    color: "white",
+    color: colors.text,
     fontWeight: "bold",
     textAlign: "center",
   },

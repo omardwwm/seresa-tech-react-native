@@ -5,11 +5,12 @@ import { onUserLogin, hideModal, changePassword } from "../redux";
 import { ScrollView } from "react-native-gesture-handler";
 import { Avatar, TextInput, Modal, Portal } from "react-native-paper";
 import * as Animatable from "react-native-animatable";
+import {useTheme} from "@react-navigation/native";
 
 const _PasswordChangeScreen = (props) => {
   const { userReducer, changePassword } = props;
   const { user } = userReducer;
-
+  const {colors} = useTheme();
   const [passwordForm, setPasswordForm] = useState({
     isPasswordFieldOn: false,
     password: "",
@@ -99,7 +100,7 @@ const _PasswordChangeScreen = (props) => {
           <TextInput
             label="Contraseña"
             mode="outlined"
-            style={styles.TextInput}
+            style={{...styles.TextInput, backgroundColor:colors.background, color:colors.text}}
             onChangeText={(text) => handleChange(text, "password")}
             onEndEditing={(e) =>
               handleValidData(e.nativeEvent.text, "password")
@@ -128,7 +129,7 @@ const _PasswordChangeScreen = (props) => {
           <TextInput
             label="Confirmar la contraseña"
             mode="outlined"
-            style={styles.textInput}
+            style={{...styles.TextInput, backgroundColor:colors.background, color:colors.text}}
             onChangeText={(text) => handleChange(text, "passwordConfirm")}
             onEndEditing={(e) =>
               handleValidData(e.nativeEvent.text, "passwordConfirm")

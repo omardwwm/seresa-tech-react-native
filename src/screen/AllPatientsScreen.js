@@ -2,8 +2,6 @@ import React, {useEffect, useState} from "react";
 import { Text, View, SafeAreaView, StyleSheet, TouchableOpacity, FlatList, StatusBar, RefreshControl} from "react-native";
 import { Fontisto } from '@expo/vector-icons';
 import ListBarSearch from "../components/ListSearchBar";
-// import filter from "lodash.filter";
-
 import { connect } from "react-redux";
 import {getPatient} from "../redux";
 import {ActivityIndicator} from "react-native-paper";
@@ -22,62 +20,58 @@ const _AllPatientsScreen = (props)=> {
         return patients[i];
     });
     // console.log(allPatientsArray);
-    const [data, setData] =  useState(allPatientsArray && allPatientsArray);
-
-    if (allPatientsArray !== null) {
-        const renderItem=({ item }) => (
-            <View style={styles.item} key={item.id}>
-                <View style={styles.itemContent}>
-                    <Text>
-                        {item.date}  {item.name}
-                    </Text>
-                    <Text>Indice Oswestry: {item.indice}</Text>
-                    <View style={{marginVertical:3}}>
-                        {item['id fisio']===0?
-                            (
-                                <Text><Fontisto name="doctor" size={24} color="grey" />  Non Suivi</Text>
-                            ):
-                            <Text><Fontisto name="doctor" size={24} color="green" />  Suivi</Text>
-                        }
-                    </View>
-                    <TouchableOpacity onPress={()=>props.navigation.navigate('FichePatient', {item})} style={{alignItems: "center"}}>
-                        <Text style={styles.btnDetails}>Lire la suite</Text>
-                    </TouchableOpacity>
+    const [data, setData] = useState(allPatientsArray);
+    useEffect(()=>{
+        setData(allPatientsArray);
+    }, []);
+    // console.log('dataAfterUseEffect', data);
+    const renderItem=({ item }) => (
+        <View style={styles.item} key={item.id}>
+            <View style={styles.itemContent}>
+                <Text>
+                    {item.date}  {item.name}
+                </Text>
+                <Text>Indice Oswestry: {item.indice}</Text>
+                <View style={{marginVertical:3}}>
+                    {item['id fisio']===0?
+                        (
+                            <Text><Fontisto name="doctor" size={24} color="grey" />{'  '}Non Suivi</Text>
+                        ):
+                        <Text><Fontisto name="doctor" size={24} color="green" />{'  '}Suivi</Text>
+                    }
                 </View>
-
+                <TouchableOpacity onPress={()=>props.navigation.navigate('FichePatient', {item})} style={{alignItems: "center"}}>
+                    <Text style={styles.btnDetails}>Lire la suite</Text>
+                </TouchableOpacity>
             </View>
-        )
+        </View>
+    )
         // console.log(isFetching);
         const keyExtractor = (item, index) => index.toString();
-        // const [Fetching, setFetching] = useState(isFetching);
         ////////////////////// search bar
-        // const [data, setData] = useState(allPatientsArray);
-        // const [query, setQuery] = useState('');
         const handleSearch = text => {
             if (text===''){
                 setData(allPatientsArray && allPatientsArray);
             }
-            // const formattedQuery = text.toLowerCase();
             const filteredData = allPatientsArray.filter(function (user){
                 return user.name.substring(0, text.length).toLowerCase() === text.toLowerCase();
             });
-            setData(filteredData);
             setQuery(text);
+            setData(filteredData);
         };
         //////////// end search bar
         const onRefresh = ()=>{
             setFetching(true);
             getPatient().then(()=>{ setFetching(false)}).then(()=>{setData(allPatientsArray)}).finally(()=>setQuery(''));
-            // getPatient().then(()=>{setData(allPatientsArray)}).finally(()=>{setFetching(false)});
         }
-
+    if (allPatientsArray) {
         return (
             <SafeAreaView>
                 <FlatList
-                    ListHeaderComponent={<ListBarSearch handleSearch={handleSearch} value={query}/>}
                     data={data}
                     renderItem={renderItem}
                     keyExtractor = { keyExtractor }
+                    ListHeaderComponent={<ListBarSearch handleSearch={handleSearch} value={query}/>}
                     maxToRenderPerBatch={10}
                     windowSize={10}
                     refreshControl={
@@ -104,8 +98,8 @@ const styles = StyleSheet.create({
         marginTop: StatusBar.currentHeight || 0,
     },
     item:{
-        marginHorizontal: 5,
-        marginVertical:6,
+        marginHorizontal: 10,
+        marginVertical:8,
         borderRadius:6,
         backgroundColor:"#d39f56",
         shadowOffset: {width: 3, height:3},
@@ -124,7 +118,8 @@ const styles = StyleSheet.create({
         justifyContent:"center",
         backgroundColor: "#8fe2b3",
         borderRadius: 6,
-        width: 120
+        width: 120,
+        padding: 5
     }
 });
 

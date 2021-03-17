@@ -7,55 +7,21 @@ import { connect } from "react-redux";
 import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
 import moment from 'moment';
 import CountDown from "react-native-countdown-component";
-import { Card } from 'react-native-elements'
+import { Card } from 'react-native-elements';
+import {useTheme} from "@react-navigation/native";
 
 
 const { width } = Dimensions.get("window");
-
 const _FormScreen = (props) => {
   const {userReducer, getForm, sendFormData, setIsLoading, hideFormModal,
     } = props;
   const {form, user, isFormLoading, showFormModal, isLoading, formError
   } = userReducer;
 
+  const {colors} = useTheme();
   useEffect(() => {
     getForm(user);
   }, [user]);
-  // console.log('userInFormScreen', user);
-  // console.log('mon formm', form);
-  // console.log('date du prochaine validation', form.date && form.date);
-  // if (patients !== null) {
-  //   const allPatientsArray = patients && Object.keys(patients).map(function (i) {
-  //     return user && patients[i];
-  //   });
-    // console.log(allPatientsArray);
-  // console.log(form);
-  //   const currentPatient = allPatientsArray && allPatientsArray.filter(function (item){
-  //     return user && item.paciente ===  user.id;
-  //   });
-    // console.log(currentPatient);
-  // let lastDateForm = user && currentPatient && currentPatient[0].date
-  // let numberPhase = user && currentPatient && currentPatient[0]['phase du relevé'];
-  // let dateForNextForm;
-  // console.log(numberPhase);
-  // switch (numberPhase){
-  //   case '0':
-  //     dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(8, 'days');
-  //      break;
-  //   case '1':
-  //     dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(15, 'days');
-  //     break;
-  //   case '4':
-  //     dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(21, 'days');
-  //     break;
-  //   default:
-  //     dateForNextForm = moment(lastDateForm, "YYYY-MM-DD hh:mm:ss").add(21, 'days');
-  // }
-
-    // console.log(dateForNextForm);
-  // const limitDateLine = lastDateForm.setDate(lastDateForm.getDate() + daysOfPhase);
-  // console.log(lastDateForm2.setDate(lastDateForm2.getDate()));
-  // }
 
   const [checked, setChecked] = useState({
     form: {},
@@ -76,13 +42,15 @@ const _FormScreen = (props) => {
       animated: true,
     });
   };
-
+//le 14/03/2021 le formulire a change depuis le back, deux formats deferents recuperes ds la mm requete, obligation de chager form par myForm;
+  let myForm = form && form.data ? form.data : form;
+  // console.log('yourOwnForm', myForm);
 
   const handleSubmit = () => {
     console.log(checked.form);
     if (
         Object.keys(checked.form).length !==
-        Object.keys(form.json_survey.pages && form.json_survey.pages[0].elements).length
+        Object.keys(myForm.json_survey.pages && myForm.json_survey.pages[0].elements).length
     ) {
       setChecked({
         ...checked,
@@ -112,13 +80,17 @@ const _FormScreen = (props) => {
           <Card>
             <Card.Title>Infos</Card.Title>
             <Text>
-              Vous semblez finir votre proocole et vous n'avez pas de formulaire a remplir.{"\n"}Pour connaitre la suite de vos soins, veuillez contacter votre physio depuis <TouchableOpacity onPress={()=>props.navigation.navigate('Profile')} style={{backgroundColor:"#b0e277", padding:2, margin:5}}>
-              <Text >
-                <MaterialCommunityIcons name="cursor-default-click" size={20} color="black" />
-                votre espace personnel
-              </Text>
-            </TouchableOpacity>
+              Vous semblez finir votre proocole et vous n'avez pas de formulaire a remplir.
             </Text>
+              <Text style={{marginTop:10}}>
+                Pour la suite de vos soins, veuillez contacter votre physio depuis{'  '}
+                <TouchableOpacity onPress={()=>props.navigation.navigate('Profile')} style={{backgroundColor:"#8fe2b3", padding:4, borderRadius:5}}>
+                  <Text>
+                    <MaterialCommunityIcons name="cursor-default-click" size={20} color="black" />
+                    votre espace personnel
+                  </Text>
+                </TouchableOpacity>
+              </Text>
           </Card>
         </View>
     );
@@ -126,23 +98,6 @@ const _FormScreen = (props) => {
   }
 
   if (form !== null) {
-    // if (form.date !== undefined) {
-    //   return (
-    //       <View
-    //           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-    //       >
-    //         <Text style={styles.title}>
-    //           Temps restant avant la prochaine phase :
-    //         </Text>
-    //         <CountDown
-    //             until={parseInt(
-    //                 (Date.parse(form.date.replace(/\s/g, "T")) - new Date()) / 1000
-    //             )}
-    //             size={30}
-    //         />
-    //       </View>
-    //   );
-    // }
 
     return (
         <View style={{ flex: 1 }}>
@@ -150,27 +105,35 @@ const _FormScreen = (props) => {
           <View
               style={{ justifyContent: "center", alignItems: "center" }}
           >
-            <Text style={{...styles.title, fontSize: 16, marginBottom:5}}>
+            <Text style={{...styles.title, fontSize: 16, marginBottom:5, color:colors.text}}>
               Temps restant avant la prochaine phase :
             </Text>
             {user && user.mod6_capabilities[0].slice(29, 30) >=0 && user.mod6_capabilities[0].slice(29, 30)<6 ?
                 (<CountDown
                     until={parseInt
-                    (moment(form && form.date) - moment(new Date())) / 1000
+                    (moment(myForm && myForm.date) - moment(new Date())) / 1000
                     }
                     size={16}
+                    timeLabelStyle={{color: colors.text}}
                 />):
                 (
                     <>
-                      <View>
-                        <Text>
-                          Vous semblez finir votre proocole ou votre situation ne vous permet pas de remplir le formulaire, contacter votre physio depuis <TouchableOpacity onPress={()=>props.navigation.navigate('Profile')} style={{backgroundColor:"#b0e277", padding:2, margin:5}}>
-                          <Text >
-                            <MaterialCommunityIcons name="cursor-default-click" size={20} color="black" />
-                            votre espace personnel
+                      <View style={{justifyContent:'center', alignItems:'center', textAlign:'center', margin:10 }}>
+                        <Card>
+                          <Card.Title>Infos</Card.Title>
+                          <Text>
+                            Vous semblez finir votre proocole et vous n'avez pas de formulaire a remplir.
                           </Text>
-                        </TouchableOpacity>
-                        </Text>
+                          <Text style={{marginTop:10}}>
+                            Pour la suite de vos soins, veuillez contacter votre physio depuis{'  '}
+                            <TouchableOpacity onPress={()=>props.navigation.navigate('Profile')} style={{backgroundColor:"#8fe2b3", padding:4, borderRadius:5}}>
+                              <Text>
+                                <MaterialCommunityIcons name="cursor-default-click" size={20} color="black" />
+                                votre espace personnel
+                              </Text>
+                            </TouchableOpacity>
+                          </Text>
+                        </Card>
                       </View>
                     </>
                 )
@@ -187,7 +150,7 @@ const _FormScreen = (props) => {
               contentContainerStyle={{ marginBottom: 10 }}
               showsHorizontalScrollIndicator={false}
           >
-            {form && form.json_survey.pages[0].elements.map((current, index) => {
+            {myForm && myForm.json_survey.pages[0].elements.map((current, index) => {
               if (current.type === "rating") {
                 const rating = [];
                 for (
@@ -210,13 +173,13 @@ const _FormScreen = (props) => {
                                   : "unchecked"
                             }
                         />
-                        <Text style={{marginRight:60}}>{index}</Text>
+                        <Text style={{marginRight:60, color:colors.text}}>{index}</Text>
                       </View>
                   );
                 }
                 return (
                     <View key={index}>
-                      <Text style={{ ...styles.title, marginTop: 10 }}>
+                      <Text style={{ ...styles.title, marginTop: 10, color:colors.text }}>
                         {current.title}
                       </Text>
                       <View
@@ -265,7 +228,7 @@ const _FormScreen = (props) => {
                               <Text style={styles.textStyle}>&#x3C;</Text>
                             </TouchableOpacity>
                         )}
-                        {index === form.json_survey.pages[0].elements.length - 1 ? null : (
+                        {index === myForm.json_survey.pages[0].elements.length - 1 ? null : (
                             <TouchableOpacity
                                 activeOpacity={0.8}
                                 onPress={() => handleNav(index + 1)}
@@ -292,7 +255,7 @@ const _FormScreen = (props) => {
                           setViewLayout([...viewLayout, layout.x]);
                         }}
                     >
-                      <Text style={styles.title}>{current.title}</Text>
+                      <Text style={{...styles.title, color:colors.text}}>{current.title}</Text>
                       <RadioButton.Group
                           onValueChange={(value) => {
                             setChecked({
@@ -316,7 +279,7 @@ const _FormScreen = (props) => {
                                           : "unchecked"
                                     }
                                 />
-                                <Text>{currentChoice.text} </Text>
+                                <Text style={{color:colors.text}}>{currentChoice.text} </Text>
                               </View>
                           );
                         })}
@@ -339,7 +302,7 @@ const _FormScreen = (props) => {
                               <Text style={styles.textStyle}>&#x3C;</Text>
                             </TouchableOpacity>
                         )}
-                        {index === form.json_survey.pages[0].elements.length - 1 ? null : (
+                        {index === myForm.json_survey.pages[0].elements.length - 1 ? null : (
                             <TouchableOpacity
                                 activeOpacity={0.8}
                                 onPress={() => handleNav(index + 1)}
@@ -354,7 +317,7 @@ const _FormScreen = (props) => {
                         )}
                       </View>
                       <View>
-                        {index=== form.json_survey.pages[0].elements.length -1  ?
+                        {index=== myForm.json_survey.pages[0].elements.length -1  ?
                         <TouchableOpacity
                             style={{
                               ...styles.submitButton
